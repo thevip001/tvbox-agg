@@ -1,6 +1,11 @@
 {
   "lives": [
     {
+      "name": "海量直播·频道合并去重",
+      "type": 0,
+      "url": "https://raw.githubusercontent.com/thevip001/tvbox-agg/main/%E8%81%9A%E5%90%88%E6%8E%A5%E5%8F%A3/live.m3u"
+    },
+    {
       "name": "👖裤佬IPTV直播",
       "type": 0,
       "url": "https://iptv.445569.xyz/live.m3u"
@@ -195,6 +200,14 @@
       "playerType": 2
     },
     {
+      "name": "虎牙一起看｜挺好",
+      "type": 0,
+      "url": "https://ztha.top/TVBox/lib/huyayqk.m3u",
+      "playerType": 2,
+      "timeout": 10,
+      "ua": "okHttp/Mod-1.5.0.0"
+    },
+    {
       "name": "斗鱼一起看｜挺好",
       "type": 0,
       "url": "https://ztha.top/TVBox/lib/douyuyqk.m3u",
@@ -365,42 +378,6 @@
       "logo": "https://epg.112114.xyz/logo/{name}.png"
     },
     {
-      "name": "没4K",
-      "type": 0,
-      "url": "https://mpimg.cn/text.php?hash=7265d70b6834cefbddb61bcc2d9c99db",
-      "timeout": 10
-    },
-    {
-      "name": "夜空1",
-      "type": 0,
-      "url": "https://pan.29o.cn/down.php/aa846bceb7a1b4adb0385b1f61b192e8.txt",
-      "timeout": 10
-    },
-    {
-      "name": "经典电视剧",
-      "type": 0,
-      "url": "https://wp.kayyw.com/f/XOpgIZ/%E7%BB%8F%E5%85%B8%E7%94%B5%E8%A7%86%E5%89%A7.txt",
-      "timeout": 10
-    },
-    {
-      "name": "很少",
-      "type": 0,
-      "url": "https://mpimg.cn/down.php/fa04b02ffac54ac877f5250d3d70e494.txt",
-      "timeout": 10
-    },
-    {
-      "name": "yuan",
-      "type": 0,
-      "url": "http://wangziduoqing.com/yuan/zb.txt",
-      "timeout": 10
-    },
-    {
-      "name": "应该能看",
-      "type": 0,
-      "url": "https://gh-proxy.org/raw.githubusercontent.com/vinkerq/iptv-api/refs/heads/master/iptv.txt",
-      "timeout": 10
-    },
-    {
       "name": "线路③",
       "type": 0,
       "url": "http://iptv.ruyitv.cc/m3u/tv.txt",
@@ -409,6 +386,11 @@
       "epg": "https://gitee.com/taksssss/tv/raw/main/epg/112114.xml.gz,http://epg.51zmt.top:8000/e.xml,https://gitee.com/taksssss/tv/raw/main/epg/epgpw_tw.xml.gz",
       "logo": "https://gitee.com/mytv-android/myTVlogo/raw/main/img/{name}.png",
       "ua": "okhttp/3.15,AptvPlayer/1.4.1,Mozilla/5.0"
+    },
+    {
+      "name": "线路④",
+      "type": 1,
+      "url": "https://gh-proxy.org/raw.githubusercontent.com/vinkerq/iptv-api/refs/heads/master/iptv.txt"
     },
     {
       "name": "线路⑥",

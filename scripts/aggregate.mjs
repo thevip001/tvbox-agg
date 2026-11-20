@@ -2,16 +2,22 @@
 /**
  * TVBox 接口每日聚合脚本（零第三方依赖，需要 Node.js 18 及以上）
  *
- * 1. 读取 apilinks.txt：每行「名称, 地址1, 地址2 ...」，多个地址是镜像，按顺序自动选通
- * 2. 抓取每个接口：解码（图片套壳 / Base64 / 2423 加密）、容错解析、展开多仓
- * 3. 点播：按 type + api + ext 去重；采集站（type 0/1）检测可用性，剔除失效站
- * 4. 直播：按地址去重；逐个下载检测，再按频道内容去重，剔除失效源
- * 5. 输出：聚合接口/海量点播聚合接口.json、聚合接口/海量直播聚合接口.json
+ * 输入：apilinks.txt（每行「名称, 地址1, 地址2 ...」，多个地址是镜像，按顺序自动选通）
+ *
+ * 输出（全部写入 聚合接口/ 目录）：
+ *   点播-采集站.json     采集站（type 0/1），只保留检测可用的
+ *   点播-Py站.json       Py 站
+ *   点播-JS站.json       JS 站
+ *   点播-Jar爬虫站.json  Jar 爬虫站（type 3）
+ *   点播合集.json        以上全部类别合并后再去重整理（另含其它类型）
+ *   live.json            直播聚合接口（TVBox 配置格式）
+ *   live.m3u             直播频道合并去重后的 M3U 播放列表
+ *   README.md            文件说明与地址（每次运行自动更新）
  */
 import crypto from "node:crypto";
 import http from "node:http";
 import https from "node:https";
-import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
+import { appendFile, mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import zlib from "node:zlib";
@@ -19,12 +25,29 @@ import zlib from "node:zlib";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const LIST_FILE = join(ROOT, "apilinks.txt");
 const OUT_DIR = join(ROOT, "聚合接口");
-const VOD_FILE = "海量点播聚合接口.json";
-const LIVE_FILE = "海量直播聚合接口.json";
 const TVBOX_UA = "okhttp/3.15";
-// 安全阀：结果明显异常（例如上游全部挂掉）时不覆盖已有文件
+
+const FILES = {
+  all: "点播合集.json",
+  cj: "点播-采集站.json",
+  py: "点播-Py站.json",
+  js: "点播-JS站.json",
+  spider: "点播-Jar爬虫站.json",
+  live: "live.json",
+  m3u: "live.m3u",
+  readme: "README.md",
+};
+// 旧版本生成的文件，运行时清理掉
+const OLD_FILES = ["海量点播聚合接口.json", "海量直播聚合接口.json"];
+
+// 安全阀：结果明显异常（比如上游全部挂掉）时不覆盖已有文件
 const MIN_SITES = 100;
 const MIN_LIVES = 3;
+const MIN_CHANNELS = 1000;
+
+const REPO = process.env.GITHUB_REPOSITORY || "thevip001/tvbox-agg";
+const BRANCH = process.env.GITHUB_REF_NAME || "main";
+const rawUrl = (file) => `https://raw.githubusercontent.com/${REPO}/${BRANCH}/聚合接口/${file}`;
 
 const beijingNow = () => new Date(Date.now() + 8 * 3600 * 1000);
 const log = (msg) => console.log(`[${beijingNow().toISOString().slice(11, 19)}] ${msg}`);
@@ -463,6 +486,32 @@ function siteCategory(site) {
   return "other";
 }
 
+/** 按去重键合并：同一站点只留一个，来源合并记录 */
+function dedupeEntries(entries) {
+  const seen = new Map();
+  const out = [];
+  for (const e of entries) {
+    const k = siteDedupKey(e.site);
+    if (seen.has(k)) {
+      const o = out[seen.get(k)];
+      for (const s of e.sources) if (!o.sources.includes(s)) o.sources.push(s);
+      continue;
+    }
+    seen.set(k, out.length);
+    out.push({ ...e, sources: [...e.sources] });
+  }
+  return out;
+}
+
+/** 本组站点里出现最多的 jar（作为该文件的顶层 spider） */
+function mostCommonJar(entries) {
+  const count = new Map();
+  for (const e of entries) {
+    if (e.site.jar) count.set(String(e.site.jar), (count.get(String(e.site.jar)) || 0) + 1);
+  }
+  return [...count].sort((a, b) => b[1] - a[1])[0]?.[0] || "";
+}
+
 /** 读取 apilinks.txt：同名接口的多行会合并成一个接口的多个镜像 */
 function parseSourceText(text) {
   const map = new Map();
@@ -503,8 +552,10 @@ function parsePlaylist(text) {
       if (!line) continue;
       if (/^#EXTINF/i.test(line)) {
         const group = /group-title="([^"]*)"/i.exec(line)?.[1] || "未分组";
-        const name = line.slice(line.lastIndexOf(",") + 1).trim() || "未命名";
-        pending = { group, name };
+        const logo = /tvg-logo="([^"]*)"/i.exec(line)?.[1] || "";
+        const name =
+          line.slice(line.lastIndexOf(",") + 1).trim() || /tvg-name="([^"]*)"/i.exec(line)?.[1] || "未命名";
+        pending = { group, name, logo };
       } else if (!line.startsWith("#") && pending) {
         out.push({ ...pending, url: line });
         pending = null;
@@ -526,13 +577,13 @@ function parsePlaylist(text) {
     }
     for (const u of rest.split("#")) {
       const url = u.trim();
-      if (/^[a-z][a-z0-9+.-]*:\/\//i.test(url)) out.push({ group, name, url });
+      if (/^[a-z][a-z0-9+.-]*:\/\//i.test(url)) out.push({ group, name, logo: "", url });
     }
   }
   return out;
 }
 
-/** 下载并检测一个直播源：可用性 + 频道内容哈希（用于内容级去重） */
+/** 下载并检测一个直播源：可用性、频道列表、频道内容哈希（用于内容级去重） */
 async function checkLive(url, ua) {
   let cur = url;
   let size = 0;
@@ -552,13 +603,14 @@ async function checkLive(url, ua) {
     }
     break;
   }
-  if (!channels.length) return { alive: false, channelCount: 0, size, hash: null };
+  if (!channels.length) return { alive: false, channelCount: 0, size, hash: null, channels: [] };
   const uniq = [...new Set(channels.map((c) => normUrl(c.url)))].sort();
   return {
     alive: true,
     channelCount: channels.length,
     size,
     hash: crypto.createHash("sha1").update(uniq.join("\n")).digest("hex"),
+    channels,
   };
 }
 
@@ -679,7 +731,7 @@ async function main() {
     try {
       liveInfo.set(k, await checkLive(String(v.live.url), ua));
     } catch {
-      liveInfo.set(k, { alive: false, channelCount: 0, size: 0, hash: null });
+      liveInfo.set(k, { alive: false, channelCount: 0, size: 0, hash: null, channels: [] });
     }
   });
   const contentOwner = new Map(); // 频道内容哈希 → 保留下来的源
@@ -694,52 +746,130 @@ async function main() {
   const liveOk = liveList.filter(([k]) => liveInfo.get(k).alive).length;
   log(`直播源可用：${liveOk} / ${liveList.length}；内容完全相同的重复源：${dupOf.size}`);
 
-  /* 5. 生成两个聚合接口 */
-  const keyNamer = uniqueNamer();
-  const nameNamer = uniqueNamer();
-  const spider = [...spiderCount].sort((a, b) => b[1] - a[1])[0]?.[0] || "";
-  const sites = [];
-  for (const [k, v] of siteMap) {
-    if (v.category === "cj" && cjAlive.get(k) === false) continue;
-    const s = { ...v.site };
-    s.key = keyNamer(String(s.key), v.sources[0]);
-    s.name = nameNamer(String(s.name ?? s.key), v.sources[0]);
-    if (spider && s.jar === spider) delete s.jar; // 与顶层 spider 相同，省略即可
-    sites.push(s);
-  }
+  /* 5. 点播：按类别分组；合集 = 各类别合并后再去重整理 */
+  const entries = [...siteMap]
+    .map(([k, v]) => ({ k, site: v.site, sources: v.sources, category: v.category }))
+    .filter((e) => e.category !== "cj" || cjAlive.get(e.k) === true); // 采集站只保留检测可用的
+  const pick = (c) => entries.filter((e) => e.category === c);
+  const cjEntries = pick("cj");
+  const pyEntries = pick("py");
+  const jsEntries = pick("js");
+  const spiderEntries = pick("spider");
+  const otherEntries = pick("other");
+  const unionBefore = [...cjEntries, ...pyEntries, ...jsEntries, ...spiderEntries, ...otherEntries];
+  const union = dedupeEntries(unionBefore);
+  const globalTop = mostCommonJar(union);
+
   const parseNamer = uniqueNamer();
   const parses = [...parseMap.values()].map((p) => ({ ...p, name: parseNamer(String(p.name || "解析")) }));
+  const flags = [...flagSet];
 
+  /** 生成一个点播配置：站点 key/name 在文件内唯一，同文件顶层 spider 的 jar 省略 */
+  const buildVod = (items) => {
+    const top = mostCommonJar(items) || globalTop;
+    const keyNamer = uniqueNamer();
+    const nameNamer = uniqueNamer();
+    const sites = items.map((e) => {
+      const s = { ...e.site };
+      s.key = keyNamer(String(s.key), e.sources[0]);
+      s.name = nameNamer(String(s.name ?? s.key), e.sources[0]);
+      if (top && s.jar === top) delete s.jar;
+      return s;
+    });
+    return { ...(top ? { spider: top } : {}), ...(wallpaper ? { wallpaper } : {}), sites, parses, flags };
+  };
+
+  /* 6. 直播：live.json（第一条是合并频道 M3U）+ 频道合并去重的 M3U */
   const liveNamer = uniqueNamer();
-  const lives = [];
+  const liveSources = [];
+  const seenChannel = new Set();
+  const groups = new Map();
+  let channelTotal = 0;
   for (const [k, v] of liveList) {
-    if (!liveInfo.get(k).alive || dupOf.has(k)) continue;
+    const info = liveInfo.get(k);
+    if (!info.alive || dupOf.has(k)) continue;
     const l = { ...v.live };
     l.name = liveNamer(String(l.name || "直播"), v.sources[0]);
-    lives.push(l);
+    liveSources.push(l);
+    for (const ch of info.channels) {
+      const ck = normUrl(ch.url);
+      if (!ck || seenChannel.has(ck)) continue;
+      seenChannel.add(ck);
+      if (!groups.has(ch.group)) groups.set(ch.group, []);
+      groups.get(ch.group).push(ch);
+      channelTotal++;
+    }
+  }
+  const liveConfig = {
+    lives: [{ name: "海量直播·频道合并去重", type: 0, url: encodeURI(rawUrl(FILES.m3u)) }, ...liveSources],
+  };
+
+  const esc = (s) => String(s || "").replace(/["\r\n]/g, " ").trim();
+  const epg = liveList
+    .map(([, v]) => v.live.epg)
+    .find((e) => typeof e === "string" && /^https?:\/\//.test(e) && !e.includes("{"));
+  const m3u = [`#EXTM3U${epg ? ` x-tvg-url="${esc(epg)}"` : ""}`];
+  for (const [group, chs] of groups) {
+    for (const ch of chs) {
+      m3u.push(
+        `#EXTINF:-1 tvg-name="${esc(ch.name)}"${ch.logo ? ` tvg-logo="${esc(ch.logo)}"` : ""} group-title="${esc(group)}",${esc(ch.name)}`,
+      );
+      m3u.push(ch.url);
+    }
   }
 
-  const vodConfig = {
-    ...(spider ? { spider } : {}),
-    ...(wallpaper ? { wallpaper } : {}),
-    sites,
-    parses,
-    flags: [...flagSet],
-  };
-  const liveConfig = { lives };
-
-  if (sites.length < MIN_SITES || lives.length < MIN_LIVES) {
+  /* 7. 检查结果并写入文件 */
+  if (union.length < MIN_SITES || liveSources.length < MIN_LIVES || channelTotal < MIN_CHANNELS) {
     throw new Error(
-      `结果异常（点播 ${sites.length} 条、直播 ${lives.length} 个），为避免覆盖已有文件，本次不写入`,
+      `结果异常（点播合集 ${union.length} 条、直播源 ${liveSources.length} 个、频道 ${channelTotal} 个），为避免覆盖已有文件，本次不写入`,
     );
   }
   await mkdir(OUT_DIR, { recursive: true });
-  await writeFile(join(OUT_DIR, VOD_FILE), JSON.stringify(vodConfig, null, 2) + "\n", "utf8");
-  await writeFile(join(OUT_DIR, LIVE_FILE), JSON.stringify(liveConfig, null, 2) + "\n", "utf8");
-  log(`已写入：点播 ${sites.length} 站 / ${parses.length} 个解析；直播 ${lives.length} 个源`);
+  const jsonOutputs = {
+    [FILES.all]: buildVod(union),
+    [FILES.cj]: buildVod(cjEntries),
+    [FILES.py]: buildVod(pyEntries),
+    [FILES.js]: buildVod(jsEntries),
+    [FILES.spider]: buildVod(spiderEntries),
+    [FILES.live]: liveConfig,
+  };
+  for (const [name, data] of Object.entries(jsonOutputs)) {
+    await writeFile(join(OUT_DIR, name), JSON.stringify(data, null, 2) + "\n", "utf8");
+  }
+  await writeFile(join(OUT_DIR, FILES.m3u), m3u.join("\n") + "\n", "utf8");
+  for (const old of OLD_FILES) await rm(join(OUT_DIR, old), { force: true });
+
+  const when = beijingNow().toISOString().slice(0, 16).replace("T", " ");
+  const readmeText = [
+    "# 聚合接口（每日自动更新）",
+    "",
+    `更新时间：${when}（北京时间）`,
+    "",
+    "把下面的地址直接填进 TVBox 即可。这些文件由 scripts/aggregate.mjs 自动生成，请不要手动修改。",
+    "",
+    "| 文件 | 内容 | 数量 | 地址 |",
+    "| --- | --- | --- | --- |",
+    `| ${FILES.all} | 全部点播站点合并去重（采集站、Py、JS、Jar 及其它类型） | ${union.length} 个站点 | ${rawUrl(FILES.all)} |`,
+    `| ${FILES.cj} | 采集站（只保留检测可用的） | ${cjEntries.length} 个站点 | ${rawUrl(FILES.cj)} |`,
+    `| ${FILES.py} | Py 站 | ${pyEntries.length} 个站点 | ${rawUrl(FILES.py)} |`,
+    `| ${FILES.js} | JS 站 | ${jsEntries.length} 个站点 | ${rawUrl(FILES.js)} |`,
+    `| ${FILES.spider} | Jar 爬虫站 | ${spiderEntries.length} 个站点 | ${rawUrl(FILES.spider)} |`,
+    `| ${FILES.live} | 直播聚合接口（TVBox 配置格式） | ${liveSources.length} 个直播源 | ${rawUrl(FILES.live)} |`,
+    `| ${FILES.m3u} | 直播频道合并去重（M3U） | ${channelTotal} 个频道 | ${rawUrl(FILES.m3u)} |`,
+    "",
+  ].join("\n");
+  await writeFile(join(OUT_DIR, FILES.readme), readmeText, "utf8");
+
+  for (const f of [...Object.keys(jsonOutputs), FILES.m3u, FILES.readme]) {
+    const st = await stat(join(OUT_DIR, f));
+    log(`  ${f}  ${(st.size / 1024).toFixed(0)} KB`);
+  }
+  log(
+    `点播：合集 ${union.length} 站（采集站 ${cjEntries.length}、Py ${pyEntries.length}、JS ${jsEntries.length}、Jar ${spiderEntries.length}、其它 ${otherEntries.length}；合并去重 ${unionBefore.length - union.length} 个）`,
+  );
+  log(`直播：${liveSources.length} 个直播源；频道合并去重后 ${channelTotal} 个`);
 
   if (process.env.GITHUB_STEP_SUMMARY) {
-    const when = beijingNow().toISOString().slice(0, 16).replace("T", " ");
     await appendFile(
       process.env.GITHUB_STEP_SUMMARY,
       [
@@ -748,11 +878,11 @@ async function main() {
         "| 项目 | 结果 |",
         "| --- | --- |",
         `| 接口抓取成功 | ${fetched.size} / ${list.length} |`,
-        `| 点播站点（原始 → 去重 → 输出） | ${rawSites} → ${siteMap.size} → ${sites.length} |`,
+        `| 点播站点（原始 → 去重） | ${rawSites} → ${siteMap.size} |`,
         `| 采集站可用（type 0/1） | ${cjOk} / ${cjList.length} |`,
-        `| 解析（原始 → 去重） | ${rawParses} → ${parseMap.size} |`,
-        `| 直播源（原始 → 去重 → 输出） | ${rawLives} → ${liveMap.size} → ${lives.length} |`,
-        `| 直播源内容重复 | ${dupOf.size} |`,
+        `| 点播合集 | ${union.length} 个站点 |`,
+        `| 直播源（原始 → 去重 → 输出） | ${rawLives} → ${liveMap.size} → ${liveSources.length} |`,
+        `| 直播频道（合并去重后） | ${channelTotal} |`,
         "",
       ].join("\n"),
     );

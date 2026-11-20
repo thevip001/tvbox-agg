@@ -226,6 +226,13 @@ export default function Dashboard() {
           >
             {data?.running ? "⏳ 更新中…" : "🔄 立即更新"}
           </button>
+          <a
+            href="/downloads/tvbox-agg.zip"
+            download
+            className="rounded-lg border border-slate-600 px-4 py-2 text-sm font-semibold text-slate-200 hover:bg-slate-800"
+          >
+            📦 下载源码
+          </a>
         </div>
       </header>
 
@@ -460,6 +467,19 @@ export default function Dashboard() {
               <li>直播源 URL 去重 + 内容级去重 + 频道级合并，输出直播聚合接口（TVBox JSON / M3U / TXT）；</li>
               <li>每个接口保留最近一次成功的备份线路，原站失效时仍可使用。</li>
             </ul>
+          </div>
+          <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/30 p-5">
+            <h3 className="mb-2 font-semibold text-emerald-200">📦 源码下载</h3>
+            <p>
+              下载完整源码压缩包（包含 <code>.git</code> 提交记录，不含 <code>.env</code> 与 <code>node_modules</code>）。解压后按 README 中「推送到 GitHub」的步骤即可上传到你自己的仓库。
+            </p>
+            <a
+              href="/downloads/tvbox-agg.zip"
+              download
+              className="mt-3 inline-block rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-500"
+            >
+              ⬇️ 下载 tvbox-agg.zip
+            </a>
           </div>
           <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-5">
             <h3 className="mb-2 font-semibold text-white">声明</h3>

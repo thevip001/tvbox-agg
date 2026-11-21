@@ -1,46 +1,46 @@
 # 聚合接口（每日自动更新）
 
-**更新时间**：2026-11-21 20:42（北京时间）　**策略**：严格（只留快站，慢站也删）
+**更新时间**：2026-11-22 03:45（北京时间）　**策略**：严格（只留快站，慢站也删）
 
 ## 📊 站点数量总览
 
 | 分类 | 输出站点数 | 文件 |
 | --- | ---: | --- |
-| **点播合集（全部）** | **3036** | [点播合集.json](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播合集.json) |
-| 　采集站 | 60 | [点播-采集站.json](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-采集站.json) |
-| 　Py 站 | 395 | [点播-Py站.json](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Py站.json) |
-| 　JS 站 | 600 | [点播-JS站.json](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-JS站.json) |
-| 　Jar 爬虫站 | 1968 | [点播-Jar爬虫站.json](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Jar爬虫站.json) |
-| 　其它 | 13 | 包含在合集内 |
-| **直播源** | **83** | [live.json](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/live.json) |
-| **直播频道** | **13457** | [live.m3u](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/live.m3u) |
+| **点播合集（全部）** | **2433** | [点播合集.json](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播合集.json) |
+| 　采集站 | 35 | [点播-采集站.json](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-采集站.json) |
+| 　Py 站 | 286 | [点播-Py站.json](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Py站.json) |
+| 　JS 站 | 486 | [点播-JS站.json](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-JS站.json) |
+| 　Jar 爬虫站 | 1625 | [点播-Jar爬虫站.json](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Jar爬虫站.json) |
+| 　其它 | 1 | 包含在合集内 |
+| **直播源** | **58** | [live.json](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/live.json) |
+| **直播频道** | **9211** | [live.m3u](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/live.m3u) |
 
-> 以上 3036 个点播站点全部通过存活检测与测速筛选（慢站已剔除），按实测速度排序，快的在前。
+> 以上 2433 个点播站点全部通过存活检测与测速筛选（慢站已剔除），按实测速度排序，快的在前。
 
 ## 🔍 本轮过滤明细
 
 | 环节 | 数量 | 说明 |
 | --- | ---: | --- |
-| 候选接口 | 1634 | 从收集池挑选 |
-| 接口抓取成功 | 134 | 含多仓递归 |
-| 原始站点 | 18376 | 抓到的全部条目 |
-| 去重后 | 4176 | 去掉 14836 条重复 |
-| 　├ 剔除·失效 | 1030 | 连不上/内容异常 |
-| 　├ 剔除·太慢 | 76 | 首字节超阈值（已实测） |
-| 　├ 剔除·本机引用 | 311 | 127.0.0.1 等 |
-| 　└ 剔除·非直播内容 | 436983 | 直播侧，MV/点歌台等 |
-| **最终输出** | **3036** | |
+| 候选接口 | 600 | 从收集池挑选 |
+| 接口抓取成功 | 105 | 含多仓递归 |
+| 原始站点 | 16566 | 抓到的全部条目 |
+| 去重后 | 3552 | 去掉 13573 条重复 |
+| 　├ 剔除·失效 | 1034 | 连不上/内容异常 |
+| 　├ 剔除·太慢 | 63 | 首字节超阈值（已实测） |
+| 　├ 剔除·本机引用 | 217 | 127.0.0.1 等 |
+| 　└ 剔除·非直播内容 | 412424 | 直播侧，MV/点歌台等 |
+| **最终输出** | **2433** | |
 
 ### 速度分档（探活结果）
 
 | 档位 | 数量 | 处理 |
 | --- | ---: | --- |
-| 🟢 精选（TTFB≤300ms） | 2101 | 保留，排最前 |
-| 🔵 正常（300<TTFB≤1500ms） | 592 | 保留 |
-| 🟡 偏慢（TTFB>1500ms） | 76 | **已剔除** |
-| 🟠 测不准（限流/403） | 377 | 保留（下轮重测） |
+| 🟢 精选（TTFB≤300ms） | 1690 | 保留，排最前 |
+| 🔵 正常（300<TTFB≤1500ms） | 552 | 保留 |
+| 🟡 偏慢（TTFB>1500ms） | 63 | **已剔除** |
+| 🟠 测不准（限流/403） | 213 | 保留（下轮重测） |
 | ⚪ 未测到（本轮预算用尽） | 0 | 保留（下轮补测） |
-| 🔴 失效 | 1030 | 已剔除 |
+| 🔴 失效 | 1034 | 已剔除 |
 
 > 判定阈值（只看首字节，故意不看吞吐）：普通站 TTFB>1500ms 判慢，内置爬虫站（csp_*）放宽到 3000ms —— 内置站测的是目标站首页，HTML 更重。
 > 不看吞吐的原因：接口本身就是几十 KB 的 JSON/脚本，KB/s 低只代表文件小，点开几乎秒开；按吞吐会把 TTFB 一两百毫秒的健康站误删。

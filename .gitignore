@@ -17,3 +17,6 @@ docs/
 
 # 源码压缩包由打包步骤生成，不入库
 public/downloads/
+
+# 上游抓取缓存（本地/CI 临时文件，不入库）
+data/cache/

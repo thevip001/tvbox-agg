@@ -272,3 +272,81 @@ export async function harvestAll(upstreams, concurrency = 6) {
   });
   return out;
 }
+
+
+/* ============================ GitHub 代码/仓库搜索（L3 层） ============================ */
+
+/**
+ * 用 GitHub API 搜索新出现的 TVBox 配置仓库。
+ * 匿名调用限速 10 次/分钟；在 Actions 里会自动带 GITHUB_TOKEN，额度高得多。
+ * 只在有 token 时启用，避免 CI 外跑不动还拖慢。
+ */
+export async function searchGithubRepos({ token, queries = [], perQuery = 8, maxAgeDays = 30 } = {}) {
+  if (!token) return { skipped: true, reason: "未提供 GITHUB_TOKEN", repos: [] };
+  const out = new Map();
+  const cutoff = Date.now() - maxAgeDays * 86400_000;
+
+  for (const q of queries) {
+    const url = `https://api.github.com/search/repositories?q=${encodeURIComponent(q)}&sort=updated&order=desc&per_page=${perQuery}`;
+    const r = await httpGet(url, {
+      ua: "tvbox-agg-collector",
+      timeoutMs: 20000,
+      maxBytes: 2 * 1024 * 1024,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    });
+    if (!r.ok) {
+      log(`  ⚠️ GitHub 搜索「${q}」失败：HTTP ${r.status}`);
+      continue;
+    }
+    let data;
+    try {
+      data = JSON.parse(r.body.toString("utf8"));
+    } catch {
+      continue;
+    }
+    for (const repo of data.items || []) {
+      if (!repo?.full_name) continue;
+      const updated = Date.parse(repo.updated_at || 0) || 0;
+      if (updated < cutoff) continue; // 太久没更新的仓库跳过
+      out.set(repo.full_name, {
+        name: repo.full_name,
+        stars: repo.stargazers_count || 0,
+        updated: repo.updated_at,
+        desc: (repo.description || "").slice(0, 60),
+        weight: repo.stargazers_count > 20 ? 3 : 2,
+      });
+    }
+    // 搜索有速率限制，逐个之间歇一下
+    await new Promise((r2) => setTimeout(r2, 1200));
+  }
+  return { skipped: false, repos: [...out.values()] };
+}
+
+/**
+ * 把一个 GitHub 仓库转成「可能的清单地址」候选。
+ * 不去猜文件内容，只按 TVBox 生态最常见的几种命名拼一遍，
+ * 后面统一走抓取+解析验证，假的自然会被淘汰。
+ */
+export function repoToCandidates(repoName, branch = "main") {
+  const base = `https://raw.githubusercontent.com/${repoName}/${branch}`;
+  const names = [
+    "apilinks.txt",
+    "api_list.json",
+    "tvboxapilinks.txt",
+    "apilinks.json",
+    "config.json",
+    "api.json",
+    "tvbox.json",
+    "data/interfaces.json",
+    "output/单仓聚合.json",
+    "output/多仓订阅.json",
+    "depot.json",
+    "merged.json",
+    "all.json",
+  ];
+  return names.map((n) => `${base}/${n}`);
+}

@@ -22,10 +22,11 @@ TVAPP精选, https://raw.githubusercontent.com/youhunwl/TVAPP/main/README.md, re
 聚合去重仓·精选, https://raw.githubusercontent.com/longge83/tvbox-merged/main/tvbox-quality.json, links
 聚合去重仓·全量, https://raw.githubusercontent.com/longge83/tvbox-merged/main/tvbox-full-homefirst.json, links
 
-# ---------- 同生态镜像清单（原项目的 fork / 再聚合，属于同级来源） ----------
-镜像备份池A, https://raw.githubusercontent.com/Tpop2026/tvbox-api-1/main/apilinks.txt, apilinks
-镜像备份池B, https://raw.githubusercontent.com/myysc/tvbox-api/main/apilinks.txt, apilinks
-镜像备份池D, https://raw.githubusercontent.com/PengShiQiang/tvbox-api-backup/main/apilinks.txt, apilinks
+# ---------- 已移除：3 个「镜像备份池」 ----------
+# Tpop2026/tvbox-api-1、myysc/tvbox-api、PengShiQiang/tvbox-api-backup
+# 实测贡献 0 条新地址（都是原项目 fork，apilinks.txt 内容与本仓完全一致），
+# 且它们的清单本来就在你自己的 apilinks.txt 里，作为上游没有意义。
+# 2026-11-21 移除。
 
 # ---------- 待你补充：下面这些仓库名是搜索结果里的候选，需先确认存在再用 ----------
 # 拾光多仓, https://raw.githubusercontent.com/用户名/仓库/main/xxx.txt, links

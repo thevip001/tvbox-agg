@@ -471,21 +471,23 @@ export function contentFingerprint(samples) {
 /* ============================ 测速分档 ============================ */
 
 export const SPEED = {
-  FAST_TTFB: Number(process.env.FAST_TTFB_MS || 800),
-  OK_TTFB: Number(process.env.OK_TTFB_MS || 3000),
-  SLOW_TTFB: Number(process.env.SLOW_TTFB_MS || 6000),
-  MIN_KBPS: Number(process.env.MIN_KBPS || 30),
+  FAST_TTFB: Number(process.env.FAST_TTFB_MS || 300),
+  OK_TTFB: Number(process.env.OK_TTFB_MS || 800),
+  SLOW_TTFB: Number(process.env.SLOW_TTFB_MS || 1500),
 };
 
-/** 返回 fast | ok | slow | dead */
+/** 返回 fast | ok | slow | dead（只看首字节，不看吞吐） */
 export function speedGrade(m) {
   if (!m || !m.ok) return "dead";
-  if (m.ttfb > SPEED.SLOW_TTFB) return "slow";
-  if (m.ttfb > SPEED.OK_TTFB) return "slow";
-  if (m.kbps && m.kbps < SPEED.MIN_KBPS) return "slow";
-  if (m.ttfb <= SPEED.FAST_TTFB) return "fast";
+  const ttfb = Number(m.ttfb) || 0;
+  if (!ttfb) return "ok";
+  if (ttfb > SPEED.SLOW_TTFB) return "slow";
+  if (ttfb <= SPEED.FAST_TTFB) return "fast";
   return "ok";
 }
 
-/** 排序权重：fast < ok < slow < dead */
-export const GRADE_ORDER = { fast: 0, ok: 1, slow: 2, dead: 3 };
+/**
+ * 排序权重：fast < ok < uncertain < slow < dead
+ * uncertain = 限流/403 测不准，保留但要排后面
+ */
+export const GRADE_ORDER = { fast: 0, ok: 1, uncertain: 2, unsure: 2, slow: 3, dead: 4 };

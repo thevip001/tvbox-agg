@@ -232,11 +232,12 @@ git push
 
 | 变量 | 默认 | 说明 |
 |---|---|---|
-| `STRICTNESS` | `balanced` | `strict` 只留快站 / `balanced` 死站删·慢站留文末 / `loose` 只删死站 |
-| `SLOW_TTFB_MS` | 6000 | 超过这个首字节时间判为慢 |
-| `OK_TTFB_MS` | 3000 | 超过降为普通档 |
-| `FAST_TTFB_MS` | 800 | 低于算精选 |
-| `MIN_KBPS` | 30 | 吞吐低于这个判为慢 |
+| `STRICTNESS` | `strict` | `strict` 只留快站（默认，定时任务即此档）/ `balanced` 死站删·慢站留文末 / `loose` 只删死站 |
+| `SLOW_TTFB_MS` | 1500 | 首字节超过这个判为慢（strict 下删除） |
+| `OK_TTFB_MS` | 800 | 超过算普通档（仍保留） |
+| `FAST_TTFB_MS` | 300 | 低于算精选，排最前 |
+| `CRAWLER_SLOW_TTFB_MS` | 3000 | 内置爬虫站（csp_*）放宽阈值，因为测的是目标站首页 |
+| `KEEP_UNPROBED` | 1 | 预算用尽没测到的站标 `unsure` 保留，下轮补测（0=当死站丢弃） |
 | `MAX_FAILS` | 3 | 连续失败几轮才永久剔除 |
 | `LIVE_PER_CHANNEL` | 3 | 每个频道保留几个源 |
 | `FILTER_NON_TV` | 1 | 过滤 MV/音乐/点歌台 |
@@ -244,7 +245,7 @@ git push
 | `DROP_LOCAL_REF` | 1 | 去掉 127.0.0.1 引用 |
 | `KEEP_SOURCE_SUFFIX` | 0 | 名字是否加「｜来源」 |
 | `MAX_CANDIDATES` | 600 | 本轮最多抓多少候选 |
-| `BUDGET_FETCH` / `BUDGET_PROBE` / `BUDGET_LIVE` | 900/1200/600 | 分阶段预算（秒），到点收工绝不拖超时 |
+| `BUDGET_FETCH` / `BUDGET_PROBE` / `BUDGET_LIVE` | 900/1560/600 | 分阶段预算（秒），到点收工绝不拖超时 |
 | `MIN_RATIO` | 0.5 | 结果低于上次这个比例就拒绝覆盖 |
 
 ### 加收集来源

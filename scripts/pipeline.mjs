@@ -22,10 +22,19 @@ export function readOptions(env = process.env) {
   return {
     // 剔除策略：strict = 只留快站 / balanced = 死站剔除、慢站保留在文末 / loose = 只剔死站
     strictness: (env.STRICTNESS || "balanced").toLowerCase(),
-    slowTtfb: Number(env.SLOW_TTFB_MS || 6000),
-    okTtfb: Number(env.OK_TTFB_MS || 3000),
-    fastTtfb: Number(env.FAST_TTFB_MS || 800),
-    minKbps: Number(env.MIN_KBPS || 30),
+    // ===== 判慢只看首字节（TTFB），不看吞吐 =====
+    // 原因：接口返回的就是几十 KB 的 JSON/脚本，KB/s 低只是「文件小、连接早断开」，
+    // 用户点开几乎是秒开。实测过 MIN_KBPS=50 会把 TTFB 133~366ms 的健康站全删掉。
+    // slowTtfb：超过就判「慢」（strict 下删除）
+    slowTtfb: Number(env.SLOW_TTFB_MS || 1500),
+    // okTtfb：超过就降到「普通」档（仍保留，只是排在精选后面）
+    okTtfb: Number(env.OK_TTFB_MS || 800),
+    // fastTtfb：低于就是「精选」
+    fastTtfb: Number(env.FAST_TTFB_MS || 300),
+    // csp_* 内置爬虫站测的是目标站首页（HTML 更重），阈值放宽一些
+    crawlerSlowTtfb: Number(env.CRAWLER_SLOW_TTFB_MS || 3000),
+    // 预算用尽、本轮没测到的站不参与判慢（下轮补测），见 probeSkipped / grade=unsure
+    keepUnprobed: (env.KEEP_UNPROBED || "1") !== "0",
     // 连续失败多少轮才永久剔除
     maxFails: Number(env.MAX_FAILS || 3),
     // 每个频道保留几个源
@@ -291,7 +300,7 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
     for (const f of cfg.flags) flagSet.add(String(f));
   }
   stats.afterDedupSites = siteMap.size;
-  stats.grades = { fast: 0, ok: 0, slow: 0, dead: 0 };
+  stats.grades = { fast: 0, ok: 0, uncertain: 0, unsure: 0, slow: 0, dead: 0 };
   stats.afterDedupLives = liveMap.size;
 
   onProgress?.(`汇总：站点 ${stats.rawSites} → ${siteMap.size}；直播 ${stats.rawLives} → ${liveMap.size}`);
@@ -356,9 +365,10 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
 
 
 
-    // 抗误杀：限流/403 属于"服务器活着但拒绝我"，一律保留并降级，不进入测速与判死逻辑
+    // 抗误杀：限流/403 属于"服务器活着但拒绝我"。
+    // 单独一个档位 uncertain —— 不能被 strict 当成慢站删掉，报告里也要说清原因。
     if (res.uncertain) {
-      res = { ...res, alive: true, grade: "slow" };
+      res = { ...res, alive: true, grade: "uncertain" };
       probeCache.set(ck, res);
       return res;
     }
@@ -379,31 +389,48 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
         }
       }
     }
-    res = { ...res, grade: res.alive ? gradeWithOpts(res, opts) : "dead" };
+    res = { ...res, grade: res.alive ? gradeWithOpts(res, opts, e.category, site.api) : "dead" };
 
     probeCache.set(ck, res);
     return res;
   };
 
-  const gradeWithOpts = (res, o) => {
+  /**
+   * 分档：只按首字节（TTFB），不按吞吐
+   *
+   *  - 采集站 / Py / JS / 其它（测的是接口本身）：TTFB > slowTtfb 判慢
+   *  - csp_* 内置爬虫站（测的是目标站首页）：阈值放宽到 crawlerSlowTtfb
+   *  - 吞吐只写进报告供参考，不参与判定（小文件 KB/s 天然低，会误杀健康站）
+   */
+  const gradeWithOpts = (res, o, category, api) => {
     if (!res || !res.alive) return "dead";
     const ttfb = Number(res.ttfb) || 0;
-    const kbps = Number(res.kbps) || 0;
-    if (ttfb > o.slowTtfb) return "slow";
-    if (kbps && kbps < o.minKbps) return "slow";
-    if (ttfb > o.okTtfb) return "slow";
-    if (ttfb > 0 && ttfb <= o.fastTtfb) return "fast";
+
+    const isCrawler = category === "spider" && !/^https?:\/\//i.test(String(api || ""));
+    const limit = isCrawler ? o.crawlerSlowTtfb : o.slowTtfb;
+
+    if (ttfb <= 0) return "ok"; // 没有测速数据（内置爬虫等），按普通保留
+    if (ttfb > limit) return "slow";
+    if (ttfb > o.okTtfb) return "ok";
+    if (ttfb <= o.fastTtfb) return "fast";
     return "ok";
+  };
+
+  /** 预算用尽：本轮没测到，不能算慢站（算慢站等于随机删站） */
+  const markUnprobed = (e) => {
+    e.probe = { alive: true, grade: "unsure", probe: "skipped", ttfb: null, kbps: null, reason: "本轮预算用尽，未完成测速（下轮补测）" };
+    e.grade = "unsure";
+    stats.probeSkipped++;
   };
 
   let probed = 0;
   phaseStart = Date.now();
   await pool(entries, opts.concurrencyProbe, async (e) => {
     if (Date.now() - phaseStart > opts.budgetProbe * 1000) {
-      stats.probeSkipped++;
-      // 预算用尽：保持「存活待定」，默认先收下但降到 slow 档（下轮会再测）
-      e.probe = { alive: true, grade: "slow", probe: "skipped", reason: "本轮预算用尽，未完成测速" };
-      e.grade = "slow";
+      // 预算用尽：本轮没测到 ≠ 站慢。旧版直接标 slow，strict 下会被批量误删
+      // （本地实测 3,134 个「太慢」里 3,011 个根本没测过）。现在单独标 unsure、保留。
+      if (opts.keepUnprobed) markUnprobed(e);
+      else { e.probe = { alive: false, grade: "dead", reason: "本轮预算用尽，未测" }; e.grade = "dead"; stats.probeSkipped++; }
       return;
     }
     const r = await probeSite(e);
@@ -431,14 +458,24 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
       });
       continue;
     }
+    // 测不准（限流/403/预算用尽没测到）：永远保留，strict 也不删，但要排后面
+    if (g === "uncertain" || g === "unsure") {
+      kept.push(e);
+      continue;
+    }
     if (g === "slow" && opts.strictness === "strict") {
       stats.dropped.slow++;
+      const p = e.probe || {};
+      const why =
+        p.ttfb != null && p.ttfb > 0
+          ? `太慢 TTFB=${p.ttfb}ms 吞吐=${p.kbps ?? "?"}KB/s`
+          : `太慢（${p.reason || "无测速数据"}）`;
       stats.removed.push({
         kind: "site",
         name: e.site.name,
         api: e.site.api,
         category: e.category,
-        reason: `太慢 TTFB=${e.probe?.ttfb ?? "?"}ms 吞吐=${e.probe?.kbps ?? "?"}KB/s`,
+        reason: why,
       });
       continue;
     }
@@ -767,40 +804,67 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
   };
   await writeFile(join(dir, FILES.removed), JSON.stringify(removed, null, 2) + "\n", "utf8");
 
-  // README
+  // README —— 站点数量放在最前面，一眼可见
   const c = result.counts;
+  const g = result.stats.grades || {};
+  const d = result.stats.dropped || {};
+  const modeName = { strict: "严格（只留快站，慢站也删）", balanced: "平衡（删死站，慢站留文末）", loose: "宽松（只删死站）" }[opts.strictness] || opts.strictness;
+
   const readme = [
     "# 聚合接口（每日自动更新）",
     "",
-    `更新时间：${when}（北京时间）`,
+    `**更新时间**：${when}（北京时间）　**策略**：${modeName}`,
     "",
-    "把下面地址直接填进 TVBox 即可。文件由 scripts/main.mjs 自动生成，请勿手改。",
+    "## 📊 站点数量总览",
     "",
-    "| 文件 | 内容 | 数量 | 地址 |",
-    "| --- | --- | --- | --- |",
-    `| ${FILES.all} | 全部点播站点（已探活+去重，快站排前） | ${c.all} 个站点 | ${rawUrl(FILES.all)} |`,
-    `| ${FILES.cj} | 采集站（ac=list + ac=detail 双段检测） | ${c.cj} 个 | ${rawUrl(FILES.cj)} |`,
-    `| ${FILES.py} | Py 站（文件可访问性检测） | ${c.py} 个 | ${rawUrl(FILES.py)} |`,
-    `| ${FILES.js} | JS 站（主文件 + 规则文件双检） | ${c.js} 个 | ${rawUrl(FILES.js)} |`,
-    `| ${FILES.spider} | Jar 爬虫站（jar 完整性 + ext 目标可达） | ${c.spider} 个 | ${rawUrl(FILES.spider)} |`,
-    `| ${FILES.live} | 直播聚合 | ${c.liveSources} 个直播源 | ${rawUrl(FILES.live)} |`,
-    `| ${FILES.m3u} | 直播频道（频道归一合并，每台 ${opts.livePerChannel} 源） | ${c.channels} 个频道 | ${rawUrl(FILES.m3u)} |`,
-    `| ${FILES.removed} | 本次剔除明细与原因 | — | ${rawUrl(FILES.removed)} |`,
+    "| 分类 | 输出站点数 | 文件 |",
+    "| --- | ---: | --- |",
+    `| **点播合集（全部）** | **${c.all}** | [${FILES.all}](${rawUrl(FILES.all)}) |`,
+    `| 　采集站 | ${c.cj} | [${FILES.cj}](${rawUrl(FILES.cj)}) |`,
+    `| 　Py 站 | ${c.py} | [${FILES.py}](${rawUrl(FILES.py)}) |`,
+    `| 　JS 站 | ${c.js} | [${FILES.js}](${rawUrl(FILES.js)}) |`,
+    `| 　Jar 爬虫站 | ${c.spider} | [${FILES.spider}](${rawUrl(FILES.spider)}) |`,
+    `| 　其它 | ${c.other} | 包含在合集内 |`,
+    `| **直播源** | **${c.liveSources}** | [${FILES.live}](${rawUrl(FILES.live)}) |`,
+    `| **直播频道** | **${c.channels}** | [${FILES.m3u}](${rawUrl(FILES.m3u)}) |`,
     "",
-    "## 本次过滤统计",
+    `> 以上 ${c.all} 个点播站点全部通过存活检测${opts.strictness === "strict" ? "与测速筛选（慢站已剔除）" : ""}，按实测速度排序，快的在前。`,
     "",
-    "| 项目 | 数量 |",
-    "| --- | --- |",
-    `| 候选接口 | ${result.stats.candidates} |`,
-    `| 抓取成功 | ${result.stats.fetched} |`,
-    `| 原始站点 → 去重后 | ${result.stats.rawSites} → ${result.stats.afterDedupSites} |`,
-    `| 剔除·失效 | ${result.stats.dropped.dead} |`,
-    `| 剔除·太慢 | ${result.stats.dropped.slow} |`,
-    `| 剔除·本机引用 | ${result.stats.dropped.local} |`,
-    `| 剔除·重复 | ${result.stats.dropped.dup} |`,
-    `| 剔除·非直播内容 | ${result.stats.dropped.nonTv} |`,
+    "## 🔍 本轮过滤明细",
     "",
-    `策略：strictness=${opts.strictness}，慢站阈值 TTFB>${opts.slowTtfb / 1000}s 或 吞吐<${opts.minKbps}KB/s`,
+    "| 环节 | 数量 | 说明 |",
+    "| --- | ---: | --- |",
+    `| 候选接口 | ${result.stats.candidates} | 从收集池挑选 |`,
+    `| 接口抓取成功 | ${result.stats.fetched} | 含多仓递归 |`,
+    `| 原始站点 | ${result.stats.rawSites} | 抓到的全部条目 |`,
+    `| 去重后 | ${result.stats.afterDedupSites} | 去掉 ${d.dup || 0} 条重复 |`,
+    `| 　├ 剔除·失效 | ${d.dead || 0} | 连不上/内容异常 |`,
+    `| 　├ 剔除·太慢 | ${d.slow || 0} | 首字节超阈值（已实测） |`,
+    `| 　├ 剔除·本机引用 | ${d.local || 0} | 127.0.0.1 等 |`,
+    `| 　└ 剔除·非直播内容 | ${d.nonTv || 0} | 直播侧，MV/点歌台等 |`,
+    `| **最终输出** | **${c.all}** | |`,
+    "",
+    "### 速度分档（探活结果）",
+    "",
+    "| 档位 | 数量 | 处理 |",
+    "| --- | ---: | --- |",
+    `| 🟢 精选（TTFB≤${opts.fastTtfb}ms） | ${g.fast || 0} | 保留，排最前 |`,
+    `| 🔵 正常（TTFB≤${opts.okTtfb}ms） | ${g.ok || 0} | 保留 |`,
+    `| 🟡 偏慢（TTFB>${opts.slowTtfb}ms） | ${g.slow || 0} | ${opts.strictness === "strict" ? "**已剔除**" : "保留在文末"} |`,
+    `| 🟠 测不准（限流/403） | ${g.uncertain || 0} | 保留（下轮重测） |`,
+    `| ⚪ 未测到（本轮预算用尽） | ${g.unsure || 0} | 保留（下轮补测） |`,
+    `| 🔴 失效 | ${g.dead || 0} | 已剔除 |`,
+    "",
+    `> 判定阈值（只看首字节，故意不看吞吐）：普通站 TTFB>${opts.slowTtfb}ms 判慢，内置爬虫站（csp_*）放宽到 ${opts.crawlerSlowTtfb}ms —— 内置站测的是目标站首页，HTML 更重。`,
+    `> 不看吞吐的原因：接口本身就是几十 KB 的 JSON/脚本，KB/s 低只代表文件小，点开几乎秒开；按吞吐会把 TTFB 一两百毫秒的健康站误删。`,
+    "",
+    "## 📁 剔除报告",
+    "",
+    `完整明细见 [${FILES.removed}](${rawUrl(FILES.removed)})：每条被删站点都记录了名称、地址、原因和实测速度，方便你抽查有没有误杀。`,
+    "",
+    "---",
+    "",
+    "接口资源来自互联网公开渠道，版权归原作者所有。仅供测试学习。",
     "",
   ].join("\n");
   await writeFile(join(dir, FILES.readme), readme, "utf8");

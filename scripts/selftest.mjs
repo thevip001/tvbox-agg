@@ -98,9 +98,10 @@ t("卫视备用线被去掉", () => {
 
 console.log("\n【5】测速分档");
 t("快站 → fast", () => assert.strictEqual(speedGrade({ ok: true, ttfb: 200, kbps: 500 }), "fast"));
-t("3~6 秒 → slow", () => assert.strictEqual(speedGrade({ ok: true, ttfb: 4000, kbps: 500 }), "slow"));
+t("0.8~1.5 秒 → ok", () => assert.strictEqual(speedGrade({ ok: true, ttfb: 1000, kbps: 500 }), "ok"));
+t("1.5 秒以上 → slow", () => assert.strictEqual(speedGrade({ ok: true, ttfb: 1600, kbps: 500 }), "slow"));
 t("6 秒以上 → slow", () => assert.strictEqual(speedGrade({ ok: true, ttfb: 9000, kbps: 500 }), "slow"));
-t("低吞吐 → slow", () => assert.strictEqual(speedGrade({ ok: true, ttfb: 300, kbps: 5 }), "slow"));
+t("低吞吐但首字节快 → 不判慢(fast)", () => assert.strictEqual(speedGrade({ ok: true, ttfb: 300, kbps: 5 }), "fast"));
 t("失败 → dead", () => assert.strictEqual(speedGrade({ ok: false }), "dead"));
 
 console.log("\n【6】宽松 JSON（现实里的接口经常是坏 JSON）");

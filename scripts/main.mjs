@@ -12,7 +12,7 @@
 import { appendFile, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { log, stamp } from "./core.mjs";
-import { harvestAll, loadUpstreams, mergePool, pickCandidates, updatePool } from "./collect.mjs";
+import { harvestAll, loadUpstreams, mergePool, pickCandidates, updatePool, searchGithubRepos, repoToCandidates } from "./collect.mjs";
 import { runPipeline, readOptions, writeOutputs, readPreviousCounts, FILES } from "./pipeline.mjs";
 
 const ARGS = new Set(process.argv.slice(2));
@@ -84,7 +84,36 @@ async function main() {
     log("  --no-collect：跳过上游清单");
   }
 
-  let poolAll = mergePool({ upstreams: upstreamHits, seeds, prevPool, fromConfigs: [] });
+  /* L3：GitHub 仓库搜索（只有拿到 token 才跑，CI 里 GITHUB_TOKEN 自动注入） */
+  let ghHits = [];
+  if (!NO_COLLECT) {
+    const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || "";
+    if (token) {
+      const { skipped, repos } = await searchGithubRepos({
+        token,
+        queries: ["tvbox in:name,description,readme", "影视仓 配置 in:name,description", "tvbox 接口 in:readme"],
+        perQuery: 8,
+        maxAgeDays: Number(process.env.GH_SEARCH_MAX_AGE_DAYS || 30),
+      });
+      if (!skipped) {
+        log(`  GitHub 搜索：命中 ${repos.length} 个近期活跃仓库`);
+        // 每个仓库尝试最常见的几个清单文件名，假的会在抓取阶段被淘汰
+        const perRepo = Number(process.env.GH_CANDIDATES_PER_REPO || 6);
+        for (const repo of repos.slice(0, 12)) {
+          ghHits.push({
+            name: `GitHub·${repo.name}`,
+            ok: true,
+            urls: repoToCandidates(repo.name).slice(0, perRepo),
+          });
+        }
+        log(`  从 ${Math.min(repos.length, 12)} 个仓库生成 ${ghHits.reduce((a, h) => a + h.urls.length, 0)} 个候选地址（待抓取验证）`);
+      }
+    } else {
+      log("  GitHub 搜索：未提供 GITHUB_TOKEN，跳过（本地运行时可设 GH_TOKEN 开启）");
+    }
+  }
+
+  let poolAll = mergePool({ upstreams: [...upstreamHits, ...ghHits], seeds, prevPool, fromConfigs: [] });
   const candidates = pickCandidates(poolAll, { limit: opts.maxCandidates, maxFails: opts.maxFails });
   log(`  候选池合计 ${poolAll.length} 条，本轮抓取 ${candidates.length} 条`);
 
@@ -174,8 +203,9 @@ async function main() {
   log("【4/5】结果");
   log(`  点播合集 ${c.all} 站（采集站 ${c.cj} / Py ${c.py} / JS ${c.js} / Jar ${c.spider} / 其它 ${c.other}）`);
   const g = s.grades || {};
-  log(`  速度分档：精选(快) ${g.fast || 0} / 普通 ${g.ok || 0} / 偏慢 ${g.slow || 0} / 失效 ${g.dead || 0}（测不准保留 ${s.uncertain || 0}）`);
+  log(`  速度分档：精选 ${g.fast || 0} / 普通 ${g.ok || 0} / 偏慢 ${g.slow || 0} / 失效 ${g.dead || 0}（测不准 ${g.uncertain || 0}、未测到 ${g.unsure || 0}，均保留）`);
   log(`  剔除：失效 ${s.dropped.dead}、太慢 ${s.dropped.slow}、重复 ${s.dropped.dup}、本机引用 ${s.dropped.local}`);
+  if (s.probeSkipped) log(`  ⚠️ 本轮有 ${s.probeSkipped} 个站因预算用尽没测到，已保留待下轮补测（不算慢站）`);
   log(`  直播：${c.liveSources} 个源；频道 ${c.rawChannels} → 合并后 ${c.channels} 条`);
   log(`  总用时 ${Math.round((Date.now() - t0) / 1000)} 秒`);
 

@@ -29,6 +29,11 @@
 
 - 同一个站点（type + api + ext 相同）只保留一个。比较时忽略协议、www、末尾斜杠和 GitHub 代理前缀的差异。
 - 采集站（type 0/1）会请求 `?ac=list` 检测，失效的剔除。
+- **测速只看首字节（TTFB），不看吞吐**：接口本身就是几十 KB 的 JSON/脚本，KB/s 低只代表文件小；
+  实测按 50KB/s 判会删掉 TTFB 只有 130~360ms 的健康站。
+  - 普通站：TTFB > 1500ms 判慢（strict 下剔除），≤300ms 为精选，≤800ms 为正常
+  - 内置爬虫站（`csp_*`，测的是目标站首页 HTML）：放宽到 3000ms
+  - 限流 / 403 / 本轮预算用尽没测到的站：单独标记并保留，下轮重测，绝不当成慢站删除
 - 点播合集把采集站、Py、JS、Jar 以及其它类型合并后，再做一次去重整理。
 - 解析（parses）按地址去重，flags 合并。
 
@@ -45,10 +50,24 @@
 
 ## 目录
 
-- `apilinks.txt`：接口列表（以原项目 lubin776/tvbox-api-backup 的接口为基础）
+- `apilinks.txt`：人工种子接口列表（78 条，含原项目全部 17 个地址）
+- `config/upstreams.txt`：上游公开清单源（自动收集用）
+- `config/liveupstreams.txt`：上游直播源清单
+- `data/pool.json`：候选池（自动累积，记录每条地址的成功/失败次数）
 - `聚合接口/`：每日生成的聚合文件
-- `scripts/aggregate.mjs`：抓取、整理、去重脚本（无第三方依赖，需要 Node.js 18+）
+- `scripts/main.mjs`：入口（收集 → 抓取 → 探活测速 → 去重 → 分类输出，无第三方依赖，需 Node.js 18+）
 - `.github/workflows/aggregate-daily.yml`：每日定时任务
+
+## 剔除策略（无需每次手选）
+
+`STRICTNESS` 默认就是 **strict**：定时任务不传任何参数时按 strict 跑，也就是死站删、慢站也删。
+手动 Run workflow 时下拉框默认值同样是 strict，不动它即可。另外两个选项只在需要时用：
+
+| 策略 | 死站 | 慢站（TTFB 超标） |
+| --- | --- | --- |
+| strict（默认） | 删除 | 删除 |
+| balanced | 删除 | 保留在文末 |
+| loose | 删除 | 全部保留 |
 
 ## 声明
 

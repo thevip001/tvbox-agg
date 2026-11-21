@@ -244,12 +244,17 @@ export async function probeCmsSite(api, opts = {}) {
   const body2 = r2.body.toString("utf8");
   const hasVod = r2.ok && /vod_id|vod_name|"list"|<\?xml/i.test(body2);
   const title = (/"vod_name"\s*:\s*"([^"]+)"/.exec(body2) || [])[1] || "";
+  const totalMs = r1.ms + r2.ms;
+  const totalBytes = r1.body.length + r2.body.length;
   return {
     alive: hasVod,
     reason: hasVod ? "ok" : r2.error || `ac=detail HTTP ${r2.status}`,
     grade: hasVod ? "ok" : "dead",
     ttfb: r1.ttfb,
-    ms: r1.ms + r2.ms,
+    ms: totalMs,
+    // 真实吞吐：两次请求的字节数 / 总耗时
+    bytes: totalBytes,
+    kbps: totalMs > 0 ? Math.round((totalBytes / 1024) * (1000 / totalMs)) : 0,
     sampleTitle: title,
     classes: (/"type_name"\s*:\s*"([^"]+)"/.exec(body1) || [])[1] || "",
   };

@@ -13,8 +13,8 @@ on:
         description: "剔除策略：strict(只留快站) / balanced(死站删、慢站留文末) / loose(只删死站)"
         required: false
         type: choice
-        options: [balanced, strict, loose]
-        default: balanced
+        options: [strict, balanced, loose]
+        default: strict
       no_collect:
         description: "跳过上游收集，只用已有池子"
         required: false
@@ -61,11 +61,14 @@ jobs:
       - name: 运行每日聚合
         env:
           # ---- 剔除策略 ----
-          STRICTNESS: ${{ github.event.inputs.strictness || 'balanced' }}
-          SLOW_TTFB_MS: "6000"        # 超过 6 秒判为慢
-          OK_TTFB_MS: "3000"          # 超过 3 秒降为普通
-          FAST_TTFB_MS: "800"         # 低于 0.8 秒算精选
-          MIN_KBPS: "30"              # 吞吐低于 30KB/s 判为慢
+          # 定时触发时 github.event.inputs 是空的，会走默认值 strict
+          STRICTNESS: ${{ github.event.inputs.strictness || 'strict' }}
+          # 判慢只看首字节（TTFB），不看吞吐
+          SLOW_TTFB_MS: "1500"        # 首字节超过 1.5 秒判为慢（strict 下剔除）
+          OK_TTFB_MS: "800"           # 超过 0.8 秒算普通
+          FAST_TTFB_MS: "300"         # 低于 0.3 秒算精选
+          CRAWLER_SLOW_TTFB_MS: "3000"  # 内置爬虫站测的是网站首页，放宽到 3 秒
+          KEEP_UNPROBED: "1"          # 预算用尽没测到的站先保留，下轮补测
           MAX_FAILS: "3"              # 连续失败 3 轮才永久剔除
           # ---- 直播 ----
           LIVE_PER_CHANNEL: "3"       # 每个频道保留几个源
@@ -76,14 +79,20 @@ jobs:
           KEEP_SOURCE_SUFFIX: "0"     # 名字不再加「｜来源」
           MAX_CANDIDATES: ${{ github.event.inputs.max_candidates || '600' }}
           # ---- 分阶段预算（秒）：到点收工，绝不把任务拖超时 ----
+          # 预算用尽的站不会被删（标 unsure 下轮补测），但会排到后面；
+          # 探活是最慢的一步（每个站要测 2 轮），给足 26 分钟。
           BUDGET_FETCH: "900"
-          BUDGET_PROBE: "1200"
+          BUDGET_PROBE: "1560"
           BUDGET_LIVE: "600"
           FETCH_WORKERS: "8"
-          PROBE_WORKERS: "20"
-          LIVE_WORKERS: "6"
+          PROBE_WORKERS: "24"
+          LIVE_WORKERS: "8"
           # CI 里不用缓存（每次都是干净环境）
           CACHE_DIR: ""
+          # GitHub 仓库搜索用（自动注入，无需你配置）
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_CANDIDATES_PER_REPO: "6"
+          GH_SEARCH_MAX_AGE_DAYS: "30"
         run: |
           ARGS=""
           if [ "${{ github.event.inputs.no_collect }}" = "true" ]; then ARGS="--no-collect"; fi

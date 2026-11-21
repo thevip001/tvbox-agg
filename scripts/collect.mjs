@@ -360,8 +360,15 @@ export async function searchGithubRepos({ token, queries = [], perQuery = 8, max
     } catch {
       continue;
     }
+    // 自己 / 原项目 不要当上游抓（否则每次都把自己上次的产物又抓一遍）
+    const SELF = new Set([
+      (process.env.GITHUB_REPOSITORY || "thevip001/tvbox-agg").toLowerCase(),
+      "lubin776/tvbox-api-backup",
+      "lubin776/get_tvbox_api",
+    ]);
     for (const repo of data.items || []) {
       if (!repo?.full_name) continue;
+      if (SELF.has(String(repo.full_name).toLowerCase())) continue;
       const updated = Date.parse(repo.updated_at || 0) || 0;
       if (updated < cutoff) continue; // 太久没更新的仓库跳过
       out.set(repo.full_name, {

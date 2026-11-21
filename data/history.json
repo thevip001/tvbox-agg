@@ -1,197 +1,35 @@
 [
  {
-  "when": "2026-11-21 11:36",
+  "when": "2026-11-21 15:41",
   "counts": {
-   "all": 4902,
-   "cj": 69,
-   "py": 299,
-   "js": 1603,
-   "spider": 2929,
-   "other": 2,
-   "liveSources": 108,
-   "channels": 15247,
-   "rawChannels": 32849
+   "all": 2420,
+   "cj": 38,
+   "py": 285,
+   "js": 479,
+   "spider": 1612,
+   "other": 6,
+   "liveSources": 56,
+   "channels": 7930,
+   "rawChannels": 23220
   },
   "grades": {
-   "fast": 3286,
-   "ok": 316,
-   "slow": 1340,
-   "dead": 1214
-  },
-  "uncertain": null,
-  "dropped": {
-   "dead": 1214,
-   "slow": 0,
-   "local": 305,
-   "dup": 9624,
-   "nonTv": 609878
-  },
-  "fetched": 120,
-  "candidates": 220,
-  "elapsed": 869
- },
- {
-  "when": "2026-11-21 12:55",
-  "counts": {
-   "all": 3407,
-   "cj": 37,
-   "py": 288,
-   "js": 1284,
-   "spider": 1798,
-   "other": 0,
-   "liveSources": 72,
-   "channels": 10980,
-   "rawChannels": 25553
-  },
-  "grades": {
-   "fast": 3184,
-   "ok": 249,
-   "slow": 1065,
-   "dead": 1078
-  },
-  "uncertain": null,
-  "dropped": {
-   "dead": 1078,
-   "slow": 1065,
-   "local": 202,
-   "dup": 8262,
-   "nonTv": 428642
-  },
-  "fetched": 107,
-  "candidates": 180,
-  "elapsed": 1012
- },
- {
-  "when": "2026-11-21 14:15",
-  "counts": {
-   "all": 4234,
-   "cj": 68,
-   "py": 359,
-   "js": 1544,
-   "spider": 2258,
-   "other": 5,
-   "liveSources": 80,
-   "channels": 12294,
-   "rawChannels": 31611
-  },
-  "grades": {
-   "fast": 3380,
-   "ok": 610,
-   "uncertain": 288,
+   "fast": 1597,
+   "ok": 604,
+   "uncertain": 240,
    "unsure": 0,
-   "slow": 68,
-   "dead": 1923
+   "slow": 138,
+   "dead": 871
   },
   "uncertain": null,
   "dropped": {
-   "dead": 1923,
-   "slow": 68,
-   "local": 259,
-   "dup": 11671,
-   "nonTv": 86909
+   "dead": 871,
+   "slow": 138,
+   "local": 109,
+   "dup": 7063,
+   "nonTv": 67080
   },
-  "fetched": 120,
+  "fetched": 69,
   "candidates": 600,
-  "elapsed": 1146
- },
- {
-  "when": "2026-11-21 14:39",
-  "counts": {
-   "all": 4653,
-   "cj": 64,
-   "py": 344,
-   "js": 1514,
-   "spider": 2730,
-   "other": 1,
-   "liveSources": 81,
-   "channels": 12341,
-   "rawChannels": 31658
-  },
-  "grades": {
-   "fast": 3850,
-   "ok": 565,
-   "uncertain": 280,
-   "unsure": 0,
-   "slow": 45,
-   "dead": 1458
-  },
-  "uncertain": null,
-  "dropped": {
-   "dead": 1458,
-   "slow": 45,
-   "local": 318,
-   "dup": 14035,
-   "nonTv": 94536
-  },
-  "fetched": 142,
-  "candidates": 600,
-  "elapsed": 1104
- },
- {
-<<<<<<< Updated upstream
-  "when": "2026-11-21 15:01",
-  "counts": {
-   "all": 4741,
-   "cj": 69,
-   "py": 363,
-   "js": 1547,
-   "spider": 2760,
-   "other": 2,
-   "liveSources": 82,
-   "channels": 12466,
-   "rawChannels": 32038
-  },
-  "grades": {
-   "fast": 3748,
-   "ok": 617,
-   "uncertain": 423,
-   "unsure": 0,
-   "slow": 73,
-   "dead": 1571
-  },
-  "uncertain": null,
-  "dropped": {
-   "dead": 1571,
-   "slow": 73,
-   "local": 348,
-   "dup": 15383,
-   "nonTv": 94775
-  },
-  "fetched": 147,
-  "candidates": 600,
-  "elapsed": 1197
-=======
-  "when": "2026-11-21 15:21",
-  "counts": {
-   "all": 4810,
-   "cj": 69,
-   "py": 363,
-   "js": 1541,
-   "spider": 2834,
-   "other": 3,
-   "liveSources": 83,
-   "channels": 13419,
-   "rawChannels": 33305
-  },
-  "grades": {
-   "fast": 3418,
-   "ok": 1098,
-   "uncertain": 342,
-   "unsure": 0,
-   "slow": 77,
-   "dead": 1476
-  },
-  "uncertain": null,
-  "dropped": {
-   "dead": 1476,
-   "slow": 77,
-   "local": 348,
-   "dup": 15374,
-   "nonTv": 439324
-  },
-  "fetched": 146,
-  "candidates": 600,
-  "elapsed": 1174
->>>>>>> Stashed changes
+  "elapsed": 1123
  }
 ]

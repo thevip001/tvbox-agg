@@ -1,0 +1,14 @@
+# ===== 收集层：直播源清单 =====
+# 每行：「名称, URL, 类型」
+#   类型：txt = 「名称,地址」或「#genre#」分组格式；m3u = M3U 播放列表
+#
+# 这些源会像普通 lives 一样被抓取、解析成频道，参与「频道归一合并」，
+# 频道级去重 + 每台保留 N 个源 之后再输出到 live.m3u。
+# 好处：它们是已经过别人测速筛过的，比从点播接口 lives 里捞出来的杂乱源质量高。
+
+# ---------- 已做测速筛选的公开直播源 ----------
+IPTV精选·测速优选, https://raw.githubusercontent.com/Supprise0901/TVBox_live/main/live.txt, txt
+IPTV仓库·频道库, https://raw.githubusercontent.com/Supprise0901/TVBox_live/main/warehouse.txt, txt
+
+# ---------- 待补：其它公开直播源（确认存在后再取消注释） ----------
+# 示例, https://raw.githubusercontent.com/用户名/仓库/main/live.m3u, m3u

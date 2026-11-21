@@ -1,0 +1,31 @@
+# ===== 收集层：上游清单源 =====
+# 每行一个：「名称, URL, 类型」
+#   类型说明：
+#     links   纯「名称,URL」文本清单（或每行只有 URL）
+#     readme  README.md / Markdown，脚本用正则抓里面的接口地址
+#     json    结构化 JSON（sources[] / urls[] / API_LIST[] 都能自动识别）
+#     apilinks 与你仓库 apilinks.txt 同格式（名称, 镜像1, 镜像2 ...）
+#
+# ⚠️ 重要：这里刻意 **不含 lubin776/tvbox-api-backup**。
+#    原项目并没有「抓清单」这一步（它的输入是自己手写的 api_list.json），
+#    所以真正的收集只能从这些上游公开清单来 —— 它们和原项目是同一层级的独立来源。
+#    想保留原项目那批地址的存量，用 apilinks.txt 里的存量即可，不必把它当成上游。
+#
+# 加新行即可扩充来源，跑一次就知道能不能抓、抽出多少条。
+
+# ---------- 结构化清单（命中率最高，优先维护） ----------
+影sir配置源, https://raw.githubusercontent.com/Lightconer/tvbox-ysc-config/main/config/sources.json, json
+轩源接口清单, https://raw.githubusercontent.com/xuyuan714/tvboxapi01/main/tvbox-api-list.txt, links
+TVAPP精选, https://raw.githubusercontent.com/youhunwl/TVAPP/main/README.md, readme
+安卓4适配仓, https://raw.githubusercontent.com/dxyc0922/Tvbox4.x_api/main/README.md, readme
+存活验证仓, https://raw.githubusercontent.com/HowKongFish/tvbox-json/main/merged.json, json
+聚合去重仓·精选, https://raw.githubusercontent.com/longge83/tvbox-merged/main/tvbox-quality.json, links
+聚合去重仓·全量, https://raw.githubusercontent.com/longge83/tvbox-merged/main/tvbox-full-homefirst.json, links
+
+# ---------- 同生态镜像清单（原项目的 fork / 再聚合，属于同级来源） ----------
+镜像备份池A, https://raw.githubusercontent.com/Tpop2026/tvbox-api-1/main/apilinks.txt, apilinks
+镜像备份池B, https://raw.githubusercontent.com/myysc/tvbox-api/main/apilinks.txt, apilinks
+镜像备份池D, https://raw.githubusercontent.com/PengShiQiang/tvbox-api-backup/main/apilinks.txt, apilinks
+
+# ---------- 待你补充：下面这些仓库名是搜索结果里的候选，需先确认存在再用 ----------
+# 拾光多仓, https://raw.githubusercontent.com/用户名/仓库/main/xxx.txt, links

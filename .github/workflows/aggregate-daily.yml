@@ -1,0 +1,113 @@
+name: 每日聚合接口
+
+# 你原来的仓库里没有这个文件，所以「每天自动运行」从来没有真正发生过。
+# 这个工作流补上这一环：每天北京时间 04:00 自动跑一次并提交产物。
+
+on:
+  schedule:
+    # UTC 20:00 = 北京时间次日 04:00
+    - cron: "0 20 * * *"
+  workflow_dispatch:
+    inputs:
+      strictness:
+        description: "剔除策略：strict(只留快站) / balanced(死站删、慢站留文末) / loose(只删死站)"
+        required: false
+        type: choice
+        options: [balanced, strict, loose]
+        default: balanced
+      no_collect:
+        description: "跳过上游收集，只用已有池子"
+        required: false
+        type: boolean
+        default: false
+      max_candidates:
+        description: "本轮最多抓多少候选接口（默认 600）"
+        required: false
+        type: string
+        default: "600"
+
+# 与其他写仓库的任务互斥，避免 push 打架
+concurrency:
+  group: tvbox-repo-write
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  aggregate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: 设置 Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # 不需要 npm install：脚本零第三方依赖
+      - name: 语法自检
+        run: |
+          for f in scripts/*.mjs; do
+            node --check "$f" || exit 1
+          done
+          echo "✅ 全部脚本语法通过"
+
+      - name: 运行每日聚合
+        env:
+          # ---- 剔除策略 ----
+          STRICTNESS: ${{ github.event.inputs.strictness || 'balanced' }}
+          SLOW_TTFB_MS: "6000"        # 超过 6 秒判为慢
+          OK_TTFB_MS: "3000"          # 超过 3 秒降为普通
+          FAST_TTFB_MS: "800"         # 低于 0.8 秒算精选
+          MIN_KBPS: "30"              # 吞吐低于 30KB/s 判为慢
+          MAX_FAILS: "3"              # 连续失败 3 轮才永久剔除
+          # ---- 直播 ----
+          LIVE_PER_CHANNEL: "3"       # 每个频道保留几个源
+          FILTER_NON_TV: "1"          # 过滤 MV/音乐/点歌台等非直播内容
+          MAX_GROUP_CHANNELS: "3000"  # 单分组超过这个数整体丢弃
+          # ---- 其它 ----
+          DROP_LOCAL_REF: "1"         # 去掉 127.0.0.1 本地引用
+          KEEP_SOURCE_SUFFIX: "0"     # 名字不再加「｜来源」
+          MAX_CANDIDATES: ${{ github.event.inputs.max_candidates || '600' }}
+          # ---- 分阶段预算（秒）：到点收工，绝不把任务拖超时 ----
+          BUDGET_FETCH: "900"
+          BUDGET_PROBE: "1200"
+          BUDGET_LIVE: "600"
+          FETCH_WORKERS: "8"
+          PROBE_WORKERS: "20"
+          LIVE_WORKERS: "6"
+          # CI 里不用缓存（每次都是干净环境）
+          CACHE_DIR: ""
+        run: |
+          ARGS=""
+          if [ "${{ github.event.inputs.no_collect }}" = "true" ]; then ARGS="--no-collect"; fi
+          echo "运行参数: $ARGS"
+          node scripts/main.mjs $ARGS
+
+      - name: 提交产物
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase --autostash || true
+          git add 聚合接口/ data/pool.json data/history.json
+          if git diff --cached --quiet; then
+            echo "本次无变化，跳过提交"
+          else
+            git commit -m "chore: 自动更新聚合接口 [$(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M')] [skip ci]"
+            git push
+          fi
+
+      # 上一轮刚写的产物如果放错了地方，这里兜底提示
+      - name: 产物检查
+        if: always()
+        run: |
+          echo "=== 聚合接口/ ==="
+          ls -la 聚合接口/ 2>/dev/null || echo "⚠️ 目录不存在"
+          echo "=== 池子 ==="
+          ls -la data/ 2>/dev/null || true

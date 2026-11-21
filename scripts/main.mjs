@@ -195,7 +195,17 @@ async function main() {
     candidates: result.stats.candidates,
     elapsed: result.elapsed,
   });
-  await writeFile(opts.historyFile, JSON.stringify(history.slice(-180), null, 1) + "\n", "utf8");
+  // 历史统计只保留最近 N 天（默认 30），不是按条数——
+  // 一天可能因为手动触发跑好几次，按条数存会悄无声息地超出"一个月"。
+  const keepDays = Number(process.env.HISTORY_KEEP_DAYS || 30);
+  const cutoff = Date.now() - keepDays * 86400 * 1000;
+  const parsedWhen = (h) => {
+    const t = Date.parse(String(h?.when || "").replace(" ", "T") + ":00+08:00");
+    return Number.isFinite(t) ? t : 0;
+  };
+  const trimmed = history.filter((h) => parsedWhen(h) >= cutoff);
+  await writeFile(opts.historyFile, JSON.stringify(trimmed, null, 1) + "\n", "utf8");
+  log(`  历史统计：保留最近 ${keepDays} 天，共 ${trimmed.length} 条（丢弃 ${history.length - trimmed.length} 条旧的）`);
 
   /* ---------- 4/5 汇总 ---------- */
   const c = result.counts;

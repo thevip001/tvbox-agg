@@ -246,6 +246,8 @@ git push
 | `MAX_CANDIDATES` | 600 | 本轮最多抓多少候选 |
 | `BUDGET_FETCH` / `BUDGET_PROBE` / `BUDGET_LIVE` | 900/1560/600 | 分阶段预算（秒），到点收工绝不拖超时 |
 | `MIN_RATIO` | 0.5 | 结果低于上次这个比例就拒绝覆盖 |
+| `HISTORY_KEEP_DAYS` | 30 | 历史统计保留天数（产物本身每天覆盖，不累积） |
+| `POOL_KEEP_DAYS` | 30 | 候选池保留天数，30 天没出现的地址自动清掉 |
 
 ### 加收集来源
 

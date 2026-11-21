@@ -81,6 +81,11 @@ jobs:
           LIVE_PER_CHANNEL: "3"       # 每个频道保留几个源
           FILTER_NON_TV: "1"          # 过滤 MV/音乐/点歌台等非直播内容
           MAX_GROUP_CHANNELS: "3000"  # 单分组超过这个数整体丢弃
+          # ---- 保留策略：产物/统计只留最近 30 天 ----
+          # 产物是每天覆盖重写的（聚合接口/ 永远只有最新一份）；
+          # 这里控制的是会累积的东西：历史统计、候选池。
+          HISTORY_KEEP_DAYS: "30"
+          POOL_KEEP_DAYS: "30"
           # ---- 其它 ----
           DROP_LOCAL_REF: "1"         # 去掉 127.0.0.1 本地引用
           KEEP_SOURCE_SUFFIX: "0"     # 名字不再加「｜来源」
@@ -119,11 +124,21 @@ jobs:
             git push
           fi
 
-      # 上一轮刚写的产物如果放错了地方，这里兜底提示
+      # 产物检查：确认只留一份最新产物，且没有把调试缓存/过期文件带进仓库
       - name: 产物检查
         if: always()
         run: |
-          echo "=== 聚合接口/ ==="
+          echo "=== 聚合接口/（每天覆盖，永远只有最新一份）==="
           ls -la 聚合接口/ 2>/dev/null || echo "⚠️ 目录不存在"
-          echo "=== 池子 ==="
+          echo "=== 保留策略：只应有最近 30 天的统计与池子 ==="
           ls -la data/ 2>/dev/null || true
+          if [ -d data/cache ]; then
+            echo "⚠️ data/cache 存在（本地调试缓存，不应入库）"
+            git status --porcelain data/cache || true
+          fi
+          # 产物若超过 7 天没更新，说明定时任务可能没跑
+          if [ -f 聚合接口/README.md ]; then
+            AGE=$(( ( $(date +%s) - $(date -r 聚合接口/README.md +%s) ) / 86400 ))
+            echo "产物年龄：${AGE} 天"
+            [ "$AGE" -gt 7 ] && echo "⚠️ 产物已超过 7 天未更新，请检查定时任务" || echo "✅ 产物新鲜"
+          fi

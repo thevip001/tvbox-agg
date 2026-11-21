@@ -176,6 +176,25 @@ export function mergePool({ upstreams = [], seeds = [], prevPool = {}, fromConfi
   const now = new Date().toISOString();
   const map = new Map(); // normKey -> entry
 
+  // 池子保留策略（默认 30 天）：只接最近 N 天内出现过的地址，
+  // 否则池子只增不减，仓库会被慢慢撑大。
+  const keepDays = Number(process.env.POOL_KEEP_DAYS || 30);
+  const maxFails = Number(process.env.MAX_FAILS || 3);
+  const cutoffTs = Date.now() - keepDays * 86400 * 1000;
+  const toTs = (v) => {
+    const t = Date.parse(String(v || ""));
+    return Number.isFinite(t) ? t : 0;
+  };
+
+  // 已判定「反复失败」的地址名单：上游每天又会把它们灌回来，
+  // 记下来让新条目直接带上失败次数，避免"删了第二天又被加回来白测一轮"。
+  const failedKeys = new Set(
+    (prevPool.entries || [])
+      .filter((e) => (Number(e.fails) || 0) >= maxFails)
+      .map((e) => normUrl(e.url, { dropQuery: false }))
+      .filter(Boolean)
+  );
+
   const add = (url, source, weight) => {
     const clean = cleanUrl(url);
     if (!/^https?:\/\//i.test(clean)) return;
@@ -194,16 +213,46 @@ export function mergePool({ upstreams = [], seeds = [], prevPool = {}, fromConfi
       weight, // 3=多仓子源 2=结构化清单 1=普通清单 0=种子
       firstSeen: now,
       lastSeen: now,
-      fails: 0,
+      fails: failedKeys.has(k) ? maxFails : 0,
+      ...(failedKeys.has(k) ? { blocked: true } : {}),
     });
   };
 
-  // ① 上次的池（保留历史，累计失败次数）
+  // ① 上次的池（累计失败次数）
+  //    超过保留期 → 直接丢；反复失败的 → 压缩成最小记录留着（不抓，但别让上游
+  //    第二天重新灌回来时又白测一轮）。压缩后单条约 100 字节，不会撑大仓库。
+  let droppedOld = 0;
+  let compactedFail = 0;
   for (const e of prevPool.entries || []) {
     const k = normUrl(e.url, { dropQuery: false });
     if (!k) continue;
-    map.set(k, { ...e, lastSeen: now, fails: Number(e.fails) || 0, weight: Number(e.weight) || 0 });
+    const seen = Math.max(toTs(e.lastSeen), toTs(e.lastOk), toTs(e.firstSeen));
+    if (seen && seen < cutoffTs) {
+      droppedOld++;
+      continue;
+    }
+    const fails = Number(e.fails) || 0;
+    if (fails >= maxFails) {
+      compactedFail++;
+      map.set(k, {
+        url: e.url,
+        key: k,
+        sources: Array.isArray(e.sources) ? e.sources : [],
+        fails,
+        lastSeen: e.lastSeen || now,
+        weight: Number(e.weight) || 0,
+        blocked: true,
+      });
+      continue;
+    }
+    map.set(k, {
+      ...e,
+      lastSeen: now,
+      fails,
+      weight: Number(e.weight) || 0,
+    });
   }
+
   // ② 上游清单命中
   for (const u of upstreams) for (const url of u.urls || []) add(url, u.name, 2);
   // ③ 多仓子源
@@ -211,6 +260,9 @@ export function mergePool({ upstreams = [], seeds = [], prevPool = {}, fromConfi
   // ④ 人工种子
   for (const s of seeds) add(s.url, s.name || "种子", 1);
 
+  if (droppedOld || compactedFail) {
+    log(`  池子清理：过期(>${keepDays}天) 删 ${droppedOld} 条、反复失败压缩保留 ${compactedFail} 条，剩余 ${map.size} 条`);
+  }
   return [...map.values()];
 }
 

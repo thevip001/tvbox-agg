@@ -128,6 +128,7 @@
   "elapsed": 1104
  },
  {
+<<<<<<< Updated upstream
   "when": "2026-11-21 15:01",
   "counts": {
    "all": 4741,
@@ -159,5 +160,38 @@
   "fetched": 147,
   "candidates": 600,
   "elapsed": 1197
+=======
+  "when": "2026-11-21 15:21",
+  "counts": {
+   "all": 4810,
+   "cj": 69,
+   "py": 363,
+   "js": 1541,
+   "spider": 2834,
+   "other": 3,
+   "liveSources": 83,
+   "channels": 13419,
+   "rawChannels": 33305
+  },
+  "grades": {
+   "fast": 3418,
+   "ok": 1098,
+   "uncertain": 342,
+   "unsure": 0,
+   "slow": 77,
+   "dead": 1476
+  },
+  "uncertain": null,
+  "dropped": {
+   "dead": 1476,
+   "slow": 77,
+   "local": 348,
+   "dup": 15374,
+   "nonTv": 439324
+  },
+  "fetched": 146,
+  "candidates": 600,
+  "elapsed": 1174
+>>>>>>> Stashed changes
  }
 ]

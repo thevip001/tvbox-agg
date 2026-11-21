@@ -8,20 +8,20 @@
 
 | 文件 | 内容 | **站点数量** | 地址 |
 | --- | --- | ---: | --- |
-| 点播合集.json | 全部点播站点合并去重（采集站、Py、JS、Jar 及其它类型） | <!--N:all-->4653 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播合集.json |
-| 点播-采集站.json | 点播 · 采集站（只保留检测可用的） | <!--N:cj-->64 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-采集站.json |
-| 点播-Py站.json | 点播 · Py 站 | <!--N:py-->344 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Py站.json |
-| 点播-JS站.json | 点播 · JS 站 | <!--N:js-->1514 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-JS站.json |
-| 点播-Jar爬虫站.json | 点播 · Jar 爬虫站 | <!--N:spider-->2730 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Jar爬虫站.json |
-| live.json | 直播聚合接口（TVBox 配置格式） | <!--N:liveSources-->81 个源 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/live.json |
-| live.m3u | 直播频道合并去重（M3U） | <!--N:channels-->12341 个频道 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/live.m3u |
+| 点播合集.json | 全部点播站点合并去重（采集站、Py、JS、Jar 及其它类型） | 4810 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播合集.json |
+| 点播-采集站.json | 点播 · 采集站（只保留检测可用的） | 69 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-采集站.json |
+| 点播-Py站.json | 点播 · Py 站 | 363 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Py站.json |
+| 点播-JS站.json | 点播 · JS 站 | 1541 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-JS站.json |
+| 点播-Jar爬虫站.json | 点播 · Jar 爬虫站 | 2834 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Jar爬虫站.json |
+| live.json | 直播聚合接口（TVBox 配置格式） | 83 个源 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/live.json |
+| live.m3u | 直播频道合并去重（M3U） | 13419 个频道 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/live.m3u |
 
 > 上表的数量由每日聚合任务自动回写（见下方的「最新数量」块），和产物永远一致。
 > 四个分类文件相加 = 点播合集（极少数条目会因内容指纹去重略有出入）。
 > `聚合接口/README.md` 里有更详细的分档和过滤明细。
 
 <!-- 站点数量:start（由每日聚合自动生成，勿手改） -->
-> **最新数量**（本地生成）：点播合集 **4653**（采集 64 · Py 344 · JS 1514 · Jar 2730）｜直播源 **81**｜直播频道 **12341**
+> **最新数量**（2026-11-21 15:21 更新）：点播合集 **4810**（采集 69 · Py 363 · JS 1541 · Jar 2834 · 其它 3）｜直播源 **83**｜直播频道 **13419**
 <!-- 站点数量:end -->
 
 ## 更新时间

@@ -116,7 +116,8 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git pull --rebase --autostash || true
-          git add 聚合接口/ data/pool.json data/history.json
+          # README.md 也要加：脚本会把站点数量回写进去（否则数量永远停在旧值）
+          git add 聚合接口/ data/pool.json data/history.json README.md
           if git diff --cached --quiet; then
             echo "本次无变化，跳过提交"
           else

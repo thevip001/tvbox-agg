@@ -8,20 +8,20 @@
 
 | 文件 | 内容 | **站点数量** | 地址 |
 | --- | --- | ---: | --- |
-| 点播合集.json | 全部点播站点合并去重（采集站、Py、JS、Jar 及其它类型） | <!--NUM:all-->2422 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播合集.json |
-| 点播-采集站.json | 点播 · 采集站（只保留检测可用的） | <!--NUM:cj-->31 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-采集站.json |
-| 点播-Py站.json | 点播 · Py 站 | <!--NUM:py-->270 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Py站.json |
-| 点播-JS站.json | 点播 · JS 站 | <!--NUM:js-->456 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-JS站.json |
-| 点播-Jar爬虫站.json | 点播 · Jar 爬虫站 | <!--NUM:spider-->1664 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Jar爬虫站.json |
-| live.json | 直播聚合接口（TVBox 配置格式） | <!--NUM:liveSources-->57 个源 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/live.json |
-| live.m3u | 直播频道合并去重（M3U） | <!--NUM:channels-->7923 个频道 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/live.m3u |
+| 点播合集.json | 全部点播站点合并去重（采集站、Py、JS、Jar 及其它类型） | <!--NUM:all-->2449 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播合集.json |
+| 点播-采集站.json | 点播 · 采集站（只保留检测可用的） | <!--NUM:cj-->40 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-采集站.json |
+| 点播-Py站.json | 点播 · Py 站 | <!--NUM:py-->285 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Py站.json |
+| 点播-JS站.json | 点播 · JS 站 | <!--NUM:js-->482 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-JS站.json |
+| 点播-Jar爬虫站.json | 点播 · Jar 爬虫站 | <!--NUM:spider-->1636 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Jar爬虫站.json |
+| live.json | 直播聚合接口（TVBox 配置格式） | <!--NUM:liveSources-->59 个源 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/live.json |
+| live.m3u | 直播频道合并去重（M3U） | <!--NUM:channels-->8948 个频道 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/live.m3u |
 
 > 上表的数量由每日聚合任务自动回写（见下方的「最新数量」块），和产物永远一致。
 > 四个分类文件相加 = 点播合集（极少数条目会因内容指纹去重略有出入）。
 > `聚合接口/README.md` 里有更详细的分档和过滤明细。
 
 <!-- 站点数量:start（由每日聚合自动生成，勿手改） -->
-> **最新数量**（2026-11-21 16:15 更新）：点播合集 **2422**（采集 31 · Py 270 · JS 456 · Jar 1664 · 其它 1）｜直播源 **57**｜直播频道 **7923**
+> **最新数量**（2026-11-21 16:35 更新）：点播合集 **2449**（采集 40 · Py 285 · JS 482 · Jar 1636 · 其它 6）｜直播源 **59**｜直播频道 **8948**
 <!-- 站点数量:end -->
 
 ## 更新时间

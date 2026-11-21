@@ -245,9 +245,12 @@ export function mergePool({ upstreams = [], seeds = [], prevPool = {}, fromConfi
       });
       continue;
     }
+    // 注意：不能把 lastSeen 刷成 now！
+    // lastSeen 是「上游最后一次出现这个地址」的时间，被用于 30 天过期判断；
+    // 如果每轮都刷成 now，过期机制就永远不生效。
+    // 「上次被抓取的时间」单独用 lastTried 记录，供 pickCandidates 轮换使用。
     map.set(k, {
       ...e,
-      lastSeen: now,
       fails,
       weight: Number(e.weight) || 0,
     });
@@ -268,12 +271,24 @@ export function mergePool({ upstreams = [], seeds = [], prevPool = {}, fromConfi
 
 /** 池子里挑本轮要抓的：按权重、连续失败次数排序 */
 export function pickCandidates(poolEntries, { limit = 600, maxFails = 4 } = {}) {
+  // 排序目标：让整个池子轮换着抓，而不是每轮都抓同一批。
+  //   1) 权重高的优先（多仓子源 > 结构化清单 > 普通清单 > 种子）
+  //   2) 从没抓过的优先（lastTried 为空）
+  //   3) 最久没抓过的优先（lastTried 越早越前）
+  //   4) 失败少的优先
+  const ts = (v) => {
+    const t = Date.parse(String(v || ""));
+    return Number.isFinite(t) ? t : 0;
+  };
   return poolEntries
-    .filter((e) => e.fails < maxFails)
+    .filter((e) => e.fails < maxFails && !e.blocked)
     .sort((a, b) => {
       if (b.weight !== a.weight) return b.weight - a.weight;
+      const ta = ts(a.lastTried);
+      const tb = ts(b.lastTried);
+      if (ta !== tb) return ta - tb;          // 没抓过(0)排最前，越早抓过的越靠前
       if (a.fails !== b.fails) return a.fails - b.fails;
-      return a.lastSeen < b.lastSeen ? -1 : 1;
+      return ts(a.lastSeen) - ts(b.lastSeen);
     })
     .slice(0, limit);
 }
@@ -286,7 +301,7 @@ export function updatePool(poolEntries, results) {
     const k = normUrl(r.url, { dropQuery: false });
     const e = byKey.get(k);
     if (!e) continue;
-    e.lastSeen = now;
+    e.lastTried = now;   // 本轮被抓取过（用于下轮轮换排序，不参与 30 天过期）
     if (r.ok) {
       e.fails = 0;
       e.lastOk = now;

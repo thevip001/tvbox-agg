@@ -621,21 +621,89 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
   const otherEntries = pick("other");
   const union = [...finalSites];
 
+  /* ---------- jar 引擎可用性 ----------
+   * TVBox（FongMi / takagen99 等）加载站点时：sites[].jar 为空 → 用顶层 spider 兜底
+   * （见 Site.objectFrom: if (site.getJar().isEmpty()) site.setJar(spider)）。
+   * 所以顶层 spider 选错，整批站点都会"加载失败"——在 TVBox 里直接不显示。
+   *
+   * 实测过的坑：n3rddd/N3RD 的 xbpg.jar 里没有 QuickJS 引擎，
+   * 但上游配了 688 个 drpy2（type=3, api=*.min.js）站点全靠它 → 全部打不开。
+   * 这里给这类站点补一个确定带 QuickJS 的 jar，不再依赖顶层 spider。
+   */
+  const QUICKJS_JAR = process.env.QUICKJS_JAR || "https://raw.githubusercontent.com/qist/tvbox/master/jar/spider.jar";
+  /** 去掉 jar 地址里的 ";md5;xxx"：md5 一旦上游改了文件内容，TVBox 会整包拒绝，全文件站点一起挂 */
+  const stripMd5 = (jar) => String(jar || "").split(";md5;")[0].split(";")[0];
+
+  /* 已知带 QuickJS 引擎的 jar（解包看过 classes.dex，有 com/whl/quickjs/*）：
+   *   qist/tvbox .../jar/spider.jar（3,665 个类，QuickJS + XBPQ 全有）
+   *   gaotianliuyun/gao .../jar/pg.jar（2,353 个类）
+   * 已知【没有】QuickJS 的：n3rddd/N3RD .../xbpg.jar —— 上游拿它当顶层 spider，
+   * 但它的配置里 688 个 drpy2 站点全靠它，所以那批站全部打不开。
+   * 线上真实数据也能佐证：766 个带 jar 的 drpy2 站，没有一个用 xbpg.jar。
+   */
+  const JS_ENGINE_JAR_RE = /(^|\/)(spider\.jar|pg\.jar|py\.jar|spider_?js\.jar)(;|$)|gaotianliuyun|qist\/tvbox/i;
+  // 站点要跑 JS 引擎吗（drpy2 / 各类 .js 壳）
+  const needsJsEngine = (site) => {
+    const api = String(site.api || "");
+    if (!/^https?:\/\//i.test(api)) return false;
+    if (/\.(py|php)(\?|$)/i.test(api)) return false;      // Py 站走 PyLoader，不需要 QuickJS
+    if (/\.js(\?|$)/i.test(api)) return true;
+    return /drpy/i.test(api);
+  };
+  const isCspClass = (site) => /^csp_/i.test(String(site.api || ""));
+
+  /** 这个 jar 够不够跑这个站点 */
+  const jarOkForSite = (site, jar) => {
+    if (!jar) return false;
+    if (isCspClass(site)) return true;                     // 内置类：候选 jar 都带 XBPQ 一族
+    if (needsJsEngine(site)) return JS_ENGINE_JAR_RE.test(jar);  // JS 站必须确定带 QuickJS
+    return true;
+  };
+
   const mostCommonJar = (items) => {
     const count = new Map();
     for (const e of items) if (e.site.jar) count.set(String(e.site.jar), (count.get(String(e.site.jar)) || 0) + 1);
     return [...count].sort((a, b) => b[1] - a[1])[0]?.[0] || "";
   };
 
+  /** 顶层 spider：谁能让最多站点跑起来就用谁（并列时用出现次数多的） */
+  const pickTopJar = (items) => {
+    if (!items.length) return "";
+    const cands = new Map();
+    const bump = (j) => j && cands.set(j, (cands.get(j) || 0) + 1);
+    for (const e of items) bump(stripMd5(String(e.site.jar || "")));
+    bump(mostCommonJar(items));
+    bump(QUICKJS_JAR);
+    let best = "";
+    let bestScore = -1;
+    let bestCount = -1;
+    for (const j of cands.keys()) {
+      const score = items.filter((e) => jarOkForSite(e.site, String(e.site.jar || j))).length;
+      const cnt = cands.get(j) || 0;
+      if (score > bestScore || (score === bestScore && cnt > bestCount)) {
+        best = j;
+        bestScore = score;
+        bestCount = cnt;
+      }
+    }
+    return best;
+  };
+
   const buildVod = (items) => {
-    const top = mostCommonJar(items);
+    const topRaw = pickTopJar(items);
+    const top = stripMd5(topRaw);
     const keyNamer = uniqueNamer({ keepSuffix: opts.keepSourceSuffix });
     const nameNamer = uniqueNamer({ keepSuffix: opts.keepSourceSuffix });
     const sites = items.map((e) => {
       const s = { ...e.site };
       s.key = keyNamer(String(s.key), e.probe?.reason || "");
       s.name = nameNamer(String(s.name ?? s.key));
-      if (top && s.jar === top) delete s.jar;
+      if (s.jar) s.jar = stripMd5(s.jar);
+      // 要跑 JS 引擎但自己的 jar 不够 → 补上确定带 QuickJS 的
+      if (needsJsEngine(s) && !jarOkForSite(s, String(s.jar || top))) s.jar = QUICKJS_JAR;
+      // 自己没有 jar 且顶层也不够 → 显式写
+      if (!s.jar && !jarOkForSite(s, top)) s.jar = QUICKJS_JAR;
+      if (top && s.jar === top) delete s.jar;   // 与顶层相同的可以省掉
       return s;
     });
     return {
@@ -865,6 +933,34 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
     "",
   ].join("\n");
   await writeFile(join(dir, FILES.readme), readme, "utf8");
+
+  /* ---------- 根目录 README 的站点数量自动回写 ----------
+   * 根 README 是静态文档，不会每天更新；这里只替换其中的「站点数量」标记块，
+   * 保证文档里的数字永远和产物一致（不会出现"文档写 4653、实际 4234"）。
+   */
+  try {
+    const rootReadme = await readFile("README.md", "utf8");
+    const stats = [
+      `<!-- 站点数量:start（由每日聚合自动生成，勿手改） -->`,
+      `> **最新数量**（${when} 更新）：点播合集 **${c.all}**（采集 ${c.cj} · Py ${c.py} · JS ${c.js} · Jar ${c.spider} · 其它 ${c.other}）｜直播源 **${c.liveSources}**｜直播频道 **${c.channels}**`,
+      `<!-- 站点数量:end -->`,
+    ].join("\n");
+    // 表格里的占位符 <!--N:all-->? 也一起替换
+    // 占位符后面可能还跟着上次写入的数字，一起吞掉
+    let out = rootReadme.replace(/<!--N:(all|cj|py|js|spider|other|liveSources|channels)-->\d*/g, (m, k) =>
+      String(c[k] ?? "?"),
+    );
+    if (out.includes("<!-- 站点数量:start")) {
+      out = out.replace(/<!-- 站点数量:start[\s\S]*?<!-- 站点数量:end -->/, stats);
+    } else {
+      // 首次：插在第一个二级标题之前
+      const idx = out.indexOf("\n## ");
+      out = idx > 0 ? out.slice(0, idx) + "\n" + stats + "\n" + out.slice(idx) : out + "\n" + stats + "\n";
+    }
+    if (out !== rootReadme) await writeFile("README.md", out, "utf8");
+  } catch {
+    /* 根 README 不存在就算了 */
+  }
 
   const sizes = [];
   for (const f of [...Object.keys(payload), FILES.m3u, FILES.readme, FILES.removed]) {

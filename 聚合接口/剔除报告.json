@@ -1,11 +1,11 @@
 {
-  "更新时间": "2026-11-21 16:35",
+  "更新时间": "2026-11-21 20:42",
   "统计": {
-    "dead": 1018,
-    "slow": 52,
-    "local": 217,
-    "dup": 13521,
-    "nonTv": 411759
+    "dead": 1030,
+    "slow": 76,
+    "local": 311,
+    "dup": 14836,
+    "nonTv": 436983
   },
   "剔除列表": [
     {
@@ -82,546 +82,6 @@
     },
     {
       "kind": "site",
-      "name": "🌖┃米搜┃网盘",
-      "api": "csp_MiSou",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "🚃┃盘搜┃网盘",
-      "api": "csp_PanSearch",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "Tg | 豆瓣",
-      "api": "csp_TgYunDouBanPan",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "Emby",
-      "api": "csp_Emby",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "Emby肥牛",
-      "api": "csp_Emby",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "虎斑|4k网盘",
-      "api": "csp_MoggCAT",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "雷静|网站",
-      "api": "csp_HBleiJingCAT",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "TG豆瓣",
-      "api": "csp_TGDouban",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "TG频道搜索",
-      "api": "csp_TGYunPanLocal",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "TG群组搜索",
-      "api": "csp_TGYunPan",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "ikun",
-      "api": "http://127.0.0.1:10079/p/0/proxy/https://ikunzyapi.com/api.php/provide/vod/?",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "暴風",
-      "api": "http://127.0.0.1:10079/p/0/proxy/https://bfzyapi.com/api.php/provide/vod?",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "索尼 ",
-      "api": "http://127.0.0.1:10079/p/0/proxy/https://suoniapi.com/api.php/provide/vod?",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "量子",
-      "api": "http://127.0.0.1:10079/p/0/proxy/http://cj.lziapi.com/api.php/provide/vod/?",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "非凡",
-      "api": "http://127.0.0.1:10079/p/0/proxy/http://cj.ffzyapi.com/api.php/provide/vod/?",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "搜索 | TG[jar]",
-      "api": "csp_TGYunPanLocal",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "视频 | Youtube[jar]",
-      "api": "csp_Youtube",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "弹幕 | 4KHDR[jar]",
-      "api": "csp_FourKHDR",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "弹幕 | 影巢[jar]",
-      "api": "csp_Hdh",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "夸克 | 推送",
-      "api": "csp_Quark",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "哔哩 • 合集",
-      "api": "csp_Bili",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "哔哩 • 视频",
-      "api": "csp_BiliYS",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "哔哩 • 音乐",
-      "api": "csp_Bili",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "哔哩 • 听书",
-      "api": "csp_Bili",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "哔哩 • 相声",
-      "api": "csp_Bili",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "哔哩 • 小品",
-      "api": "csp_Bili",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "哔哩 • 戏曲",
-      "api": "csp_Bili",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "少儿 • 教育",
-      "api": "csp_Bili",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "小学 • 课堂",
-      "api": "csp_Bili",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "初中 • 课堂",
-      "api": "csp_Bili",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "高中 • 课堂",
-      "api": "csp_Bili",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "纸条弹幕┃🍭",
-      "api": "csp_XiaoZhiTiao",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "易搜弹幕┃🍭",
-      "api": "csp_YiSo",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "云搜弹幕┃🍭",
-      "api": "csp_PanSearch",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "盘搜弹幕┃🍭",
-      "api": "csp_PanSou",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "巢巢┃4K",
-      "api": "csp_Hdhive",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "🔍Tg豆瓣┃本接口免费-🈲贩卖",
-      "api": "csp_TgYunDouBanPan",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "TG豆瓣",
-      "api": "csp_TGDouban",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "TG频道搜索",
-      "api": "csp_TGYunPanLocal",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "TG群组搜索",
-      "api": "csp_TGYunPan",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "ikun",
-      "api": "http://127.0.0.1:10079/p/0/proxy/https://ikunzyapi.com/api.php/provide/vod/?",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "暴風",
-      "api": "http://127.0.0.1:10079/p/0/proxy/https://bfzyapi.com/api.php/provide/vod?",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "索尼 ",
-      "api": "http://127.0.0.1:10079/p/0/proxy/https://suoniapi.com/api.php/provide/vod?",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "量子",
-      "api": "http://127.0.0.1:10079/p/0/proxy/http://cj.lziapi.com/api.php/provide/vod/?",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "非凡",
-      "api": "http://127.0.0.1:10079/p/0/proxy/http://cj.ffzyapi.com/api.php/provide/vod/?",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "Tg | 豆瓣",
-      "api": "csp_TgYunDouBanPan",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "Emby",
-      "api": "csp_Emby",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "Emby肥牛",
-      "api": "csp_Emby",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "哔哩 • 合集",
-      "api": "csp_Bili",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "哔哩 • 视频",
-      "api": "csp_BiliYS",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "哔哩 • 音乐",
-      "api": "csp_Bili",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "哔哩 • 听书",
-      "api": "csp_Bili",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "哔哩 • 相声",
-      "api": "csp_Bili",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "哔哩 • 小品",
-      "api": "csp_Bili",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "哔哩 • 戏曲",
-      "api": "csp_Bili",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "少儿 • 教育",
-      "api": "csp_Bili",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "小学 • 课堂",
-      "api": "csp_Bili",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "初中 • 课堂",
-      "api": "csp_Bili",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "高中 • 课堂",
-      "api": "csp_Bili",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "🌖┃米搜┃网盘",
-      "api": "csp_MiSou",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "🚃┃盘搜┃网盘",
-      "api": "csp_PanSearch",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "🔍Tg豆瓣┃本接口免费-🈲贩卖",
-      "api": "csp_TgYunDouBanPan",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "搜索 | TG[jar]",
-      "api": "csp_TGYunPanLocal",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "视频 | Youtube[jar]",
-      "api": "csp_Youtube",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "弹幕 | 4KHDR[jar]",
-      "api": "csp_FourKHDR",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "弹幕 | 影巢[jar]",
-      "api": "csp_Hdh",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "夸克 | 推送",
-      "api": "csp_Quark",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "🔥┃设置Token",
-      "api": "csp_KungFu404",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "🔎┃阿里┃七夜",
-      "api": "csp_Dovx",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "🔍┃阿里┃Zhaozy",
-      "api": "csp_Zhaozy",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "🔍Tg豆瓣┃本接口免费-🈲贩卖",
-      "api": "csp_TgYunDouBanPan",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "Tg | 豆瓣",
-      "api": "csp_TgYunDouBanPan",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "Emby",
-      "api": "csp_Emby",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "Emby肥牛",
-      "api": "csp_Emby",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "🌖┃米搜┃网盘",
-      "api": "csp_MiSou",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "🚃┃盘搜┃网盘",
-      "api": "csp_PanSearch",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "🔥┃设置Token",
-      "api": "csp_KungFu404",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "🔎┃阿里┃七夜",
-      "api": "csp_Dovx",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "🔍┃阿里┃Zhaozy",
-      "api": "csp_Zhaozy",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "搜索 | TG[jar]",
-      "api": "csp_TGYunPanLocal",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "视频 | Youtube[jar]",
-      "api": "csp_Youtube",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "弹幕 | 4KHDR[jar]",
-      "api": "csp_FourKHDR",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "弹幕 | 影巢[jar]",
-      "api": "csp_Hdh",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "夸克 | 推送",
-      "api": "csp_Quark",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "🌖┃米搜┃网盘",
-      "api": "csp_MiSou",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "🚃┃盘搜┃网盘",
-      "api": "csp_PanSearch",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "🌖┃米搜┃网盘",
-      "api": "csp_MiSou",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "🚃┃盘搜┃网盘",
-      "api": "csp_PanSearch",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "🌖┃米搜┃网盘",
-      "api": "csp_MiSou",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "🚃┃盘搜┃网盘",
-      "api": "csp_PanSearch",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
       "name": "TG豆瓣",
       "api": "csp_TGDouban",
       "reason": "引用本机地址(127.0.0.1)"
@@ -690,6 +150,18 @@
       "kind": "site",
       "name": "Emby肥牛",
       "api": "csp_Emby",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🌖┃米搜┃网盘",
+      "api": "csp_MiSou",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🚃┃盘搜┃网盘",
+      "api": "csp_PanSearch",
       "reason": "引用本机地址(127.0.0.1)"
     },
     {
@@ -816,12 +288,384 @@
       "kind": "site",
       "name": "高中 • 课堂",
       "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "TG豆瓣",
+      "api": "csp_TGDouban",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "TG频道搜索",
+      "api": "csp_TGYunPanLocal",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "TG群组搜索",
+      "api": "csp_TGYunPan",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "ikun",
+      "api": "http://127.0.0.1:10079/p/0/proxy/https://ikunzyapi.com/api.php/provide/vod/?",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "暴風",
+      "api": "http://127.0.0.1:10079/p/0/proxy/https://bfzyapi.com/api.php/provide/vod?",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "索尼 ",
+      "api": "http://127.0.0.1:10079/p/0/proxy/https://suoniapi.com/api.php/provide/vod?",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "量子",
+      "api": "http://127.0.0.1:10079/p/0/proxy/http://cj.lziapi.com/api.php/provide/vod/?",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "非凡",
+      "api": "http://127.0.0.1:10079/p/0/proxy/http://cj.ffzyapi.com/api.php/provide/vod/?",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "Tg | 豆瓣",
+      "api": "csp_TgYunDouBanPan",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "Emby",
+      "api": "csp_Emby",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "Emby肥牛",
+      "api": "csp_Emby",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 合集",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 视频",
+      "api": "csp_BiliYS",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 音乐",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 听书",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 相声",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 小品",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 戏曲",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "少儿 • 教育",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "小学 • 课堂",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "初中 • 课堂",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "高中 • 课堂",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🌖┃米搜┃网盘",
+      "api": "csp_MiSou",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🚃┃盘搜┃网盘",
+      "api": "csp_PanSearch",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🔍Tg豆瓣┃本接口免费-🈲贩卖",
+      "api": "csp_TgYunDouBanPan",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "搜索 | TG[jar]",
+      "api": "csp_TGYunPanLocal",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "视频 | Youtube[jar]",
+      "api": "csp_Youtube",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "弹幕 | 4KHDR[jar]",
+      "api": "csp_FourKHDR",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "弹幕 | 影巢[jar]",
+      "api": "csp_Hdh",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "夸克 | 推送",
+      "api": "csp_Quark",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🌖┃米搜┃网盘",
+      "api": "csp_MiSou",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🚃┃盘搜┃网盘",
+      "api": "csp_PanSearch",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🌖┃米搜┃网盘",
+      "api": "csp_MiSou",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🚃┃盘搜┃网盘",
+      "api": "csp_PanSearch",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🔥┃设置Token",
+      "api": "csp_KungFu404",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🔎┃阿里┃七夜",
+      "api": "csp_Dovx",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🔍┃阿里┃Zhaozy",
+      "api": "csp_Zhaozy",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "搜索 | TG[jar]",
+      "api": "csp_TGYunPanLocal",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "视频 | Youtube[jar]",
+      "api": "csp_Youtube",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "弹幕 | 4KHDR[jar]",
+      "api": "csp_FourKHDR",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "弹幕 | 影巢[jar]",
+      "api": "csp_Hdh",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "夸克 | 推送",
+      "api": "csp_Quark",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🔥┃设置Token",
+      "api": "csp_KungFu404",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🔎┃阿里┃七夜",
+      "api": "csp_Dovx",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🔍┃阿里┃Zhaozy",
+      "api": "csp_Zhaozy",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🔍Tg豆瓣┃本接口免费-🈲贩卖",
+      "api": "csp_TgYunDouBanPan",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "Tg | 豆瓣",
+      "api": "csp_TgYunDouBanPan",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "Emby",
+      "api": "csp_Emby",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "Emby肥牛",
+      "api": "csp_Emby",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🌖┃米搜┃网盘",
+      "api": "csp_MiSou",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🚃┃盘搜┃网盘",
+      "api": "csp_PanSearch",
       "reason": "引用本机地址(127.0.0.1)"
     },
     {
       "kind": "site",
       "name": "YOUTUBE[PY]",
       "api": "https://cnb.cool/fish2035/xs/-/git/raw/main/py/ytb1_m8.py",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 合集",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 视频",
+      "api": "csp_BiliYS",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 音乐",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 听书",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 相声",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 小品",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 戏曲",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "少儿 • 教育",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "小学 • 课堂",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "初中 • 课堂",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "高中 • 课堂",
+      "api": "csp_Bili",
       "reason": "引用本机地址(127.0.0.1)"
     },
     {
@@ -1018,6 +862,150 @@
     },
     {
       "kind": "site",
+      "name": "🌖┃米搜┃网盘",
+      "api": "csp_MiSou",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🚃┃盘搜┃网盘",
+      "api": "csp_PanSearch",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "TG豆瓣",
+      "api": "csp_TGDouban",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "TG频道搜索",
+      "api": "csp_TGYunPanLocal",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "TG群组搜索",
+      "api": "csp_TGYunPan",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "ikun",
+      "api": "http://127.0.0.1:10079/p/0/proxy/https://ikunzyapi.com/api.php/provide/vod/?",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "暴風",
+      "api": "http://127.0.0.1:10079/p/0/proxy/https://bfzyapi.com/api.php/provide/vod?",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "索尼 ",
+      "api": "http://127.0.0.1:10079/p/0/proxy/https://suoniapi.com/api.php/provide/vod?",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "量子",
+      "api": "http://127.0.0.1:10079/p/0/proxy/http://cj.lziapi.com/api.php/provide/vod/?",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "非凡",
+      "api": "http://127.0.0.1:10079/p/0/proxy/http://cj.ffzyapi.com/api.php/provide/vod/?",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🔍Tg豆瓣┃本接口免费-🈲贩卖",
+      "api": "csp_TgYunDouBanPan",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "Tg | 豆瓣",
+      "api": "csp_TgYunDouBanPan",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "Emby",
+      "api": "csp_Emby",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "Emby肥牛",
+      "api": "csp_Emby",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "纸条弹幕┃🍭",
+      "api": "csp_XiaoZhiTiao",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "易搜弹幕┃🍭",
+      "api": "csp_YiSo",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "云搜弹幕┃🍭",
+      "api": "csp_PanSearch",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "盘搜弹幕┃🍭",
+      "api": "csp_PanSou",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "巢巢┃4K",
+      "api": "csp_Hdhive",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "搜索 | TG[jar]",
+      "api": "csp_TGYunPanLocal",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "视频 | Youtube[jar]",
+      "api": "csp_Youtube",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "弹幕 | 4KHDR[jar]",
+      "api": "csp_FourKHDR",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "弹幕 | 影巢[jar]",
+      "api": "csp_Hdh",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "夸克 | 推送",
+      "api": "csp_Quark",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
       "name": "TG豆瓣",
       "api": "csp_TGDouban",
       "reason": "引用本机地址(127.0.0.1)"
@@ -1198,18 +1186,6 @@
     },
     {
       "kind": "site",
-      "name": "虎斑|4k网盘",
-      "api": "csp_MoggCAT",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
-      "name": "雷静|网站",
-      "api": "csp_HBleiJingCAT",
-      "reason": "引用本机地址(127.0.0.1)"
-    },
-    {
-      "kind": "site",
       "name": "搜索 | TG[jar]",
       "api": "csp_TGYunPanLocal",
       "reason": "引用本机地址(127.0.0.1)"
@@ -1312,6 +1288,594 @@
     },
     {
       "kind": "site",
+      "name": "🌖┃米搜┃网盘",
+      "api": "csp_MiSou",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🚃┃盘搜┃网盘",
+      "api": "csp_PanSearch",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🌖┃米搜┃网盘",
+      "api": "csp_MiSou",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🚃┃盘搜┃网盘",
+      "api": "csp_PanSearch",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 合集",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 视频",
+      "api": "csp_BiliYS",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 音乐",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 听书",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 相声",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 小品",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 戏曲",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "少儿 • 教育",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "小学 • 课堂",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "初中 • 课堂",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "高中 • 课堂",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "虎斑🔹盘4k",
+      "api": "csp_Mogg",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 合集",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 视频",
+      "api": "csp_BiliYS",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 音乐",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 听书",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 相声",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 小品",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩 • 戏曲",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "少儿 • 教育",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "小学 • 课堂",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "初中 • 课堂",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "高中 • 课堂",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩｜视频",
+      "api": "csp_BiliYS",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩｜合集",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "♎易搜",
+      "api": "csp_YiSo",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "♎盘搜",
+      "api": "csp_PanSou",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "♎UP云搜",
+      "api": "csp_UpYun",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "♎盘搜索",
+      "api": "csp_PanSearch",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "♎七夜",
+      "api": "csp_Dovx",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "♎找资源",
+      "api": "csp_Zhaozy",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "♎推送",
+      "api": "csp_Push",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "👲┃玩偶┃影视",
+      "api": "csp_Wogg",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🌖┃七夜┃网盘",
+      "api": "csp_Dovx",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🚢┃盘搜┃网盘",
+      "api": "csp_Pansou",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🚃┃盘搜┃网盘2",
+      "api": "csp_PanSearch",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🍒┃Up搜┃网盘",
+      "api": "csp_UpYun",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "📜┃纸条┃网盘",
+      "api": "csp_XiaoZhiTiao",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "机缘巧盒凯弟",
+      "api": "csp_Push",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🎈玩偶┃4K弹幕",
+      "api": "csp_WoGG",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "☁️易搜┃4K搜",
+      "api": "csp_YiSo",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🦊盘搜┃搜索",
+      "api": "csp_PanSou",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🐺资源┃搜索",
+      "api": "csp_Zhaozy",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "😾七夜┃搜索",
+      "api": "csp_Dovx",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "☁️Up搜┃4K搜",
+      "api": "csp_UpYun",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "公众号：机缘巧盒凯弟",
+      "api": "csp_Push",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩｜APP",
+      "api": "https://jiekou.netlify.app/py/哔哩视频.py",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩｜视频",
+      "api": "csp_BiliYS",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩｜集合",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩｜合集",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩｜听书",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "哔哩｜演唱会",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "医药｜合集",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "相声｜哔哩",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "小品｜哔哩",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "B站｜戏曲",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "儿童｜拼音",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "儿童｜识字",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "儿童｜英语",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "儿童｜硬笔",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "儿童｜思维",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "儿童｜口才",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "儿童｜编程",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "儿童｜武术",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "少儿｜教育",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "小学｜课堂",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "初中｜课堂",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "高中｜课堂",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "外语｜课堂",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "小灯塔｜百科",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "小灯塔｜科学",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "小灯塔｜地理",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "小灯塔｜国学",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "小灯塔｜人文",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "👽玩偶哥哥",
+      "api": "csp_WoGG",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🆎易搜",
+      "api": "csp_YiSo",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "📀盘搜",
+      "api": "csp_PanSou",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "☁️UP云搜",
+      "api": "csp_UpYun",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🙀盘搜索",
+      "api": "csp_PanSearch",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "😾七夜",
+      "api": "csp_Dovx",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🦊找资源",
+      "api": "csp_Zhaozy",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🍭推送",
+      "api": "csp_Push",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "野草口令：8072",
+      "api": "csp_Push",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "☀哔里🔹影視",
+      "api": "csp_BiliYS",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "💿虎斑🔹盘4k",
+      "api": "csp_Mogg",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🅱️哔哩🔹音乐",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🅱️哔哩🔹听书",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🅱️哔哩🔹相声",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🅱️哔哩🔹小品",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "🅱️哔哩🔹戏曲",
+      "api": "csp_Bili",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "📀喵狸盘搜(搜索)",
+      "api": "csp_AliPS",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "📀易搜(搜索)",
+      "api": "csp_Yisou",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "📀UP云搜(搜索)",
+      "api": "csp_Upyunso",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
+      "name": "📽推送",
+      "api": "csp_PushAgent",
+      "reason": "引用本机地址(127.0.0.1)"
+    },
+    {
+      "kind": "site",
       "name": "🧲美剧天堂",
       "api": "csp_MeijuTT",
       "category": "spider",
@@ -1326,10 +1890,59 @@
     },
     {
       "kind": "site",
+      "name": "🐯虎牙┃直播",
+      "api": "https://ghproxy.net/https://raw.githubusercontent.com/fantaiying7/EXT/refs/heads/main/drpy2.min.js",
+      "category": "js",
+      "reason": "太慢 TTFB=5503ms 吞吐=8KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "🐟斗鱼┃直播",
+      "api": "https://ghproxy.net/https://raw.githubusercontent.com/fantaiying7/EXT/refs/heads/main/drpy2.min.js",
+      "category": "js",
+      "reason": "太慢 TTFB=6287ms 吞吐=5KB/s"
+    },
+    {
+      "kind": "site",
       "name": "🐮【免费分享】🐮",
       "api": "csp_NewDouBanGuard",
       "category": "spider",
       "reason": "ext 目标站不可达 https://cdn.waimaimingtang.com/file/images/bwc/20260414181247-ae51abfbfe.txt"
+    },
+    {
+      "kind": "site",
+      "name": "💓花卷┃4K💓‍",
+      "api": "csp_AiNewHuaJuanGuard",
+      "category": "spider",
+      "reason": "太慢 TTFB=11226ms 吞吐=75KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "💓‍七味┃4K💓‍",
+      "api": "csp_AiQwMkvGuard",
+      "category": "spider",
+      "reason": "太慢 TTFB=11798ms 吞吐=75KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "💓木偶┃4K💓",
+      "api": "csp_AiNewMuOuGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "💓快影┃4K💓",
+      "api": "csp_AiNewKuaiYingGuard",
+      "category": "spider",
+      "reason": "太慢 TTFB=11289ms 吞吐=71KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "💓蜡笔┃4K💓",
+      "api": "csp_AiNewLaBiGuard",
+      "category": "spider",
+      "reason": "下载超时"
     },
     {
       "kind": "site",
@@ -1504,7 +2117,7 @@
       "name": "🎶明星┃MV",
       "api": "https://mv.wogg.link/mv/vod",
       "category": "cj",
-      "reason": "ac=detail HTTP 200"
+      "reason": "ac=list HTTP 401"
     },
     {
       "kind": "site",
@@ -1512,20 +2125,6 @@
       "api": "https://raw.githubusercontent.com/liu673cn/box/main/libs/js/drpy2.min.js",
       "category": "js",
       "reason": "HTTP 404"
-    },
-    {
-      "kind": "site",
-      "name": "🎦┃短剧┃葡萄",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "🎦┃短剧┃嗷嗷",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "ext 目标站不可达 https://aoao.tv"
     },
     {
       "kind": "site",
@@ -1550,90 +2149,6 @@
     },
     {
       "kind": "site",
-      "name": "手机┃推送",
-      "api": "csp_AweSomeGuard",
-      "category": "spider",
-      "reason": "下载超时"
-    },
-    {
-      "kind": "site",
-      "name": "弹幕|小窗",
-      "api": "csp_Huban",
-      "category": "spider",
-      "reason": "太慢 TTFB=3134ms 吞吐=44KB/s"
-    },
-    {
-      "kind": "site",
-      "name": "AList",
-      "api": "csp_AweSomeGuard",
-      "category": "spider",
-      "reason": "下载超时"
-    },
-    {
-      "kind": "site",
-      "name": "🐾日本┃动漫",
-      "api": "csp_Anime1Guard",
-      "category": "spider",
-      "reason": "下载超时"
-    },
-    {
-      "kind": "site",
-      "name": "🐻剧圈┃多线",
-      "api": "csp_AppSxGuard",
-      "category": "spider",
-      "reason": "下载超时"
-    },
-    {
-      "kind": "site",
-      "name": "🌞光影┃多线",
-      "api": "csp_AppSxGuard",
-      "category": "spider",
-      "reason": "下载超时"
-    },
-    {
-      "kind": "site",
-      "name": "🍙视界┃多线",
-      "api": "csp_AppSxGuard",
-      "category": "spider",
-      "reason": "下载超时"
-    },
-    {
-      "kind": "site",
-      "name": "🥝花花┃多线",
-      "api": "csp_AppSxGuard",
-      "category": "spider",
-      "reason": "下载超时"
-    },
-    {
-      "kind": "site",
-      "name": "🦊播客┃多线",
-      "api": "csp_AppSxGuard",
-      "category": "spider",
-      "reason": "下载超时"
-    },
-    {
-      "kind": "site",
-      "name": "👀爱影┃多线",
-      "api": "csp_AppSxGuard",
-      "category": "spider",
-      "reason": "下载超时"
-    },
-    {
-      "kind": "site",
-      "name": "还行",
-      "api": "csp_AppYs",
-      "category": "spider",
-      "reason": "ext 目标站不可达 http://m51.gotto.top/api.php/v1.vod"
-    },
-    {
-      "kind": "site",
-      "name": "⚽八八┃看球",
-      "api": "csp_Sir88Guard",
-      "category": "spider",
-      "reason": "下载超时"
-    },
-    {
-      "kind": "site",
       "name": "泥巴(墙)",
       "api": "csp_Nbys",
       "category": "spider",
@@ -1645,13 +2160,6 @@
       "api": "csp_XBiu",
       "category": "spider",
       "reason": "HTTP 404"
-    },
-    {
-      "kind": "site",
-      "name": "6080电影(XBPQ)",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
     },
     {
       "kind": "site",
@@ -1788,6 +2296,55 @@
     },
     {
       "kind": "site",
+      "name": "🐾日本┃动漫",
+      "api": "csp_Anime1Guard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "☀原创┃秒播",
+      "api": "csp_YCyzGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "🐻剧圈┃多线",
+      "api": "csp_AppSxGuard",
+      "category": "spider",
+      "reason": "AggregateError"
+    },
+    {
+      "kind": "site",
+      "name": "🍙视界┃多线",
+      "api": "csp_AppSxGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "🥝花花┃多线",
+      "api": "csp_AppSxGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "👀爱影┃多线",
+      "api": "csp_AppSxGuard",
+      "category": "spider",
+      "reason": "AggregateError"
+    },
+    {
+      "kind": "site",
+      "name": "还行",
+      "api": "csp_AppYs",
+      "category": "spider",
+      "reason": "ext 目标站不可达 http://m51.gotto.top/api.php/v1.vod"
+    },
+    {
+      "kind": "site",
       "name": "🏜┃潮流┃APP",
       "api": "csp_AppRJ",
       "category": "spider",
@@ -1813,13 +2370,6 @@
       "api": "csp_AppGet",
       "category": "spider",
       "reason": "目标站测速失败 https://allinadmin.oss-cn-hangzhou.aliyuncs.com/bk/9.txt|88689667dce61725"
-    },
-    {
-      "kind": "site",
-      "name": "🥇️┃金牌┃影视",
-      "api": "csp_Jpys",
-      "category": "spider",
-      "reason": "太慢 TTFB=3790ms 吞吐=174KB/s"
     },
     {
       "kind": "site",
@@ -1855,6 +2405,76 @@
       "api": "http://xn--z7x900a.net/api/drpy2.min.js",
       "category": "js",
       "reason": "HTTP 404"
+    },
+    {
+      "kind": "site",
+      "name": "🌕️┆片单┆精选",
+      "api": "csp_PianDan",
+      "category": "spider",
+      "reason": "太慢 TTFB=4224ms 吞吐=681KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "🍼┆设置┆中心",
+      "api": "csp_FishConfig",
+      "category": "spider",
+      "reason": "太慢 TTFB=4390ms 吞吐=657KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "🐟┆鱼鱼┆盘搜",
+      "api": "csp_FishPs",
+      "category": "spider",
+      "reason": "太慢 TTFB=5069ms 吞吐=581KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "🤪┆摆烂┆4K",
+      "api": "csp_App88",
+      "category": "spider",
+      "reason": "太慢 TTFB=3008ms 吞吐=826KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "🍂┆随缘┆4K",
+      "api": "csp_SuiYuan",
+      "category": "spider",
+      "reason": "太慢 TTFB=6148ms 吞吐=627KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "🍓┆热播┆APP",
+      "api": "csp_AppRJ",
+      "category": "spider",
+      "reason": "ext 目标站不可达 http://v.rbotv.cn"
+    },
+    {
+      "kind": "site",
+      "name": "✏️┆文才┆影视",
+      "api": "csp_WenCai",
+      "category": "spider",
+      "reason": "ext 目标站不可达 https://www.tjrongze.com,https://y2s52n7.com,https://m.hkybqufgh.com,https://m.sizhengxt.com,https://m.9zhoukj.com,https://m.jiabaide.cn"
+    },
+    {
+      "kind": "site",
+      "name": "📻┆六月┆有声",
+      "api": "csp_TingBook",
+      "category": "spider",
+      "reason": "ext 目标站不可达 https://app.365ting.com"
+    },
+    {
+      "kind": "site",
+      "name": "🎙️┆堇夏┆有声",
+      "api": "csp_TingBookJinXia",
+      "category": "spider",
+      "reason": "ext 目标站不可达 https://m.ting15.com"
+    },
+    {
+      "kind": "site",
+      "name": "🐯虎牙┃直播",
+      "api": "https://ztha.top/TVBox/lib/drpy2.min.js",
+      "category": "js",
+      "reason": "太慢 TTFB=1736ms 吞吐=26KB/s"
     },
     {
       "kind": "site",
@@ -2152,20 +2772,6 @@
     },
     {
       "kind": "site",
-      "name": "影视 | 哔嘀影视[js]",
-      "api": "https://gh-proxy.com/raw.githubusercontent.com/gaotianliuyun/gao/master/lib/drpy2.min.js",
-      "category": "js",
-      "reason": "目标站测速失败 https://gh-proxy.com/raw.githubusercontent.com/gaotianliuyun/gao/master/js/哔嘀影视.js"
-    },
-    {
-      "kind": "site",
-      "name": "影视 | 7喜影院[js]",
-      "api": "https://gh-proxy.com/raw.githubusercontent.com/gaotianliuyun/gao/master/lib/drpy2.min.js",
-      "category": "js",
-      "reason": "目标站测速失败 https://gh-proxy.com/raw.githubusercontent.com/gaotianliuyun/gao/master/js/7喜影院.js"
-    },
-    {
-      "kind": "site",
       "name": "影视 | 18哈[js]",
       "api": "https://gh-proxy.com/raw.githubusercontent.com/gaotianliuyun/gao/master/lib/drpy2.min.js",
       "category": "js",
@@ -2201,45 +2807,10 @@
     },
     {
       "kind": "site",
-      "name": "影视 | UrleBird[飞][js]",
-      "api": "https://gh-proxy.com/raw.githubusercontent.com/gaotianliuyun/gao/master/lib/drpy2.min.js",
-      "category": "js",
-      "reason": "目标站测速失败 https://gh-proxy.com/raw.githubusercontent.com/gaotianliuyun/gao/master/js/UrleBird[飞].js"
-    },
-    {
-      "kind": "site",
-      "name": "影视 | 爱看影院[js]",
-      "api": "https://gh-proxy.com/raw.githubusercontent.com/gaotianliuyun/gao/master/lib/drpy2.min.js",
-      "category": "js",
-      "reason": "目标站测速失败 https://gh-proxy.com/raw.githubusercontent.com/gaotianliuyun/gao/master/js/爱看影院.js"
-    },
-    {
-      "kind": "site",
-      "name": "影视 | 北川影视[js]",
-      "api": "https://gh-proxy.com/raw.githubusercontent.com/gaotianliuyun/gao/master/lib/drpy2.min.js",
-      "category": "js",
-      "reason": "目标站测速失败 https://gh-proxy.com/raw.githubusercontent.com/gaotianliuyun/gao/master/js/北川影视.js"
-    },
-    {
-      "kind": "site",
-      "name": "📚┃儿童┃启蒙",
-      "api": "http://hello.xn--z7x900a.net/api/drpy2.min.js",
-      "category": "js",
-      "reason": "返回网页"
-    },
-    {
-      "kind": "site",
-      "name": "📚┃儿童┃启蒙",
-      "api": "http://%E8%82%A5%E7%8C%AB.net/api/drpy2.min.js",
-      "category": "js",
-      "reason": "HTTP 404"
-    },
-    {
-      "kind": "site",
       "name": "💖分享预告",
       "api": "csp_XBPQ",
       "category": "spider",
-      "reason": "ext 目标站不可达 http://hucongrong.web3v.work/风水/fxz/lib/分享新片.json"
+      "reason": "下载超时"
     },
     {
       "kind": "site",
@@ -2260,7 +2831,7 @@
       "name": "🇨🇳央视集合",
       "api": "py_cctv",
       "category": "spider",
-      "reason": "ext 目标站不可达 http://hucongrong.web3v.work/风水/fxz/lib/cctvpk.json"
+      "reason": "下载超时"
     },
     {
       "kind": "site",
@@ -2281,28 +2852,28 @@
       "name": "💖分享者vip",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv387drpy2.min.js",
       "category": "js",
-      "reason": "太慢 TTFB=1607ms 吞吐=1KB/s"
+      "reason": "太慢 TTFB=2336ms 吞吐=1KB/s"
     },
     {
       "kind": "site",
       "name": "💖分享奈飞",
       "api": "csp_XYQHiker",
       "category": "spider",
-      "reason": "ext 目标站不可达 http://hucongrong.web3v.work/风水/fxz/lib/nfzw.json"
+      "reason": "下载超时"
     },
     {
       "kind": "site",
       "name": "💖分享耐菲",
       "api": "csp_XYQHiker",
       "category": "spider",
-      "reason": "ext 目标站不可达 http://hucongrong.web3v.work/风水/fxz/lib/ynfys.json"
+      "reason": "下载超时"
     },
     {
       "kind": "site",
       "name": "💖分享萘飛",
       "api": "csp_XBPQ",
       "category": "spider",
-      "reason": "ext 目标站不可达 http://hucongrong.web3v.work/风水/fxz/lib/naifei4K.json"
+      "reason": "下载超时"
     },
     {
       "kind": "site",
@@ -2330,7 +2901,7 @@
       "name": "💖分享喵喵",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv387drpy2.min.js",
       "category": "js",
-      "reason": "太慢 TTFB=3668ms 吞吐=2KB/s"
+      "reason": "太慢 TTFB=3155ms 吞吐=2KB/s"
     },
     {
       "kind": "site",
@@ -2344,35 +2915,35 @@
       "name": "💖分享丽波",
       "api": "csp_XBPQ",
       "category": "spider",
-      "reason": "ext 目标站不可达 http://hucongrong.web3v.work/风水/fxz/lib/LiBo.json"
+      "reason": "下载超时"
     },
     {
       "kind": "site",
       "name": "💖分享蓝光",
       "api": "csp_XBPQ",
       "category": "spider",
-      "reason": "ext 目标站不可达 http://hucongrong.web3v.work/风水/fxz/lib/ssb.json"
+      "reason": "下载超时"
     },
     {
       "kind": "site",
       "name": "💖分享素颜",
       "api": "csp_XBPQ",
       "category": "spider",
-      "reason": "ext 目标站不可达 http://hucongrong.web3v.work/风水/fxz/lib/subaibai.json"
+      "reason": "下载超时"
     },
     {
       "kind": "site",
       "name": "💖分享视觉",
       "api": "csp_XBPQ",
       "category": "spider",
-      "reason": "ext 目标站不可达 http://hucongrong.web3v.work/风水/fxz/lib/xinshijue.json"
+      "reason": "下载超时"
     },
     {
       "kind": "site",
       "name": "💖分享栀子",
       "api": "csp_XBPQ",
       "category": "spider",
-      "reason": "ext 目标站不可达 http://hucongrong.web3v.work/风水/fxz/lib/子子.json"
+      "reason": "下载超时"
     },
     {
       "kind": "site",
@@ -2394,13 +2965,6 @@
       "api": "csp_XBPQ",
       "category": "spider",
       "reason": "下载超时"
-    },
-    {
-      "kind": "site",
-      "name": "💖分享爱优",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
     },
     {
       "kind": "site",
@@ -2453,13 +3017,6 @@
     },
     {
       "kind": "site",
-      "name": "💖分享飞鱼",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
       "name": "⛵️明日方舟",
       "api": "https://catbox.n13.club/mingri.php",
       "category": "other",
@@ -2495,45 +3052,10 @@
     },
     {
       "kind": "site",
-      "name": "🍵分享茶杯",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "💖分享丨OK",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "💖分享|AMD",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "💖分享网飞",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "💖分享PPTV",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
       "name": "🍎360影视",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv387drpy2.min.js",
       "category": "js",
-      "reason": "太慢 TTFB=1811ms 吞吐=7KB/s"
+      "reason": "太慢 TTFB=1561ms 吞吐=8KB/s"
     },
     {
       "kind": "site",
@@ -2572,66 +3094,52 @@
     },
     {
       "kind": "site",
-      "name": "💖分享飘花",
-      "api": "csp_PiaoHua",
-      "category": "spider",
-      "reason": "太慢 TTFB=3513ms 吞吐=26KB/s"
-    },
-    {
-      "kind": "site",
-      "name": "💖分享淘剧",
-      "api": "csp_CandyMuj_taoju",
-      "category": "spider",
-      "reason": "下载超时"
-    },
-    {
-      "kind": "site",
       "name": "🦜奇珍异兽",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv387drpy2.min.js",
       "category": "js",
-      "reason": "太慢 TTFB=2239ms 吞吐=10KB/s"
+      "reason": "太慢 TTFB=2488ms 吞吐=9KB/s"
     },
     {
       "kind": "site",
       "name": "🍄酷云77",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv387drpy2.min.js",
       "category": "js",
-      "reason": "太慢 TTFB=2356ms 吞吐=4KB/s"
+      "reason": "太慢 TTFB=2772ms 吞吐=4KB/s"
     },
     {
       "kind": "site",
       "name": "🐶搜狗视频",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv387drpy2.min.js",
       "category": "js",
-      "reason": "太慢 TTFB=2642ms 吞吐=6KB/s"
+      "reason": "太慢 TTFB=2636ms 吞吐=6KB/s"
     },
     {
       "kind": "site",
       "name": "🔭腾云驾雾",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv387drpy2.min.js",
       "category": "js",
-      "reason": "太慢 TTFB=2523ms 吞吐=5KB/s"
+      "reason": "太慢 TTFB=3006ms 吞吐=4KB/s"
     },
     {
       "kind": "site",
       "name": "🍋百忙无果",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv387drpy2.min.js",
       "category": "js",
-      "reason": "太慢 TTFB=2478ms 吞吐=4KB/s"
+      "reason": "太慢 TTFB=3147ms 吞吐=3KB/s"
     },
     {
       "kind": "site",
       "name": "🔭优酷视频",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv387drpy2.min.js",
       "category": "js",
-      "reason": "太慢 TTFB=2584ms 吞吐=11KB/s"
+      "reason": "太慢 TTFB=3005ms 吞吐=9KB/s"
     },
     {
       "kind": "site",
       "name": "💖分享自用",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv2427AppYsV2.js",
       "category": "js",
-      "reason": "太慢 TTFB=2092ms 吞吐=14KB/s"
+      "reason": "太慢 TTFB=2884ms 吞吐=10KB/s"
     },
     {
       "kind": "site",
@@ -2705,24 +3213,10 @@
     },
     {
       "kind": "site",
-      "name": "💖分享河马",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
       "name": "🍏分享苹果",
       "api": "csp_XBPQ",
       "category": "spider",
       "reason": "下载超时"
-    },
-    {
-      "kind": "site",
-      "name": "💖分享神马",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
     },
     {
       "kind": "site",
@@ -2775,31 +3269,24 @@
     },
     {
       "kind": "site",
-      "name": "🍷996影视",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
       "name": "📻直播电台",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv3631直播.js",
       "category": "js",
-      "reason": "太慢 TTFB=4328ms 吞吐=23KB/s"
+      "reason": "太慢 TTFB=3882ms 吞吐=26KB/s"
     },
     {
       "kind": "site",
       "name": "👨‍👨‍👧亲子教育",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv387drpy2.min.js",
       "category": "js",
-      "reason": "太慢 TTFB=3668ms 吞吐=2KB/s"
+      "reason": "太慢 TTFB=3771ms 吞吐=2KB/s"
     },
     {
       "kind": "site",
       "name": "🛰好趣直播",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv387drpy2.min.js",
       "category": "js",
-      "reason": "太慢 TTFB=2628ms 吞吐=1KB/s"
+      "reason": "太慢 TTFB=3633ms 吞吐=1KB/s"
     },
     {
       "kind": "site",
@@ -2820,14 +3307,14 @@
       "name": "🐙360Kan",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv3715360kan_open.js",
       "category": "js",
-      "reason": "太慢 TTFB=2677ms 吞吐=3KB/s"
+      "reason": "太慢 TTFB=3615ms 吞吐=2KB/s"
     },
     {
       "kind": "site",
       "name": "🌞南瓜[cat]",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv3729nangua_open.js",
       "category": "js",
-      "reason": "太慢 TTFB=2586ms 吞吐=4KB/s"
+      "reason": "太慢 TTFB=3545ms 吞吐=3KB/s"
     },
     {
       "kind": "site",
@@ -2883,21 +3370,21 @@
       "name": "🍵白嫖[cat]",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv3841bpys_open.js",
       "category": "js",
-      "reason": "太慢 TTFB=2625ms 吞吐=15KB/s"
+      "reason": "太慢 TTFB=3071ms 吞吐=13KB/s"
     },
     {
       "kind": "site",
       "name": "🎧音悦[cat]",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv3855yinyuetai_open.js",
       "category": "js",
-      "reason": "太慢 TTFB=2598ms 吞吐=3KB/s"
+      "reason": "太慢 TTFB=2946ms 吞吐=2KB/s"
     },
     {
       "kind": "site",
       "name": "🪗KTV[cat]",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv3869ktv_open.js",
       "category": "js",
-      "reason": "太慢 TTFB=2610ms 吞吐=2KB/s"
+      "reason": "太慢 TTFB=3003ms 吞吐=2KB/s"
     },
     {
       "kind": "site",
@@ -2925,7 +3412,7 @@
       "name": "💖分享短剧",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv387drpy2.min.js",
       "category": "js",
-      "reason": "太慢 TTFB=2834ms 吞吐=2KB/s"
+      "reason": "太慢 TTFB=2882ms 吞吐=2KB/s"
     },
     {
       "kind": "site",
@@ -2960,14 +3447,14 @@
       "name": "☕️畅谈梦想",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv387drpy2.min.js",
       "category": "js",
-      "reason": "太慢 TTFB=3997ms 吞吐=3KB/s"
+      "reason": "太慢 TTFB=2892ms 吞吐=4KB/s"
     },
     {
       "kind": "site",
       "name": "🔥骚火电影",
       "api": "csp_XBPQ",
       "category": "spider",
-      "reason": "太慢 TTFB=3021ms 吞吐=0KB/s"
+      "reason": "太慢 TTFB=3329ms 吞吐=0KB/s"
     },
     {
       "kind": "site",
@@ -2999,13 +3486,6 @@
     },
     {
       "kind": "site",
-      "name": "🕵️‍♀️老王电影",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
       "name": "🐯嘛衣唬呀",
       "api": "csp_XBPQ",
       "category": "spider",
@@ -3016,7 +3496,7 @@
       "name": "🌝看遍世界",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv387drpy2.min.js",
       "category": "js",
-      "reason": "太慢 TTFB=3690ms 吞吐=4KB/s"
+      "reason": "太慢 TTFB=4241ms 吞吐=3KB/s"
     },
     {
       "kind": "site",
@@ -3079,7 +3559,7 @@
       "name": "🎏星影相随",
       "api": "https://www.xy1080.net/api.php/provide/vod",
       "category": "cj",
-      "reason": "ac=detail HTTP 200"
+      "reason": "socket hang up"
     },
     {
       "kind": "site",
@@ -3114,7 +3594,7 @@
       "name": "🌺朴樱影视",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv387drpy2.min.js",
       "category": "js",
-      "reason": "太慢 TTFB=4431ms 吞吐=3KB/s"
+      "reason": "太慢 TTFB=4235ms 吞吐=3KB/s"
     },
     {
       "kind": "site",
@@ -3156,14 +3636,14 @@
       "name": "🏡热播之家",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv387drpy2.min.js",
       "category": "js",
-      "reason": "太慢 TTFB=3021ms 吞吐=0KB/s"
+      "reason": "太慢 TTFB=3338ms 吞吐=0KB/s"
     },
     {
       "kind": "site",
       "name": "🤡师兄驾到",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv387drpy2.min.js",
       "category": "js",
-      "reason": "太慢 TTFB=2957ms 吞吐=4KB/s"
+      "reason": "太慢 TTFB=3884ms 吞吐=3KB/s"
     },
     {
       "kind": "site",
@@ -3171,13 +3651,6 @@
       "api": "https://xkanzy10.com/api.php/provide/vod",
       "category": "cj",
       "reason": "getaddrinfo ENOTFOUND xkanzy10.com"
-    },
-    {
-      "kind": "site",
-      "name": "💖无心影视",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
     },
     {
       "kind": "site",
@@ -3226,7 +3699,7 @@
       "name": "🕹️淘片资源",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv5585json.html",
       "category": "cj",
-      "reason": "太慢 TTFB=5249ms 吞吐=14KB/s"
+      "reason": "太慢 TTFB=4284ms 吞吐=20KB/s"
     },
     {
       "kind": "site",
@@ -3282,14 +3755,14 @@
       "name": "☃️咕噜咕噜",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv387drpy2.min.js",
       "category": "js",
-      "reason": "太慢 TTFB=3229ms 吞吐=2KB/s"
+      "reason": "太慢 TTFB=3012ms 吞吐=2KB/s"
     },
     {
       "kind": "site",
       "name": "🌽农民|JS",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv387drpy2.min.js",
       "category": "js",
-      "reason": "太慢 TTFB=4244ms 吞吐=3KB/s"
+      "reason": "太慢 TTFB=3110ms 吞吐=4KB/s"
     },
     {
       "kind": "site",
@@ -3352,7 +3825,7 @@
       "name": "🦆鸭奶飞飞",
       "api": "csp_AppYsV2",
       "category": "spider",
-      "reason": "下载超时"
+      "reason": "ext 目标站不可达 https://yanetflix.me/api.php/app/"
     },
     {
       "kind": "site",
@@ -3419,13 +3892,6 @@
     },
     {
       "kind": "site",
-      "name": "💫速度搜索",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "太慢 TTFB=3347ms 吞吐=1KB/s"
-    },
-    {
-      "kind": "site",
       "name": "🧬看看剧场",
       "api": "csp_XBPQ",
       "category": "spider",
@@ -3444,13 +3910,6 @@
       "api": "https://kuaikan-api.com/api.php/provide/vod/?ac=list",
       "category": "cj",
       "reason": "Client network socket disconnected before secure TLS connection was established"
-    },
-    {
-      "kind": "site",
-      "name": "🦨臭蛋蛋呀",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
     },
     {
       "kind": "site",
@@ -3513,7 +3972,7 @@
       "name": "🍉西瓜视频",
       "api": "csp_XBPQ",
       "category": "spider",
-      "reason": "下载超时"
+      "reason": "ext 目标站不可达 http://hucongrong.web3v.work/风水/fxz/lib/西瓜视频.js"
     },
     {
       "kind": "site",
@@ -3527,14 +3986,14 @@
       "name": "🐳中国蓝光",
       "api": "csp_XYQHiker",
       "category": "spider",
-      "reason": "下载超时"
+      "reason": "ext 目标站不可达 http://hucongrong.web3v.work/风水/fxz/lib/中国蓝光网.json"
     },
     {
       "kind": "site",
       "name": "🎭八蛋影视",
       "api": "csp_XBPQ",
       "category": "spider",
-      "reason": "下载超时"
+      "reason": "ext 目标站不可达 http://hucongrong.web3v.work/风水/fxz/lib/八蛋影视.js"
     },
     {
       "kind": "site",
@@ -3786,7 +4245,7 @@
       "name": "📚儿童启蒙",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/apiv387drpy2.min.js",
       "category": "js",
-      "reason": "太慢 TTFB=3575ms 吞吐=0KB/s"
+      "reason": "太慢 TTFB=4125ms 吞吐=0KB/s"
     },
     {
       "kind": "site",
@@ -3839,794 +4298,17 @@
     },
     {
       "kind": "site",
-      "name": "💥｜金牌｜影视",
-      "api": "csp_Glod",
-      "category": "spider",
-      "reason": "ext 目标站不可达 https://m.610pkea.com,https://y2s52n7.com,https://m.hkybqufgh.com,https://m.sizhengxt.com,https://m.9zhoukj.com,https://m.sizhengxt.com,https://m.jiabaide.cn"
-    },
-    {
-      "kind": "site",
-      "name": "💗｜立播｜网盘",
-      "api": "csp_Libvio",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.libvio.io"
-    },
-    {
-      "kind": "site",
-      "name": "🎇｜腾腾｜解析",
-      "api": "https://pan.vma.cc/pan/down.php/ec67b9045d393737f073d2c9365533f0.js",
-      "category": "js",
-      "reason": "HTTP 410"
-    },
-    {
-      "kind": "site",
-      "name": "🎇｜酷酷｜解析",
-      "api": "https://pan.vma.cc/pan/down.php/ec67b9045d393737f073d2c9365533f0.js",
-      "category": "js",
-      "reason": "HTTP 410"
-    },
-    {
-      "kind": "site",
-      "name": "🎇｜果果｜解析",
-      "api": "https://pan.vma.cc/pan/down.php/ec67b9045d393737f073d2c9365533f0.js",
-      "category": "js",
-      "reason": "HTTP 410"
-    },
-    {
-      "kind": "site",
-      "name": "🎇｜奇奇｜解析",
-      "api": "https://pan.vma.cc/pan/down.php/ec67b9045d393737f073d2c9365533f0.js",
-      "category": "js",
-      "reason": "HTTP 410"
-    },
-    {
-      "kind": "site",
-      "name": "🚀臻臻┃高峰不卡*网盘4K",
-      "api": "csp_MIPan",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🛸指南┃高峰不卡*网盘4K",
-      "api": "csp_MIPan",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "☁️蜡笔┃高峰不卡*网盘4K",
-      "api": "csp_Duopan",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🧸玩偶┃高峰不卡*网盘4K",
-      "api": "csp_Gege",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🚀秒播┃极速帧享",
-      "api": "csp_YunZhenXiang",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🚀秒播┃爱看剧场",
-      "api": "csp_AiKan",
-      "category": "spider",
-      "reason": "ext 目标站不可达 http://43.248.117.123:4680"
-    },
-    {
-      "kind": "site",
-      "name": "🚀秒播┃世界影视",
-      "api": "csp_HkybSpider",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🚀秒播┃壹哥影视",
-      "api": "csp_YiYs",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "👀爱影┃热门4K",
-      "api": "csp_WhaleApp",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "👀热门┃低版4K",
-      "api": "csp_AppGet",
-      "category": "spider",
-      "reason": "ext 目标站不可达 https://appcms.4ksj.app|O3K6rYx75Q4xtiIE|V119"
-    },
-    {
-      "kind": "site",
-      "name": "🌾热门┃低版4K",
-      "api": "csp_AppGet",
-      "category": "spider",
-      "reason": "ext 目标站不可达 http://110.42.67.130:1226|kj37zs29q22jk96t|V122|okhttp/3.10.0"
-    },
-    {
-      "kind": "site",
-      "name": "🌾农民┃高清影视",
-      "api": "csp_Wwys",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🐷八戒┃高清影视",
-      "api": "csp_Tounimabi",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "☀️半日┃热门影视",
-      "api": "csp_App99",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🌺大鹅┃高清影视",
-      "api": "csp_YunDuo",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🍁枫叶┃热门4K",
-      "api": "csp_FengYe",
-      "category": "spider",
-      "reason": "ext 目标站不可达 https://www.vip1949.com/"
-    },
-    {
-      "kind": "site",
-      "name": "🥪双星┃热门动漫",
-      "api": "csp_App99",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🥪韩圈┃热门韩剧",
-      "api": "csp_Hxq",
-      "category": "spider",
-      "reason": "ext 目标站不可达 http://www.小不点.com/api/2026/fishhxq.php"
-    },
-    {
-      "kind": "site",
-      "name": "🍚次元┃热门动漫",
-      "api": "csp_Ciyuancheng",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🍚漫闪┃热门动漫",
-      "api": "csp_Manshan",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🍚稀饭┃热门动漫",
-      "api": "csp_CycSpider",
-      "category": "spider",
-      "reason": "ext 目标站不可达 https://www.tangsan.fun/config.php?source=xifan"
-    },
-    {
-      "kind": "site",
-      "name": "🌟七猫┃精选短剧",
-      "api": "csp_DuanJuAiQiMiao",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🌟星丫┃精选短剧",
-      "api": "csp_AppXY",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🫎剧圈┃高清影视",
-      "api": "csp_App99",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🍎苹果┃高清影视",
-      "api": "csp_AppDrama",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "👀橘汁┃高清影视",
-      "api": "csp_AppDrama",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🔍米搜┃网盘搜索",
-      "api": "csp_MiSou",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "📻六月┃有声听书",
-      "api": "csp_TingBook",
-      "category": "spider",
-      "reason": "ext 目标站不可达 https://app.365ting.com"
-    },
-    {
-      "kind": "site",
-      "name": "🎵酷酷┃在线音乐",
-      "api": "csp_KuKuMusic",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "📡游戏┃在线直播",
-      "api": "csp_YXZB",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "💃 糖豆┃广场舞",
-      "api": "csp_AppTd",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "路飞丨Live",
-      "api": "https://www.252035.xyz/z/lib/lf_live10_min-output.js",
-      "category": "js",
-      "reason": "内容不像脚本"
-    },
-    {
-      "kind": "site",
-      "name": "豆瓣 | 采集",
-      "api": "https://caiji.dbzy.tv/api.php/provide/vod/from/dbm3u8/at/josn/",
-      "category": "cj",
-      "reason": "getaddrinfo ENOTFOUND caiji.dbzy.tv"
-    },
-    {
-      "kind": "site",
-      "name": "✏️┆文才┆影视",
-      "api": "csp_WenCai",
-      "category": "spider",
-      "reason": "ext 目标站不可达 https://www.tjrongze.com,https://y2s52n7.com,https://m.hkybqufgh.com,https://m.sizhengxt.com,https://m.9zhoukj.com,https://m.jiabaide.cn"
-    },
-    {
-      "kind": "site",
-      "name": "🎙️┆堇夏┆有声",
-      "api": "csp_TingBookJinXia",
-      "category": "spider",
-      "reason": "ext 目标站不可达 https://m.ting15.com"
-    },
-    {
-      "kind": "site",
-      "name": "🐠┃热播┃秒播",
-      "api": "csp_TianTian",
-      "category": "spider",
-      "reason": "ext 目标站不可达 http://v.rbotv.cn"
-    },
-    {
-      "kind": "site",
-      "name": "🍀┃央视┃栏目",
-      "api": "https://www.iyouhun.com/tv/json/py/央视.py",
-      "category": "py",
-      "reason": "返回网页"
-    },
-    {
-      "kind": "site",
-      "name": "🐌┃视界┃秒播",
-      "api": "https://www.iyouhun.com/tv/json/py/界.py",
-      "category": "py",
-      "reason": "返回网页"
-    },
-    {
-      "kind": "site",
-      "name": "🌳┃木兮┃秒播",
-      "api": "http://mytv6688.xyz/pyplugin/木兮.py",
-      "category": "py",
-      "reason": "返回网页"
-    },
-    {
-      "kind": "site",
-      "name": "⚡️┃极影┃影视",
-      "api": "https://fastlink.cokey.xyz/f/5lO2Fd/%E6%9E%81%E5%BD%B1.js",
-      "category": "js",
-      "reason": "HTTP 567"
-    },
-    {
-      "kind": "site",
-      "name": "🍁┃枫叶┃影视",
-      "api": "https://www.iyouhun.com/tv/json/py/枫叶.py",
-      "category": "py",
-      "reason": "返回网页"
-    },
-    {
-      "kind": "site",
-      "name": "😀┃A站┃平台",
-      "api": "https://fastlink.cokey.xyz/f/XB4Oik/Acfun.py",
-      "category": "py",
-      "reason": "HTTP 567"
-    },
-    {
-      "kind": "site",
-      "name": "🅱️┃哔哩┃影视",
-      "api": "csp_Bilimd",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "👓️┃爱看┃影视",
-      "api": "https://pan.szfx.top/down.php/56ac2028f2dd8336dccad017927cbef1.py",
-      "category": "py",
-      "reason": "connect ECONNREFUSED 127.0.0.1:443"
-    },
-    {
-      "kind": "site",
-      "name": "🧿┃农民┃影视",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "🦊┃狐狸┃电影",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "🖍️┃文才┃影视",
-      "api": "https://www.iyouhun.com/tv/json/py/文才.py",
-      "category": "py",
-      "reason": "返回网页"
-    },
-    {
-      "kind": "site",
-      "name": "😄┃永乐┃视频",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "🏕️┃小镇┃视频",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "🚡┃七味┃影视",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "💧┃水滴┃视频",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "✨┃聚合┃短剧",
-      "api": "https://www.iyouhun.com/tv/json/js/聚合短剧.js",
+      "name": "📚┃儿童┃启蒙",
+      "api": "http://%E8%82%A5%E7%8C%AB.net/api/drpy2.min.js",
       "category": "js",
       "reason": "HTTP 404"
     },
     {
       "kind": "site",
-      "name": "🐯┃虎牙┃直播",
-      "api": "https://www.iyouhun.com/tv/json/js/drpy2.min.js",
-      "category": "js",
-      "reason": "HTTP 404"
-    },
-    {
-      "kind": "site",
-      "name": "🦈┃斗鱼┃直播",
-      "api": "https://www.iyouhun.com/tv/json/js/drpy2.min.js",
-      "category": "js",
-      "reason": "HTTP 404"
-    },
-    {
-      "kind": "site",
-      "name": "🏆┃咖啡┃直播",
-      "api": "https://www.iyouhun.com/tv/json/js/咖啡直播.js",
-      "category": "js",
-      "reason": "HTTP 404"
-    },
-    {
-      "kind": "site",
-      "name": "🏆┃瓜子┃体育",
-      "api": "csp_GuaziLiveAmns",
+      "name": "Nostr推荐",
+      "api": "csp_Nostr",
       "category": "spider",
-      "reason": "ext 目标站不可达 https://api.bmjb2mk7.com,https://api.46d5umpk.com,https://api.tkfupxqu.com,https://api.5h5hbfhh.com,https://api.qchyzkww.com,https://api.cjxxpgkq.com,https://api.zejzeu7p.com"
-    },
-    {
-      "kind": "site",
-      "name": "🏆┃飞球┃体育",
-      "api": "csp_FeiqLiveAmns",
-      "category": "spider",
-      "reason": "HTTP 401"
-    },
-    {
-      "kind": "site",
-      "name": "🎭┃戏曲┃合集",
-      "api": "https://www.iyouhun.com/tv/json/js/drpy2.min.js",
-      "category": "js",
-      "reason": "HTTP 404"
-    },
-    {
-      "kind": "site",
-      "name": "仅用作学习交流使用，请于24小时之内进行清除",
-      "api": "csp_Douban2",
-      "category": "spider",
-      "reason": "太慢 TTFB=4039ms 吞吐=262KB/s"
-    },
-    {
-      "kind": "site",
-      "name": "盘搜|集合",
-      "api": "http://so.yinpai.xyz/wanpan.php?type=quark|uc|baidu|tianyi|xunlei|123",
-      "category": "other",
-      "reason": "内容不像脚本"
-    },
-    {
-      "kind": "site",
-      "name": "B站|点播",
-      "api": "csp_BiliCAT",
-      "category": "spider",
-      "reason": "太慢 TTFB=3475ms 吞吐=248KB/s"
-    },
-    {
-      "kind": "site",
-      "name": "秒看|软件",
-      "api": "csp_HBmiaoKanCAT",
-      "category": "spider",
-      "reason": "太慢 TTFB=3114ms 吞吐=324KB/s"
-    },
-    {
-      "kind": "site",
-      "name": "蓝鹰|软件",
-      "api": "csp_HBAppQiCAT",
-      "category": "spider",
-      "reason": "ext 目标站不可达 http://103.217.190.91:5566"
-    },
-    {
-      "kind": "site",
-      "name": "蓝鸟|软件",
-      "api": "csp_HBAppQiCAT",
-      "category": "spider",
-      "reason": "太慢 TTFB=3008ms 吞吐=306KB/s"
-    },
-    {
-      "kind": "site",
-      "name": "橘子|软件",
-      "api": "csp_HBJuZhiCAT",
-      "category": "spider",
-      "reason": "太慢 TTFB=3820ms 吞吐=305KB/s"
-    },
-    {
-      "kind": "site",
-      "name": "一起|软件",
-      "api": "csp_HBYiQiCAT",
-      "category": "spider",
-      "reason": "太慢 TTFB=3932ms 吞吐=298KB/s"
-    },
-    {
-      "kind": "site",
-      "name": "天天|软件",
-      "api": "csp_HBtiantianv3CAT",
-      "category": "spider",
-      "reason": "ext 目标站不可达 http://v.rbotv.cn"
-    },
-    {
-      "kind": "site",
-      "name": "荐片|软件",
-      "api": "csp_JianpianCAT",
-      "category": "spider",
-      "reason": "ext 目标站不可达 https://zxfmj.com/"
-    },
-    {
-      "kind": "site",
-      "name": "红果|听书",
-      "api": "csp_HBHongGuoCAT",
-      "category": "spider",
-      "reason": "太慢 TTFB=3487ms 吞吐=296KB/s"
-    },
-    {
-      "kind": "site",
-      "name": "修罗|网站",
-      "api": "csp_HBPQCAT",
-      "category": "spider",
-      "reason": "ext 目标站不可达 https://v.xlys.ltd.ua"
-    },
-    {
-      "kind": "site",
-      "name": "文才|网站",
-      "api": "csp_WcaiCAT",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.jxshdzs.com/"
-    },
-    {
-      "kind": "site",
-      "name": "追追|网站",
-      "api": "csp_WcaiCAT",
-      "category": "spider",
-      "reason": "太慢 TTFB=3822ms 吞吐=199KB/s"
-    },
-    {
-      "kind": "site",
-      "name": "暴风|网站",
-      "api": "csp_HBcms10CAT",
-      "category": "spider",
-      "reason": "ext 目标站不可达 http://43.138.242.105:8686/api.php?key=104847348&id=id1"
-    },
-    {
-      "kind": "site",
-      "name": "三四|网站",
-      "api": "csp_HBPQCAT",
-      "category": "spider",
-      "reason": "ext 目标站不可达 http://103.205.254.65:25252/仅供测试/lib/三四影视.json"
-    },
-    {
-      "kind": "site",
-      "name": "小猫|网站",
-      "api": "csp_HBcms10CAT",
-      "category": "spider",
-      "reason": "目标站测速失败 https://vs.okcdn100.top/api.php/provide/vod/"
-    },
-    {
-      "kind": "site",
-      "name": "日出|网站",
-      "api": "http://103.205.254.65:25252/仅供测试/lib/drpy2.min.js",
-      "category": "js",
-      "reason": "太慢 TTFB=1955ms 吞吐=32KB/s"
-    },
-    {
-      "kind": "site",
-      "name": "养生|网站",
-      "api": "http://103.205.254.65:25252/仅供测试/lib/drpy2.min.js",
-      "category": "js",
-      "reason": "内容不像脚本"
-    },
-    {
-      "kind": "site",
-      "name": "囧次|动漫",
-      "api": "csp_HBJCYCAT",
-      "category": "spider",
-      "reason": "目标站测速失败 https://jcy.jciyuan.com"
-    },
-    {
-      "kind": "site",
-      "name": "歪比|网站",
-      "api": "csp_HBWaBiBaBuCAT",
-      "category": "spider",
-      "reason": "太慢 TTFB=3194ms 吞吐=271KB/s"
-    },
-    {
-      "kind": "site",
-      "name": "看球通|体育",
-      "api": "csp_HBSportAiCAT",
-      "category": "spider",
-      "reason": "太慢 TTFB=3090ms 吞吐=294KB/s"
-    },
-    {
-      "kind": "site",
-      "name": "全网|短剧",
-      "api": "http://38.76.197.172:15151/duanju.php?type=dquark",
-      "category": "other",
-      "reason": "内容过小"
-    },
-    {
-      "kind": "site",
-      "name": "七猫漫|短剧",
-      "api": "csp_HBManJuCAT",
-      "category": "spider",
-      "reason": "太慢 TTFB=3087ms 吞吐=345KB/s"
-    },
-    {
-      "kind": "site",
-      "name": "歌曲|歌曲",
-      "api": "csp_HBDJ111CAT",
-      "category": "spider",
-      "reason": "太慢 TTFB=3354ms 吞吐=301KB/s"
-    },
-    {
-      "kind": "site",
-      "name": "💥VIP豆瓣排行💥",
-      "api": "csp_Douban",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "💖┃简搜┃4K💖",
-      "api": "csp_JianSou",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "💖┃至臻┃4K💖",
-      "api": "csp_PanCms",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "💖┃木偶┃4K💖",
-      "api": "csp_PanCms",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "💖┃多多┃4K💖",
-      "api": "csp_PanCms",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "💖┃快映┃4K💖",
-      "api": "csp_PanCms",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "💖┃虎斑┃4K💖",
-      "api": "csp_PanCms",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "💖┃剧透┃4K💖",
-      "api": "csp_Star2",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "🍂┃苹果┃1080P",
-      "api": "csp_AppDrama",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🍂┃荐片┃1080P",
-      "api": "csp_Jianpian",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "🍂┃大鹅┃1080P",
-      "api": "csp_YunDuo",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🍂┃懂片┃秒播",
-      "api": "csp_DongPian",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "🍂┃影侠┃影视",
-      "api": "csp_DyXia",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "🍂┃杜北┃秒播",
-      "api": "csp_Dubk",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "🍂┃橘子┃影视",
-      "api": "csp_AppDramaV5",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "🍂┃师兄┃影视",
-      "api": "csp_DaShiXiong",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "🎈┃国粹┃戏曲",
-      "api": "csp_Bili",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "🏮┃相声┃小品",
-      "api": "csp_Bili",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "🎸┃演唱会┃MV",
-      "api": "csp_Bili",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "🎧┃明星┃MV",
-      "api": "csp_Bili",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "🅱┃️哔哩┃大全",
-      "api": "csp_Bili",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "🅱️┃哔哩┃短剧",
-      "api": "csp_Bili",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "🎬┃影视┃解说",
-      "api": "csp_Bili",
-      "category": "spider",
-      "reason": "不是有效的 jar"
-    },
-    {
-      "kind": "site",
-      "name": "🪁┆纸鸢┆动漫",
-      "api": "csp_AppGhg",
-      "category": "spider",
-      "reason": "太慢 TTFB=3421ms 吞吐=804KB/s"
+      "reason": "太慢 TTFB=5166ms 吞吐=647KB/s"
     },
     {
       "kind": "site",
@@ -5015,6 +4697,636 @@
     },
     {
       "kind": "site",
+      "name": "💥｜金牌｜影视",
+      "api": "csp_Glod",
+      "category": "spider",
+      "reason": "ext 目标站不可达 https://m.610pkea.com,https://y2s52n7.com,https://m.hkybqufgh.com,https://m.sizhengxt.com,https://m.9zhoukj.com,https://m.sizhengxt.com,https://m.jiabaide.cn"
+    },
+    {
+      "kind": "site",
+      "name": "💥｜热播｜影视",
+      "api": "csp_AppRJ",
+      "category": "spider",
+      "reason": "ext 目标站不可达 http://v.rbotv.cn"
+    },
+    {
+      "kind": "site",
+      "name": "💗｜立播｜网盘",
+      "api": "csp_Libvio",
+      "category": "spider",
+      "reason": "目标站测速失败 https://www.libvio.io"
+    },
+    {
+      "kind": "site",
+      "name": "🎇｜腾腾｜解析",
+      "api": "https://pan.vma.cc/pan/down.php/ec67b9045d393737f073d2c9365533f0.js",
+      "category": "js",
+      "reason": "HTTP 410"
+    },
+    {
+      "kind": "site",
+      "name": "🎇｜酷酷｜解析",
+      "api": "https://pan.vma.cc/pan/down.php/ec67b9045d393737f073d2c9365533f0.js",
+      "category": "js",
+      "reason": "HTTP 410"
+    },
+    {
+      "kind": "site",
+      "name": "🎇｜果果｜解析",
+      "api": "https://pan.vma.cc/pan/down.php/ec67b9045d393737f073d2c9365533f0.js",
+      "category": "js",
+      "reason": "HTTP 410"
+    },
+    {
+      "kind": "site",
+      "name": "🎇｜奇奇｜解析",
+      "api": "https://pan.vma.cc/pan/down.php/ec67b9045d393737f073d2c9365533f0.js",
+      "category": "js",
+      "reason": "HTTP 410"
+    },
+    {
+      "kind": "site",
+      "name": "💥VIP豆瓣排行💥",
+      "api": "csp_Douban",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "💖┃简搜┃4K💖",
+      "api": "csp_JianSou",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "💖┃至臻┃4K💖",
+      "api": "csp_PanCms",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "💖┃木偶┃4K💖",
+      "api": "csp_PanCms",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "💖┃多多┃4K💖",
+      "api": "csp_PanCms",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "💖┃快映┃4K💖",
+      "api": "csp_PanCms",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "💖┃虎斑┃4K💖",
+      "api": "csp_PanCms",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "💖┃剧透┃4K💖",
+      "api": "csp_Star2",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🍂┃苹果┃1080P",
+      "api": "csp_AppDrama",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🍂┃热播┃高清",
+      "api": "csp_AppRJ",
+      "category": "spider",
+      "reason": "ext 目标站不可达 http://v.rbotv.cn"
+    },
+    {
+      "kind": "site",
+      "name": "🍂┃荐片┃1080P",
+      "api": "csp_Jianpian",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🍂┃大鹅┃1080P",
+      "api": "csp_YunDuo",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🍂┃懂片┃秒播",
+      "api": "csp_DongPian",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🍂┃影侠┃影视",
+      "api": "csp_DyXia",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🍂┃金牌┃秒播",
+      "api": "csp_JinPai",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🍂┃杜北┃秒播",
+      "api": "csp_Dubk",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🍂┃橘子┃影视",
+      "api": "csp_AppDramaV5",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🍂┃师兄┃影视",
+      "api": "csp_DaShiXiong",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🎵┃库库┃音乐",
+      "api": "csp_KuKuMusic",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "💃┃糖豆┃舞蹈",
+      "api": "csp_AppTd",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🎈┃国粹┃戏曲",
+      "api": "csp_Bili",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🏮┃相声┃小品",
+      "api": "csp_Bili",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🎸┃演唱会┃MV",
+      "api": "csp_Bili",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🎧┃明星┃MV",
+      "api": "csp_Bili",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🅱┃️哔哩┃大全",
+      "api": "csp_Bili",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🅱️┃哔哩┃短剧",
+      "api": "csp_Bili",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🎬┃影视┃解说",
+      "api": "csp_Bili",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🍉瓜子",
+      "api": "csp_GuaziAmns",
+      "category": "spider",
+      "reason": "太慢 TTFB=5179ms 吞吐=4KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "🅰橘汁",
+      "api": "csp_AppDrama",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🅰华谊",
+      "api": "csp_AppDrama",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🅰苹果",
+      "api": "csp_AppDrama",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🅰电影天堂",
+      "api": "csp_AppDrama",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "📦蒙太奇",
+      "api": "csp_AppV7Amns",
+      "category": "spider",
+      "reason": "太慢 TTFB=4725ms 吞吐=5KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "🍊柚子",
+      "api": "csp_AppV7Amns",
+      "category": "spider",
+      "reason": "太慢 TTFB=4473ms 吞吐=5KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "🐶特狗",
+      "api": "csp_AppV6Amns",
+      "category": "spider",
+      "reason": "太慢 TTFB=4309ms 吞吐=5KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "🚀秋天",
+      "api": "csp_NewGrV2Amns",
+      "category": "spider",
+      "reason": "太慢 TTFB=3303ms 吞吐=7KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "🐱魔都动漫",
+      "api": "csp_DMmoduAmns",
+      "category": "spider",
+      "reason": "太慢 TTFB=3512ms 吞吐=6KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "🔥短剧推荐",
+      "api": "csp_HgdhAmns",
+      "category": "spider",
+      "reason": "太慢 TTFB=3061ms 吞吐=7KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "📚酷我听书",
+      "api": "https://gh-proxy.org/https://raw.githubusercontent.com/yoursmile66/TVBox/main/js/lib/drpy2.min.js",
+      "category": "js",
+      "reason": "内容不像脚本"
+    },
+    {
+      "kind": "site",
+      "name": "🐠┃热播┃秒播",
+      "api": "csp_TianTian",
+      "category": "spider",
+      "reason": "ext 目标站不可达 http://v.rbotv.cn"
+    },
+    {
+      "kind": "site",
+      "name": "🐝┃纯净┃采集",
+      "api": "https://api.wsyzy.net/api.php/provide/vod/?ac=list",
+      "category": "cj",
+      "reason": "太慢 TTFB=4392ms 吞吐=1KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "🍀┃央视┃栏目",
+      "api": "https://www.iyouhun.com/tv/json/py/央视.py",
+      "category": "py",
+      "reason": "返回网页"
+    },
+    {
+      "kind": "site",
+      "name": "🐌┃视界┃秒播",
+      "api": "https://www.iyouhun.com/tv/json/py/界.py",
+      "category": "py",
+      "reason": "返回网页"
+    },
+    {
+      "kind": "site",
+      "name": "🌳┃木兮┃秒播",
+      "api": "http://mytv6688.xyz/pyplugin/木兮.py",
+      "category": "py",
+      "reason": "返回网页"
+    },
+    {
+      "kind": "site",
+      "name": "⚡️┃极影┃影视",
+      "api": "https://fastlink.cokey.xyz/f/5lO2Fd/%E6%9E%81%E5%BD%B1.js",
+      "category": "js",
+      "reason": "HTTP 567"
+    },
+    {
+      "kind": "site",
+      "name": "🍁┃枫叶┃影视",
+      "api": "https://www.iyouhun.com/tv/json/py/枫叶.py",
+      "category": "py",
+      "reason": "返回网页"
+    },
+    {
+      "kind": "site",
+      "name": "😀┃A站┃平台",
+      "api": "https://fastlink.cokey.xyz/f/XB4Oik/Acfun.py",
+      "category": "py",
+      "reason": "HTTP 567"
+    },
+    {
+      "kind": "site",
+      "name": "🅱️┃哔哩┃影视",
+      "api": "csp_Bilimd",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "👓️┃爱看┃影视",
+      "api": "https://pan.szfx.top/down.php/56ac2028f2dd8336dccad017927cbef1.py",
+      "category": "py",
+      "reason": "connect ECONNREFUSED 127.0.0.1:443"
+    },
+    {
+      "kind": "site",
+      "name": "🖍️┃文才┃影视",
+      "api": "https://www.iyouhun.com/tv/json/py/文才.py",
+      "category": "py",
+      "reason": "返回网页"
+    },
+    {
+      "kind": "site",
+      "name": "🏅┃金牌┃影院",
+      "api": "csp_Jinpai",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "✨┃聚合┃短剧",
+      "api": "https://www.iyouhun.com/tv/json/js/聚合短剧.js",
+      "category": "js",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "site",
+      "name": "🐯┃虎牙┃直播",
+      "api": "https://www.iyouhun.com/tv/json/js/drpy2.min.js",
+      "category": "js",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "site",
+      "name": "🦈┃斗鱼┃直播",
+      "api": "https://www.iyouhun.com/tv/json/js/drpy2.min.js",
+      "category": "js",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "site",
+      "name": "🏆┃咖啡┃直播",
+      "api": "https://www.iyouhun.com/tv/json/js/咖啡直播.js",
+      "category": "js",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "site",
+      "name": "🏆┃瓜子┃体育",
+      "api": "csp_GuaziLiveAmns",
+      "category": "spider",
+      "reason": "ext 目标站不可达 https://api.bmjb2mk7.com,https://api.46d5umpk.com,https://api.tkfupxqu.com,https://api.5h5hbfhh.com,https://api.qchyzkww.com,https://api.cjxxpgkq.com,https://api.zejzeu7p.com"
+    },
+    {
+      "kind": "site",
+      "name": "🎭┃戏曲┃合集",
+      "api": "https://www.iyouhun.com/tv/json/js/drpy2.min.js",
+      "category": "js",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "site",
+      "name": "路飞丨Live",
+      "api": "https://www.252035.xyz/z/lib/lf_live10_min-output.js",
+      "category": "js",
+      "reason": "内容不像脚本"
+    },
+    {
+      "kind": "site",
+      "name": "豆瓣 | 采集",
+      "api": "https://caiji.dbzy.tv/api.php/provide/vod/from/dbm3u8/at/josn/",
+      "category": "cj",
+      "reason": "getaddrinfo ENOTFOUND caiji.dbzy.tv"
+    },
+    {
+      "kind": "site",
+      "name": "🚀臻臻┃高峰不卡*网盘4K",
+      "api": "csp_MIPan",
+      "category": "spider",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "site",
+      "name": "🛸指南┃高峰不卡*网盘4K",
+      "api": "csp_MIPan",
+      "category": "spider",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "site",
+      "name": "☁️蜡笔┃高峰不卡*网盘4K",
+      "api": "csp_Duopan",
+      "category": "spider",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "site",
+      "name": "🧸玩偶┃高峰不卡*网盘4K",
+      "api": "csp_Gege",
+      "category": "spider",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "site",
+      "name": "🚀秒播┃极速帧享",
+      "api": "csp_YunZhenXiang",
+      "category": "spider",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "site",
+      "name": "🚀秒播┃爱看剧场",
+      "api": "csp_AiKan",
+      "category": "spider",
+      "reason": "ext 目标站不可达 http://43.248.117.123:4680"
+    },
+    {
+      "kind": "site",
+      "name": "🚀秒播┃世界影视",
+      "api": "csp_HkybSpider",
+      "category": "spider",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "site",
+      "name": "🚀秒播┃壹哥影视",
+      "api": "csp_YiYs",
+      "category": "spider",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "site",
+      "name": "👀爱影┃热门4K",
+      "api": "csp_WhaleApp",
+      "category": "spider",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "site",
+      "name": "👀热门┃低版4K",
+      "api": "csp_AppGet",
+      "category": "spider",
+      "reason": "ext 目标站不可达 https://appcms.4ksj.app|O3K6rYx75Q4xtiIE|V119"
+    },
+    {
+      "kind": "site",
+      "name": "🌾热门┃低版4K",
+      "api": "csp_AppGet",
+      "category": "spider",
+      "reason": "ext 目标站不可达 http://110.42.67.130:1226|kj37zs29q22jk96t|V122|okhttp/3.10.0"
+    },
+    {
+      "kind": "site",
+      "name": "🐷八戒┃高清影视",
+      "api": "csp_Tounimabi",
+      "category": "spider",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "site",
+      "name": "🌺大鹅┃高清影视",
+      "api": "csp_YunDuo",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🍁枫叶┃热门4K",
+      "api": "csp_FengYe",
+      "category": "spider",
+      "reason": "ext 目标站不可达 https://www.vip1949.com/"
+    },
+    {
+      "kind": "site",
+      "name": "🥪韩圈┃热门韩剧",
+      "api": "csp_Hxq",
+      "category": "spider",
+      "reason": "ext 目标站不可达 http://www.小不点.com/api/2026/fishhxq.php"
+    },
+    {
+      "kind": "site",
+      "name": "🍚次元┃热门动漫",
+      "api": "csp_Ciyuancheng",
+      "category": "spider",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "site",
+      "name": "🍚漫闪┃热门动漫",
+      "api": "csp_Manshan",
+      "category": "spider",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "site",
+      "name": "🍚稀饭┃热门动漫",
+      "api": "csp_CycSpider",
+      "category": "spider",
+      "reason": "ext 目标站不可达 https://www.tangsan.fun/config.php?source=xifan"
+    },
+    {
+      "kind": "site",
+      "name": "🌟七猫┃精选短剧",
+      "api": "csp_DuanJuAiQiMiao",
+      "category": "spider",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "site",
+      "name": "🌟星丫┃精选短剧",
+      "api": "csp_AppXY",
+      "category": "spider",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "site",
+      "name": "🍎苹果┃高清影视",
+      "api": "csp_AppDrama",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "👀橘汁┃高清影视",
+      "api": "csp_AppDrama",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🔍米搜┃网盘搜索",
+      "api": "csp_MiSou",
+      "category": "spider",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "site",
+      "name": "📡游戏┃在线直播",
+      "api": "csp_YXZB",
+      "category": "spider",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "site",
       "name": "超帧设置(手机够呛4K,电视不配补帧超帧)",
       "api": "csp_SuperframeSpider",
       "category": "spider",
@@ -5040,6 +5352,13 @@
       "api": "https://pan.szfx.top/down.php/5c0847922c8e8096eeb8687035667049.py",
       "category": "py",
       "reason": "connect ECONNREFUSED 127.0.0.1:443"
+    },
+    {
+      "kind": "site",
+      "name": "西瓜",
+      "api": "https://meow.668yun.top/api/s/Kp2S08TE7dpIwYVKnJWyFPfdioM6FVTw/西瓜官方（有部分 4k）.py",
+      "category": "py",
+      "reason": "太慢 TTFB=1503ms 吞吐=16KB/s"
     },
     {
       "kind": "site",
@@ -5169,55 +5488,6 @@
     },
     {
       "kind": "site",
-      "name": "🧿布卡｜影视",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "枫叶电影",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "枫叶电影",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "鹊桥｜影视 ",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "歪比巴卜",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "KKK┃动漫",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "❤️|电影┃先生",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
       "name": "羊佬壳游戏",
       "api": "https://pan.uvqzu.cn/f/BpVsd/%E4%BA%91%E6%B8%B8.js",
       "category": "js",
@@ -5253,13 +5523,6 @@
     },
     {
       "kind": "site",
-      "name": "克隆合集",
-      "api": "http://zhangqun1818.serv00.net/klhj.php",
-      "category": "other",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
       "name": "Emby",
       "api": "https://17264.kstore.space/Emby.js",
       "category": "js",
@@ -5288,6 +5551,13 @@
     },
     {
       "kind": "site",
+      "name": "🌼如意┃影视🌼",
+      "api": "http://cj.rycjapi.com/api.php/provide/vod",
+      "category": "cj",
+      "reason": "太慢 TTFB=1736ms 吞吐=4KB/s"
+    },
+    {
+      "kind": "site",
       "name": "🌼豆瓣┃影视🌼",
       "api": "https://caiji.dbzy5.com/api.php/provide/vod",
       "category": "cj",
@@ -5295,38 +5565,45 @@
     },
     {
       "kind": "site",
+      "name": "🌼茅台┃影视🌼",
+      "api": "https://caiji.maotaizy.cc/api.php/provide/vod",
+      "category": "cj",
+      "reason": "太慢 TTFB=2196ms 吞吐=4KB/s"
+    },
+    {
+      "kind": "site",
       "name": "夸克|推送",
       "api": "https://so.yinpai.xyz/api.php?type=quark",
       "category": "other",
-      "reason": "内容过小"
+      "reason": "连接超时"
     },
     {
       "kind": "site",
       "name": "优惜|推送",
       "api": "https://so.yinpai.xyz/api.php?type=uc",
       "category": "other",
-      "reason": "内容过小"
+      "reason": "连接超时"
     },
     {
       "kind": "site",
       "name": "百度|推送",
       "api": "https://so.yinpai.xyz/api.php?type=baidu",
       "category": "other",
-      "reason": "内容过小"
+      "reason": "连接超时"
     },
     {
       "kind": "site",
       "name": "天翼|推送",
       "api": "https://so.yinpai.xyz/api.php?type=tianyi",
       "category": "other",
-      "reason": "内容过小"
+      "reason": "连接超时"
     },
     {
       "kind": "site",
       "name": "迅雷|推送",
       "api": "https://so.yinpai.xyz/api.php?type=xunlei",
       "category": "other",
-      "reason": "内容过小"
+      "reason": "连接超时"
     },
     {
       "kind": "site",
@@ -5337,10 +5614,24 @@
     },
     {
       "kind": "site",
-      "name": "次元城",
-      "api": "csp_Cycdm",
+      "name": "📚┃儿童┃启蒙",
+      "api": "http://hello.xn--z7x900a.net/api/drpy2.min.js",
+      "category": "js",
+      "reason": "返回网页"
+    },
+    {
+      "kind": "site",
+      "name": "🌟木偶┃4 K",
+      "api": "csp_WobgAmns",
       "category": "spider",
-      "reason": "HTTP 401"
+      "reason": "太慢 TTFB=3403ms 吞吐=7KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "海外看(墙外)",
+      "api": "https://haiwaikan.com/api.php/provide/vod",
+      "category": "cj",
+      "reason": "socket hang up"
     },
     {
       "kind": "site",
@@ -5428,13 +5719,6 @@
     },
     {
       "kind": "site",
-      "name": "🎸┃酷奇┃MV",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
       "name": "🅱️┃哔哩┃影视",
       "api": "https://www.iyouhun.com/tv/json/lib/drpy2.min.js",
       "category": "js",
@@ -5449,10 +5733,178 @@
     },
     {
       "kind": "site",
-      "name": "✨爱看4K短剧✨",
-      "api": "csp_XBPQ",
+      "name": "直播┃LIVE",
+      "api": "csp_AllliveGuard",
       "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "🍎苹果┃不卡",
+      "api": "csp_LiteAppleGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "💡溢彩┃秒播",
+      "api": "csp_AppSxGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "🍊在线┃秒播",
+      "api": "csp_ZxzjGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "⏮️低端┃外剧",
+      "api": "csp_DdrkGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "👀萌米┃多线",
+      "api": "csp_AppTTGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "🐻剧圈┃多线",
+      "api": "csp_JqqGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "下饭┃多线",
+      "api": "csp_AppSxGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "👀鲸鱼┃多线",
+      "api": "csp_AppSxGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "👓欢视┃多线",
+      "api": "csp_AppTTGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "✡️┃六维┃磁力",
+      "api": "https://jihulab.com/iduoduo/xduo/-/raw/main/libs/drpy2.min.js",
+      "category": "js",
+      "reason": "HTTP 401"
+    },
+    {
+      "kind": "site",
+      "name": "🛳┃港口┃磁力",
+      "api": "csp_XYQHiker",
+      "category": "spider",
+      "reason": "HTTP 401"
+    },
+    {
+      "kind": "site",
+      "name": "😎┃酷吧┃磁力",
+      "api": "https://jihulab.com/iduoduo/xduo/-/raw/main/libs/drpy2.min.js",
+      "category": "js",
+      "reason": "HTTP 401"
+    },
+    {
+      "kind": "site",
+      "name": "毛毛┃4K",
+      "api": "csp_AppYsV2",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "🌈上头┃短剧",
+      "api": "csp_Djtt",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "🎀异界┃动漫",
+      "api": "csp_YsjGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "⚽926┃看球",
+      "api": "csp_kanqiu926Guard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "🐧企鹅┃体育",
+      "api": "csp_XPath",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "🐯虎牙┃直播",
+      "api": "https://fanty.run.goorm.site/ext/js/drpy2.min.js",
+      "category": "js",
+      "reason": "getaddrinfo ENOTFOUND fanty.run.goorm.site"
+    },
+    {
+      "kind": "site",
+      "name": "🐟斗鱼┃直播",
+      "api": "https://fanty.run.goorm.site/ext/js/drpy2.min.js",
+      "category": "js",
+      "reason": "getaddrinfo ENOTFOUND fanty.run.goorm.site"
+    },
+    {
+      "kind": "site",
+      "name": "📽️聚短┃视频",
+      "api": "https://agit.ai/fantaiying/fty/raw/branch/master/ext/drpy2.min.js",
+      "category": "js",
+      "reason": "内容过小"
+    },
+    {
+      "kind": "site",
+      "name": "🅱哔哩哔哩┃歌曲",
+      "api": "csp_Bili",
+      "category": "spider",
+      "reason": "目标站测速失败 http://ysys.lic10.cn/ys/config/js/biliych.json"
+    },
+    {
+      "kind": "site",
+      "name": "📚儿童┃启蒙",
+      "api": "http://ysys.lic10.cn/ys/config/api/drpy2.min.js",
+      "category": "js",
+      "reason": "太慢 TTFB=1613ms 吞吐=0KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "📚小学┃课堂",
+      "api": "csp_BiliGuard",
+      "category": "spider",
+      "reason": "目标站测速失败 http://ysys.lic10.cn/ys/config/js/小学课堂.json"
+    },
+    {
+      "kind": "site",
+      "name": "次元城",
+      "api": "csp_Cycdm",
+      "category": "spider",
+      "reason": "HTTP 401"
     },
     {
       "kind": "site",
@@ -5551,13 +6003,6 @@
       "api": "csp_XBPQ",
       "category": "spider",
       "reason": "ext 目标站不可达 http://box.ufuzi.com/tv/qq/%E7%9F%AD%E5%89%A7%E9%A2%91%E9%81%93/json/天龙短剧.json"
-    },
-    {
-      "kind": "site",
-      "name": "✨红果短剧✨",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
     },
     {
       "kind": "site",
@@ -5736,48 +6181,6 @@
     },
     {
       "kind": "site",
-      "name": "剧圈 • APP",
-      "api": "csp_App99",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "半日 • APP",
-      "api": "csp_App99",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "天堂 • APP",
-      "api": "csp_AppDrama",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "橘汁 • APP",
-      "api": "csp_AppDrama",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "华谊 • APP",
-      "api": "csp_AppDrama",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "苹果 • APP",
-      "api": "csp_AppDrama",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
       "name": "蓝鹰 • APP",
       "api": "csp_AppQi",
       "category": "spider",
@@ -5785,24 +6188,10 @@
     },
     {
       "kind": "site",
-      "name": "果果 • 短剧",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
       "name": "金牌 • 影视",
       "api": "csp_Jpys",
       "category": "spider",
       "reason": "ext 目标站不可达 https://www.sunnafh.com,https://m.sizhengxt.com,https://m.jiabaide.cn"
-    },
-    {
-      "kind": "site",
-      "name": "番社 • 动漫",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
     },
     {
       "kind": "site",
@@ -5817,104 +6206,6 @@
       "api": "csp_TingJinxia",
       "category": "spider",
       "reason": "ext 目标站不可达 https://m.ting15.com"
-    },
-    {
-      "kind": "site",
-      "name": "直播┃LIVE",
-      "api": "csp_AllliveGuard",
-      "category": "spider",
-      "reason": "太慢 TTFB=3815ms 吞吐=37KB/s"
-    },
-    {
-      "kind": "site",
-      "name": "✡️┃六维┃磁力",
-      "api": "https://jihulab.com/iduoduo/xduo/-/raw/main/libs/drpy2.min.js",
-      "category": "js",
-      "reason": "HTTP 401"
-    },
-    {
-      "kind": "site",
-      "name": "🛳┃港口┃磁力",
-      "api": "csp_XYQHiker",
-      "category": "spider",
-      "reason": "HTTP 401"
-    },
-    {
-      "kind": "site",
-      "name": "😎┃酷吧┃磁力",
-      "api": "https://jihulab.com/iduoduo/xduo/-/raw/main/libs/drpy2.min.js",
-      "category": "js",
-      "reason": "HTTP 401"
-    },
-    {
-      "kind": "site",
-      "name": "🌊 海外看┃此接口须有魔法上网",
-      "api": "https://haiwaikan.com/api.php/provide/vod",
-      "category": "cj",
-      "reason": "ac=detail HTTP 200"
-    },
-    {
-      "kind": "site",
-      "name": "🐯虎牙┃直播",
-      "api": "https://fanty.run.goorm.site/ext/js/drpy2.min.js",
-      "category": "js",
-      "reason": "getaddrinfo ENOTFOUND fanty.run.goorm.site"
-    },
-    {
-      "kind": "site",
-      "name": "🐟斗鱼┃直播",
-      "api": "https://fanty.run.goorm.site/ext/js/drpy2.min.js",
-      "category": "js",
-      "reason": "getaddrinfo ENOTFOUND fanty.run.goorm.site"
-    },
-    {
-      "kind": "site",
-      "name": "📽️聚短┃视频",
-      "api": "https://agit.ai/fantaiying/fty/raw/branch/master/ext/drpy2.min.js",
-      "category": "js",
-      "reason": "内容过小"
-    },
-    {
-      "kind": "site",
-      "name": "🅱哔哩哔哩┃歌曲",
-      "api": "csp_Bili",
-      "category": "spider",
-      "reason": "目标站测速失败 http://ysys.lic10.cn/ys/config/js/biliych.json"
-    },
-    {
-      "kind": "site",
-      "name": "📚小学┃课堂",
-      "api": "csp_BiliGuard",
-      "category": "spider",
-      "reason": "目标站测速失败 http://ysys.lic10.cn/ys/config/js/小学课堂.json"
-    },
-    {
-      "kind": "site",
-      "name": "🚌动漫巴士",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "🎁面包",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "🏃‍♀️追剧吧",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "📚酷我听书",
-      "api": "https://gh-proxy.org/https://raw.githubusercontent.com/yoursmile66/TVBox/main/js/lib/drpy2.min.js",
-      "category": "js",
-      "reason": "内容不像脚本"
     },
     {
       "kind": "site",
@@ -6051,8 +6342,8 @@
     },
     {
       "kind": "site",
-      "name": "💝分享合集",
-      "api": "http://zhangqun1818.serv00.net/cj/cjjh.php",
+      "name": "💝分享js集",
+      "api": "http://zhangqun1818.serv00.net/js.php",
       "category": "other",
       "reason": "连接超时"
     },
@@ -6076,13 +6367,6 @@
       "api": "https://gh-proxy.com/https://raw.githubusercontent.com/maoystv/api/refs/heads/main/JS/drpy2.min.js",
       "category": "js",
       "reason": "内容不像脚本"
-    },
-    {
-      "kind": "site",
-      "name": "💝分享西瓜",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
     },
     {
       "kind": "site",
@@ -6135,48 +6419,6 @@
     },
     {
       "kind": "site",
-      "name": "💖分享狐狸",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "💖分享奇优",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "💖分享魅影",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "💖分享樱空",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "💖分享唐人",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "💖分享金牌",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
       "name": "💖分享卧龙",
       "api": "https://collect.wolongzyw.com/api.php/provide/vod/",
       "category": "cj",
@@ -6191,24 +6433,10 @@
     },
     {
       "kind": "site",
-      "name": "💖分享|BTT",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
       "name": "🍎360影视",
       "api": "https://gh-proxy.com/https://raw.githubusercontent.com/maoystv/api/refs/heads/main/JS/drpy2.min.js",
       "category": "js",
       "reason": "内容不像脚本"
-    },
-    {
-      "kind": "site",
-      "name": "💖分享白嫖",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
     },
     {
       "kind": "site",
@@ -6223,34 +6451,6 @@
       "api": "https://gh-proxy.com/https://raw.githubusercontent.com/alantang1977/X/main/laozhang/兔小贝.js",
       "category": "js",
       "reason": "HTTP 404"
-    },
-    {
-      "kind": "site",
-      "name": "💖喵喵动漫",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "💖之家动漫",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "💖大全动漫",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "💖吾吧动漫",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
     },
     {
       "kind": "site",
@@ -6404,7 +6604,7 @@
       "name": "👓新视觉",
       "api": "csp_Xinsj",
       "category": "spider",
-      "reason": "目标站测速失败 https://www.6080yy3.com/"
+      "reason": "ext 目标站不可达 https://www.6080yy3.com/"
     },
     {
       "kind": "site",
@@ -6481,7 +6681,7 @@
       "name": "🏭厂长影视",
       "api": "csp_Czsapp",
       "category": "spider",
-      "reason": "ext 目标站不可达 https://cz01.me/"
+      "reason": "太慢 TTFB=4467ms 吞吐=0KB/s"
     },
     {
       "kind": "site",
@@ -6530,21 +6730,21 @@
       "name": "🌙HOHO（APP）",
       "api": "csp_AppYsV2",
       "category": "spider",
-      "reason": "目标站测速失败 https://hoho.tv/api.php/app/"
+      "reason": "ext 目标站不可达 https://hoho.tv/api.php/app/"
     },
     {
       "kind": "site",
       "name": "🌙落攻阁（APP）",
       "api": "csp_AppYsV2",
       "category": "spider",
-      "reason": "目标站测速失败 https://www.lggys.cn/api.php/app/"
+      "reason": "ext 目标站不可达 https://www.lggys.cn/api.php/app/"
     },
     {
       "kind": "site",
       "name": "🌙空气屋（APP）",
       "api": "csp_AppYsV2",
       "category": "spider",
-      "reason": "目标站测速失败 https://www.airfun.fun/xgapp.php/v2/"
+      "reason": "ext 目标站不可达 https://www.airfun.fun/xgapp.php/v2/"
     },
     {
       "kind": "site",
@@ -6565,14 +6765,14 @@
       "name": "🌙速看100（APP）",
       "api": "csp_AppYsV2",
       "category": "spider",
-      "reason": "目标站测速失败 https://sk100.tv/api.php/app/"
+      "reason": "ext 目标站不可达 https://sk100.tv/api.php/app/"
     },
     {
       "kind": "site",
       "name": "🌙木白（APP）",
       "api": "csp_AppYsV2",
       "category": "spider",
-      "reason": "目标站测速失败 https://www.chiguafilm.com/api.php/v1.vod"
+      "reason": "ext 目标站不可达 https://www.chiguafilm.com/api.php/v1.vod"
     },
     {
       "kind": "site",
@@ -6698,7 +6898,7 @@
       "name": "💅🏻原盘4k",
       "api": "csp_XYQHiker",
       "category": "spider",
-      "reason": "ext 目标站不可达 https://jihulab.com/ymz1231/json/-/raw/main/%E4%B8%AD%E5%9B%BD%E8%93%9D%E5%85%89%E7%BD%91.json"
+      "reason": "不是有效的 jar"
     },
     {
       "kind": "site",
@@ -6755,13 +6955,6 @@
       "api": "csp_Ys555",
       "category": "spider",
       "reason": "目标站测速失败 https://www.555dyy1.com"
-    },
-    {
-      "kind": "site",
-      "name": "️🍂秋霞影视",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
     },
     {
       "kind": "site",
@@ -7063,6 +7256,90 @@
       "api": "http://api.nguonphim.tv/api.php/provide/vod/",
       "category": "cj",
       "reason": "getaddrinfo ENOTFOUND api.nguonphim.tv"
+    },
+    {
+      "kind": "site",
+      "name": "雷鲸|189Pan",
+      "api": "csp_LeiJing",
+      "category": "spider",
+      "reason": "太慢 TTFB=3266ms 吞吐=134KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "Qupans|Pan",
+      "api": "csp_Qupans",
+      "category": "spider",
+      "reason": "太慢 TTFB=3424ms 吞吐=129KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "☁TgSearchQuark┃网盘",
+      "api": "csp_TgSearchQuark",
+      "category": "spider",
+      "reason": "太慢 TTFB=3364ms 吞吐=130KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "☁TgSearchBaidu┃网盘",
+      "api": "csp_TgSearchBaidu",
+      "category": "spider",
+      "reason": "太慢 TTFB=4050ms 吞吐=112KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "☁TgSearch123┃网盘",
+      "api": "csp_TgSearch123",
+      "category": "spider",
+      "reason": "太慢 TTFB=3830ms 吞吐=116KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "☁TgSearch189┃网盘",
+      "api": "csp_TgSearch189",
+      "category": "spider",
+      "reason": "太慢 TTFB=4529ms 吞吐=100KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "☁TgSearch139┃网盘",
+      "api": "csp_TgSearch139",
+      "category": "spider",
+      "reason": "太慢 TTFB=4646ms 吞吐=98KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "☁TgSearchMagnet┃网盘",
+      "api": "csp_TgSearchMagnet",
+      "category": "spider",
+      "reason": "太慢 TTFB=5165ms 吞吐=88KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "夸克吧",
+      "api": "csp_KuaKeBa",
+      "category": "spider",
+      "reason": "太慢 TTFB=4897ms 吞吐=94KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "电影云集",
+      "api": "csp_DianYingYunJi",
+      "category": "spider",
+      "reason": "太慢 TTFB=5404ms 吞吐=85KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "热播影视4k",
+      "api": "csp_ReBoYingShi",
+      "category": "spider",
+      "reason": "太慢 TTFB=5530ms 吞吐=83KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "旋风影视",
+      "api": "csp_XuanFeng",
+      "category": "spider",
+      "reason": "太慢 TTFB=5555ms 吞吐=83KB/s"
     },
     {
       "kind": "site",
@@ -7395,10 +7672,94 @@
     },
     {
       "kind": "site",
-      "name": "💓虎斑┃4K💓",
-      "api": "csp_WexhubanGuard",
+      "name": "💓123┃4K💓",
+      "api": "csp_Wexpan123ziyuanGuard",
       "category": "spider",
-      "reason": "太慢 TTFB=9408ms 吞吐=81KB/s"
+      "reason": "太慢 TTFB=11861ms 吞吐=64KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "💥韩剧┃秒播💥",
+      "api": "csp_WexhanxiaoquanGuard",
+      "category": "spider",
+      "reason": "太慢 TTFB=11218ms 吞吐=72KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "🅱‍哔哔┃影视🅱‍",
+      "api": "csp_WexbiliysGuard",
+      "category": "spider",
+      "reason": "太慢 TTFB=11819ms 吞吐=64KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "💡聚剧剧┃四盘",
+      "api": "csp_SeedhubGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "🌞光影┃不卡",
+      "api": "csp_T4Guard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "🧀奶酪┃秒播",
+      "api": "csp_T4Guard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "📺热播┃多线",
+      "api": "csp_AppTTGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "🌸茉莉┃多线",
+      "api": "csp_AppSxGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "🦊播客┃多线",
+      "api": "csp_AppSxGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "🐻剧圈┃多线",
+      "api": "csp_AppSxGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "🦉咕咕┃动漫",
+      "api": "csp_AppSxGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "🎮一直播┃直播",
+      "api": "csp_AllliveGuard",
+      "category": "spider",
+      "reason": "下载超时"
+    },
+    {
+      "kind": "site",
+      "name": "🍂┃热播┃高清",
+      "api": "csp_AppRJ",
+      "category": "spider",
+      "reason": "ext 目标站不可达 http://v.rbotv.cn"
     },
     {
       "kind": "site",
@@ -7412,252 +7773,28 @@
       "name": "🍂┃大鹅┃1080P",
       "api": "csp_YunDuo",
       "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🎬┃影视┃解说",
-      "api": "csp_Bi",
-      "category": "spider",
-      "reason": "太慢 TTFB=7523ms 吞吐=35KB/s"
-    },
-    {
-      "kind": "site",
-      "name": "💡聚剧剧┃四盘",
-      "api": "csp_SeedhubGuard",
-      "category": "spider",
-      "reason": "目标站测速失败 https://ztha.top/TVBox/5++kwLhNYm9UrO9wh7Dl7eKamTee4s/5"
-    },
-    {
-      "kind": "site",
-      "name": "🌞光影┃不卡",
-      "api": "csp_T4Guard",
-      "category": "spider",
-      "reason": "目标站测速失败 https://ztha.top/TVBox/rfOIzPkSUkANv6AT2prC8en3+Trbx4j10CIoZMv3Ag4bdEYQqTMqu/Z3YPtC2NJv6n6YeZdgyWlo4WJjBL5gUt6B7LvCEDT4CLrWka31GRq7jwVkfQRB/Jy9HkG7E8xUBIJi5DdVFk3qAuGnwUWqQNRblRxzHW+tdSm6zoFcG/QkZ97bzWOXn0fzbgwjBDkBHgcPIYjlULlctCNKgJ9DzGNSl+zMZDZgmxczsZeeahRS38Cst3qvaHn1T2lmLBGVGXPaRovi77LPRRDOJSNRrdpvCHdRikYwgar0MU56hXMGeGBiKp/OmGTIYR8dFRGvZ/m8xGOqs8U13h6wvADOGlYoP9VaQBqTcDnz9Q0Urhw3oFXWyvIlUrDhX9la5L2NYzagbyk3afqhxeSXXp07nAFsNy2CojHRTbmz4eohLoIJTSi2DzPpheVx1DAapfgRdTc7Ax5ddYpN338GiDAa0GnEgLe04a1pZ5jF+/Q7HJswqlSO+DXCQ3FjRbb/ZPQcozcCWwzhUHE1QUAt799V9DPMuiHGyudIcZarGQmezB+Lb45RdHIRy0PXD+NRVPJlfDFD5FMGSqsiVklibvuwlVHT8J5vHgh/1nEZoI1RlYYLrkjTts2EeQmrpB/sgLyo1vnjFw=="
-    },
-    {
-      "kind": "site",
-      "name": "🧀奶酪┃秒播",
-      "api": "csp_T4Guard",
-      "category": "spider",
-      "reason": "目标站测速失败 https://ztha.top/TVBox/rfOIzPkSUkANv6AT2prC8en3+TzKx9TnlT8vaY37HhtYfAQe6C5xqrVuJPhQwYV6r3eRdMBGm3Qm6Th+BushR86B6KqJGXDsHazHw7alBG/7zUxkN1tK/NypRxnpBNoeUtpw4jcCGhytI75yO4g4zG6SOPA0RSwhksM0IF2friAkrHCWoW3v+0mdw6sjz4t4XB1Df7yL/R5cfaA/5LQYq3I8OkvMrJMU9Q1P7JXwx7NSF2zTyH/ANVmZ4u5m567DW1KVG7OuQjXPjZiOXTYk0+wjpfBRTf19yIq6q/C76k2Fs80joAMPw0ueDR+QHxtuDcTom2rmHkI1Fonkzi6BotbpUcbSi4PiIgmfdbvVwhG6Z+i4nvt+IYa48l5aLA7PLgDiERpuOs31aHaXlgFswT87XyTb8QaF4CuzKWJuXptwNTjvXAS9KHdxH49Ay+hfBAB2bCvUf4CMoldF2wZUv0mI2qY966erFpOFg+FOc7t88EUH8j8ACXQtHJiKC9RQ+SaLIF0="
-    },
-    {
-      "kind": "site",
-      "name": "📺热播┃多线",
-      "api": "csp_AppTTGuard",
-      "category": "spider",
-      "reason": "目标站测速失败 https://ztha.top/TVBox/uqGL1bNENExT7/hGxpSE5qU="
-    },
-    {
-      "kind": "site",
-      "name": "🌸茉莉┃多线",
-      "api": "csp_AppSxGuard",
-      "category": "spider",
-      "reason": "目标站测速失败 https://ztha.top/TVBox/rfOb1uAWbkRHp7hdxprG9un3+TDC2t/rlTwlcMr+ChdbeV8Q9y9xsKxqfbtO0M05tGWcacFVm2c45jhyH6t1Rt6A6PjICGqxV+uN1uOqS2/x0Vp5J0Vfo8usQADpHg=="
-    },
-    {
-      "kind": "site",
-      "name": "🦊播客┃多线",
-      "api": "csp_AppSxGuard",
-      "category": "spider",
-      "reason": "目标站测速失败 https://ztha.top/TVBox/rfOb1uAWbkRHp7hdxprG9un3+SPC3Nbv1SI/b5LtAUhbYkFU/DFvsLBvd/oV3cA4uGiCZNFRz3ln6nh5Q+AgDZiM5KrCAiO7S7SVzv31EG78jVB4JEMNrMPzTgWqRZdMTdR1smBWWwru"
-    },
-    {
-      "kind": "site",
-      "name": "🐻剧圈┃多线",
-      "api": "csp_AppSxGuard",
-      "category": "spider",
-      "reason": "目标站测速失败 https://ztha.top/TVBox/rfOX1voDIQhH8epBwpmIsuSluiuZl4+/lm1iJsy3HwNWMxpf9CY77fshI+kByoxy7DyPatUZ1jk0ty1p"
-    },
-    {
-      "kind": "site",
-      "name": "🦉咕咕┃动漫",
-      "api": "csp_AppSxGuard",
-      "category": "spider",
-      "reason": "目标站测速失败 https://ztha.top/TVBox/rfOX1voDIQhH8epBwpmIsuS/sSCZxc/l0mxkeoroQVYOelMAvX1kuYptSLB36YxEjVawS9p37Cgo"
-    },
-    {
-      "kind": "site",
-      "name": "🎮一直播┃直播",
-      "api": "csp_AllliveGuard",
-      "category": "spider",
-      "reason": "目标站测速失败 https://ztha.top/TVBox/uqGL1fpJNAUN8ORQgIPD+b6l+CzC2t8="
-    },
-    {
-      "kind": "site",
-      "name": "快映 • APP",
-      "api": "csp_AppFox",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.pjb777.top/ky4kbgq7b273.json"
-    },
-    {
-      "kind": "site",
-      "name": "布布 • APP",
-      "api": "csp_YunDuo",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "剧圈 • APP",
-      "api": "csp_App99",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "半日 • APP",
-      "api": "csp_App99",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "天堂 • APP",
-      "api": "csp_AppDrama",
-      "category": "spider",
-      "reason": "连接超时"
+      "reason": "不是有效的 jar"
     },
     {
       "kind": "site",
       "name": "橘汁 • APP",
       "api": "csp_AppDrama",
       "category": "spider",
-      "reason": "连接超时"
+      "reason": "不是有效的 jar"
     },
     {
       "kind": "site",
       "name": "华谊 • APP",
       "api": "csp_AppDrama",
       "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "苹果 • APP",
-      "api": "csp_AppDrama",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "蓝鹰 • APP",
-      "api": "csp_AppQi",
-      "category": "spider",
-      "reason": "ext 目标站不可达 http://103.217.190.91:5566"
-    },
-    {
-      "kind": "site",
-      "name": "蓝鸟 • APP",
-      "api": "csp_AppQi",
-      "category": "spider",
-      "reason": "ext 目标站不可达 http://103.217.190.91:5566"
-    },
-    {
-      "kind": "site",
-      "name": "果果 • 短剧",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "番社 • 动漫",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "手机┃推送",
-      "api": "csp_AweSomeGuard",
-      "category": "spider",
-      "reason": "下载超时"
-    },
-    {
-      "kind": "site",
-      "name": "AList",
-      "api": "csp_AweSomeGuard",
-      "category": "spider",
-      "reason": "下载超时"
-    },
-    {
-      "kind": "site",
-      "name": "📺热播┃多线",
-      "api": "csp_AppTTGuard",
-      "category": "spider",
-      "reason": "下载超时"
-    },
-    {
-      "kind": "site",
-      "name": "🐻剧圈┃多线",
-      "api": "csp_AppSxGuard",
-      "category": "spider",
-      "reason": "下载超时"
-    },
-    {
-      "kind": "site",
-      "name": "🌞光影┃多线",
-      "api": "csp_AppSxGuard",
-      "category": "spider",
-      "reason": "目标站测速失败 https://szyyds.cn/tv/rfOb1uAWbkRHp7hdxprG9un3+TDC2t/rlTwlcMr+ChdbeV8Q9y9xsKxqfbtO0M05tGWcacFVm2c45jhyH6t1Rt6A6PjICGqxV+uN1uOqS2/x0Vp5J0Vfo8usQADpHg=="
-    },
-    {
-      "kind": "site",
-      "name": "🍙视界┃多线",
-      "api": "csp_AppSxGuard",
-      "category": "spider",
-      "reason": "下载超时"
-    },
-    {
-      "kind": "site",
-      "name": "🥝花花┃多线",
-      "api": "csp_AppSxGuard",
-      "category": "spider",
-      "reason": "目标站测速失败 https://szyyds.cn/tv/rfOb1uAWbkRHp7hdxprG9un3+TbEn4q2l2kibom2DB9cJ0IB72Vu7apib64Gl9Ew6WDTJcIVzWsluDxqEaBqWIyM77GBXCPqCPmCyOr3RGfwjlsjchkArMHzTFT1VY9QUooz8m8BXA2mSa/whkG7SpZP100qUm6hMmTjm8YQQ51m6mxEE7hhEK1eNQ=="
-    },
-    {
-      "kind": "site",
-      "name": "🦊播客┃多线",
-      "api": "csp_AppSxGuard",
-      "category": "spider",
-      "reason": "目标站测速失败 https://szyyds.cn/tv/rfOb1uAWbkRHp7hdxprG9un3+SPC3Nbv1SI/b5LtAUhbYkFU/DFvsLBvd/oV3cA4uGiCZNFRz3ln6nh5Q+AgDZiM5KrCAiO7S7SVzv31EG78jVB4JEMNrMPzTgWqRZdMTdR1smBWWwru"
-    },
-    {
-      "kind": "site",
-      "name": "👀爱影┃多线",
-      "api": "csp_AppSxGuard",
-      "category": "spider",
-      "reason": "目标站测速失败 https://szyyds.cn/tv/rfOb1uAWbkRHp7hdxprG9un3+TbK3c790iI/b5LtEhxNfAQK7DRvrLcqbf1Q0MQntXLZfMhK0Xsn6nwmF+shR8eZ76qXW3y9XKbblunmCSPux0YtJlscp9zpDmW7Ju4ufOtv+BcyBX7VWrSzyUWoVcxGhUtv"
-    },
-    {
-      "kind": "site",
-      "name": "🥏电视┃直播",
-      "api": "https://tv.203511.xyz/lib/lf_live_min.js",
-      "category": "js",
-      "reason": "内容不像脚本"
-    },
-    {
-      "kind": "site",
-      "name": "橘汁 • APP",
-      "api": "csp_AppDrama",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "华谊 • APP",
-      "api": "csp_AppDrama",
-      "category": "spider",
-      "reason": "连接超时"
+      "reason": "不是有效的 jar"
     },
     {
       "kind": "site",
       "name": "薯条 • APP",
       "api": "csp_AppDrama",
       "category": "spider",
-      "reason": "连接超时"
+      "reason": "不是有效的 jar"
     },
     {
       "kind": "site",
@@ -7689,20 +7826,6 @@
     },
     {
       "kind": "site",
-      "name": "小镇 • 影视",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "双星 • 动漫",
-      "api": "csp_App99",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
       "name": "漫国 • 动漫",
       "api": "csp_AppSy",
       "category": "spider",
@@ -7721,6 +7844,111 @@
       "api": "csp_Market",
       "category": "spider",
       "reason": "目标站测速失败 https://oss-v1.wangmeipo.cn/236/single.json"
+    },
+    {
+      "kind": "site",
+      "name": "快映 • APP",
+      "api": "csp_AppFox",
+      "category": "spider",
+      "reason": "目标站测速失败 https://www.pjb777.top/ky4kbgq7b273.json"
+    },
+    {
+      "kind": "site",
+      "name": "布布 • APP",
+      "api": "csp_YunDuo",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "天堂 • APP",
+      "api": "csp_AppDrama",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "橘汁 • APP",
+      "api": "csp_AppDrama",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "华谊 • APP",
+      "api": "csp_AppDrama",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "苹果 • APP",
+      "api": "csp_AppDrama",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "蓝鹰 • APP",
+      "api": "csp_AppQi",
+      "category": "spider",
+      "reason": "ext 目标站不可达 http://103.217.190.91:5566"
+    },
+    {
+      "kind": "site",
+      "name": "蓝鸟 • APP",
+      "api": "csp_AppQi",
+      "category": "spider",
+      "reason": "ext 目标站不可达 http://103.217.190.91:5566"
+    },
+    {
+      "kind": "site",
+      "name": "📺热播┃多线",
+      "api": "csp_AppTTGuard",
+      "category": "spider",
+      "reason": "目标站测速失败 https://szyyds.cn/tv/uqGL1bNENExT7/hGxpSE5qU="
+    },
+    {
+      "kind": "site",
+      "name": "🐻剧圈┃多线",
+      "api": "csp_AppSxGuard",
+      "category": "spider",
+      "reason": "目标站测速失败 https://szyyds.cn/tv/rfOX1voDIQhH8epBwpmIsuSluiuZl4+/lm1iJsy3HwNWMxpf9CY77fshI+kByoxy7DyPatUZ1jk0ty1p"
+    },
+    {
+      "kind": "site",
+      "name": "🌞光影┃多线",
+      "api": "csp_AppSxGuard",
+      "category": "spider",
+      "reason": "目标站测速失败 https://szyyds.cn/tv/rfOb1uAWbkRHp7hdxprG9un3+TDC2t/rlTwlcMr+ChdbeV8Q9y9xsKxqfbtO0M05tGWcacFVm2c45jhyH6t1Rt6A6PjICGqxV+uN1uOqS2/x0Vp5J0Vfo8usQADpHg=="
+    },
+    {
+      "kind": "site",
+      "name": "🍙视界┃多线",
+      "api": "csp_AppSxGuard",
+      "category": "spider",
+      "reason": "目标站测速失败 https://szyyds.cn/tv/rfOX1voDIQhH8epBwpmIsuSjpyyamoq83jM9L4r3AlwEM1kc4mV87aNKLeF/iNNL7ne1LNZlk3Bz8A=="
+    },
+    {
+      "kind": "site",
+      "name": "🥝花花┃多线",
+      "api": "csp_AppSxGuard",
+      "category": "spider",
+      "reason": "目标站测速失败 https://szyyds.cn/tv/rfOb1uAWbkRHp7hdxprG9un3+TbEn4q2l2kibom2DB9cJ0IB72Vu7apib64Gl9Ew6WDTJcIVzWsluDxqEaBqWIyM77GBXCPqCPmCyOr3RGfwjlsjchkArMHzTFT1VY9QUooz8m8BXA2mSa/whkG7SpZP100qUm6hMmTjm8YQQ51m6mxEE7hhEK1eNQ=="
+    },
+    {
+      "kind": "site",
+      "name": "🦊播客┃多线",
+      "api": "csp_AppSxGuard",
+      "category": "spider",
+      "reason": "目标站测速失败 https://szyyds.cn/tv/rfOb1uAWbkRHp7hdxprG9un3+SPC3Nbv1SI/b5LtAUhbYkFU/DFvsLBvd/oV3cA4uGiCZNFRz3ln6nh5Q+AgDZiM5KrCAiO7S7SVzv31EG78jVB4JEMNrMPzTgWqRZdMTdR1smBWWwru"
+    },
+    {
+      "kind": "site",
+      "name": "👀爱影┃多线",
+      "api": "csp_AppSxGuard",
+      "category": "spider",
+      "reason": "目标站测速失败 https://szyyds.cn/tv/rfOb1uAWbkRHp7hdxprG9un3+TbK3c790iI/b5LtEhxNfAQK7DRvrLcqbf1Q0MQntXLZfMhK0Xsn6nwmF+shR8eZ76qXW3y9XKbblunmCSPux0YtJlscp9zpDmW7Ju4ufOtv+BcyBX7VWrSzyUWoVcxGhUtv"
     },
     {
       "kind": "site",
@@ -8000,63 +8228,28 @@
       "name": "🅰橘汁",
       "api": "csp_AppDrama",
       "category": "spider",
-      "reason": "连接超时"
+      "reason": "不是有效的 jar"
     },
     {
       "kind": "site",
       "name": "🅰华谊",
       "api": "csp_AppDrama",
       "category": "spider",
-      "reason": "连接超时"
+      "reason": "不是有效的 jar"
     },
     {
       "kind": "site",
       "name": "🅰苹果",
       "api": "csp_AppDrama",
       "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🅰半日",
-      "api": "csp_App99",
-      "category": "spider",
-      "reason": "连接超时"
+      "reason": "不是有效的 jar"
     },
     {
       "kind": "site",
       "name": "🅰电影天堂",
       "api": "csp_AppDrama",
       "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🅰剧圈圈",
-      "api": "csp_App99",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🚌动漫巴士",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "🎁面包",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "🏃‍♀️追剧吧",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
+      "reason": "不是有效的 jar"
     },
     {
       "kind": "site",
@@ -8312,10 +8505,17 @@
     },
     {
       "kind": "site",
+      "name": "🥏电视┃直播",
+      "api": "https://tv.203511.xyz/lib/lf_live_min.js",
+      "category": "js",
+      "reason": "内容不像脚本"
+    },
+    {
+      "kind": "site",
       "name": "🧸玩偶┃网盘不卡4K",
       "api": "csp_Gege",
       "category": "spider",
-      "reason": "read ECONNRESET"
+      "reason": "目标站测速失败 https://gh-proxy.org/raw.githubusercontent.com/ggrrttyyiii/CatVodSpider/refs/heads/main/json/ewogICJzaXRlX3VybHMiOiBbCiAgICAiaHR0cHM6Ly93d3cud29nZy5saXZlIiwKICAgICJodHRwczovL3dvZ2dwYW4uMzMzMjMyLnh5ei8iLAogICAgImh0dHBzOi8vd3d3LndvZ2cubmV0IgogIF0sCiAgInRva2VuIjogIiIsCiAgInVjQ29va2llIjogIiIsCiAgInF1YXJrQ29va2llIjogIiIKfQ=="
     },
     {
       "kind": "site",
@@ -8333,31 +8533,17 @@
     },
     {
       "kind": "site",
-      "name": "📱MiNO┃影视",
-      "api": "csp_MiNO",
+      "name": "⚡秒播┃影视",
+      "api": "csp_AppRJ",
       "category": "spider",
-      "reason": "连接超时"
+      "reason": "ext 目标站不可达 http://v.rbotv.cn"
     },
     {
       "kind": "site",
       "name": "🦢大鹅┃影视",
       "api": "csp_YunDuo",
       "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🎭剧圈┃影视",
-      "api": "csp_App99",
-      "category": "spider",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "site",
-      "name": "🌞半日┃影视",
-      "api": "csp_App99",
-      "category": "spider",
-      "reason": "连接超时"
+      "reason": "不是有效的 jar"
     },
     {
       "kind": "site",
@@ -8473,34 +8659,6 @@
     },
     {
       "kind": "site",
-      "name": "💢骚火",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "💢云播",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "☘️短视频",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
-      "name": "🎸酷奇MV",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
       "name": "行动┃APP",
       "api": "csp_AppGet",
       "category": "spider",
@@ -8536,13 +8694,6 @@
     },
     {
       "kind": "site",
-      "name": "飞宇影院",
-      "api": "csp_XBPQ",
-      "category": "spider",
-      "reason": "目标站测速失败 https://www.putaojuchang.com"
-    },
-    {
-      "kind": "site",
       "name": "快映 • APP",
       "api": "csp_AppFox",
       "category": "spider",
@@ -8571,10 +8722,17 @@
     },
     {
       "kind": "site",
-      "name": "花柳｜APP",
+      "name": "麒麟｜APP",
       "api": "csp_AppFox",
       "category": "spider",
-      "reason": "太慢 TTFB=3249ms 吞吐=137KB/s"
+      "reason": "太慢 TTFB=4680ms 吞吐=108KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "火花｜APP",
+      "api": "csp_AppFox",
+      "category": "spider",
+      "reason": "太慢 TTFB=3275ms 吞吐=129KB/s"
     },
     {
       "kind": "site",
@@ -8623,28 +8781,28 @@
       "name": "腾腾｜视频",
       "api": "https://file.zhangyichi.dev/uploads/695cb6347d0b1_1767683636.js",
       "category": "js",
-      "reason": "HTTP 404"
-    },
-    {
-      "kind": "site",
-      "name": "酷酷｜视频",
-      "api": "https://file.zhangyichi.dev/uploads/695cb6347d0b1_1767683636.js",
-      "category": "js",
-      "reason": "HTTP 404"
+      "reason": "内容不像脚本"
     },
     {
       "kind": "site",
       "name": "果果｜视频",
       "api": "https://file.zhangyichi.dev/uploads/695cb6347d0b1_1767683636.js",
       "category": "js",
-      "reason": "HTTP 404"
+      "reason": "内容不像脚本"
     },
     {
       "kind": "site",
       "name": "奇奇｜视频",
       "api": "https://file.zhangyichi.dev/uploads/695cb6347d0b1_1767683636.js",
       "category": "js",
-      "reason": "HTTP 404"
+      "reason": "内容不像脚本"
+    },
+    {
+      "kind": "site",
+      "name": "锦鲤｜短剧",
+      "api": "csp_JinliDJ",
+      "category": "spider",
+      "reason": "太慢 TTFB=3177ms 吞吐=147KB/s"
     },
     {
       "kind": "site",
@@ -8676,31 +8834,17 @@
     },
     {
       "kind": "site",
-      "name": "饺子｜影视",
-      "api": "csp_Jiaozi",
-      "category": "spider",
-      "reason": "太慢 TTFB=3050ms 吞吐=187KB/s"
-    },
-    {
-      "kind": "site",
       "name": "采集｜合集",
       "api": "https://file.zhangyichi.dev/uploads/695cb6347d0b1_1767683636.js",
       "category": "js",
-      "reason": "HTTP 404"
+      "reason": "内容不像脚本"
     },
     {
       "kind": "site",
       "name": "A1｜动漫",
       "api": "https://file.zhangyichi.dev/uploads/695cb6347d0b1_1767683636.js",
       "category": "js",
-      "reason": "HTTP 404"
-    },
-    {
-      "kind": "site",
-      "name": "NT｜动漫",
-      "api": "https://file.zhangyichi.dev/uploads/695cb6347d0b1_1767683636.js",
-      "category": "js",
-      "reason": "HTTP 404"
+      "reason": "内容不像脚本"
     },
     {
       "kind": "site",
@@ -8718,29 +8862,8 @@
     },
     {
       "kind": "site",
-      "name": "花子｜动漫",
-      "api": "https://file.zhangyichi.dev/uploads/695cb6347d0b1_1767683636.js",
-      "category": "js",
-      "reason": "HTTP 404"
-    },
-    {
-      "kind": "site",
       "name": "爱动漫｜动漫",
       "api": "http://47.96.82.41:5188/js/drpy2.min.js",
-      "category": "js",
-      "reason": "HTTP 404"
-    },
-    {
-      "kind": "site",
-      "name": "路漫漫｜动漫",
-      "api": "https://file.zhangyichi.dev/uploads/695cb6347d0b1_1767683636.js",
-      "category": "js",
-      "reason": "HTTP 404"
-    },
-    {
-      "kind": "site",
-      "name": "去看吧｜动漫",
-      "api": "https://file.zhangyichi.dev/uploads/695cb6347d0b1_1767683636.js",
       "category": "js",
       "reason": "HTTP 404"
     },
@@ -8763,7 +8886,7 @@
       "name": "🔥网飞TV🔥",
       "api": "csp_XBPQ",
       "category": "spider",
-      "reason": "连接超时"
+      "reason": "下载超时"
     },
     {
       "kind": "site",
@@ -8802,9 +8925,696 @@
     },
     {
       "kind": "site",
-      "name": "🦊火狐采集",
-      "api": "https://hhzyapi.com/api.php/provide/vod/",
-      "reason": "与另一站点内容相同"
+      "name": "官源 | 优酷 ",
+      "api": "https://wget.la/https://raw.githubusercontent.com/yw88075/tvbox/main/dr/lib/drpy2.min.js",
+      "category": "js",
+      "reason": "太慢 TTFB=1897ms 吞吐=15KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "官源 | 爱奇艺 ",
+      "api": "https://wget.la/https://raw.githubusercontent.com/yw88075/tvbox/main/dr/lib/drpy2.min.js",
+      "category": "js",
+      "reason": "太慢 TTFB=1665ms 吞吐=14KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "👖PHP",
+      "api": "http://jiduo.3116598.xyz/PHP/pkty.php",
+      "category": "other",
+      "reason": "内容不像脚本"
+    },
+    {
+      "kind": "site",
+      "name": "👖T4",
+      "api": "https://banyeomni.780420.xyz:17777/api/tvbox/source/2097848348508688384?token=banye666",
+      "category": "other",
+      "reason": "内容不像脚本"
+    },
+    {
+      "kind": "site",
+      "name": "👖戏曲",
+      "api": "https://iduo.us.ci/gt/leevi0709/one/main/js/drpy2.min.js",
+      "category": "js",
+      "reason": "getaddrinfo ENOTFOUND iduo.us.ci"
+    },
+    {
+      "kind": "site",
+      "name": "首发┃零六",
+      "api": "csp_AppGet",
+      "category": "spider",
+      "reason": "目标站测速失败 https://yun-1316442804.cos.ap-guangzhou.myqcloud.com/603.txt|FTgP4Gq8zPiqbt7M|V122|okhttp/3.10.0"
+    },
+    {
+      "kind": "site",
+      "name": "麦田┃十五",
+      "api": "csp_AppV6",
+      "category": "spider",
+      "reason": "目标站测速失败 http://172.247.227.203:25321/mtys.php"
+    },
+    {
+      "kind": "site",
+      "name": "天堂┃十八",
+      "api": "csp_AppDrama",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "秒播┃二三",
+      "api": "csp_YunZhenXiang",
+      "category": "spider",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "site",
+      "name": "宝宝📚国学",
+      "api": "csp_Bili",
+      "category": "spider",
+      "reason": "目标站测速失败 http://mzrjk.top/学习/lib/小灯塔国学.json"
+    },
+    {
+      "kind": "site",
+      "name": "儿童📚启蒙",
+      "api": "https://gh-proxy.net/https://raw.githubusercontent.com/fantaiying7/EXT/refs/heads/main/drpy2.min.js",
+      "category": "js",
+      "reason": "返回网页"
+    },
+    {
+      "kind": "site",
+      "name": "🐼┃肥猫┃APP",
+      "api": "csp_AppGet",
+      "category": "spider",
+      "reason": "ext 目标站不可达 https://cms140.yhg.one|bM7iC9eA3oZ1nB7z"
+    },
+    {
+      "kind": "site",
+      "name": "🍚┃干饭┃APP",
+      "api": "csp_AppGet",
+      "category": "spider",
+      "reason": "目标站测速失败 https://mk1080.top/get.txt|c60d88b2eep53za8"
+    },
+    {
+      "kind": "site",
+      "name": "📀┃光盘┃APP",
+      "api": "csp_AppQi",
+      "category": "spider",
+      "reason": "目标站测速失败 https://yun-1316442804.cos.ap-guangzhou.myqcloud.com/600.txt|FTgP4Gq8zPiqbt7M"
+    },
+    {
+      "kind": "site",
+      "name": "😌┃行动┃APP",
+      "api": "csp_AppQi",
+      "category": "spider",
+      "reason": "ext 目标站不可达 https://qj4.catbb.xyz|eecbio48dsq13kkk"
+    },
+    {
+      "kind": "site",
+      "name": "⭕┃韩圈 ┃APP",
+      "api": "csp_Hxq",
+      "category": "spider",
+      "reason": "ext 目标站不可达 http://www. 小不点.com/api/2026/fishhxq.php"
+    },
+    {
+      "kind": "site",
+      "name": "♾️┃永永┃APP",
+      "api": "csp_AppGet",
+      "category": "spider",
+      "reason": "ext 目标站不可达 https://444421.xyz|#getapp@TMD@2025|120"
+    },
+    {
+      "kind": "site",
+      "name": "🏭┃厂长┃影视",
+      "api": "csp_Czsapp",
+      "category": "spider",
+      "reason": "目标站测速失败 https://www.czzy89.com"
+    },
+    {
+      "kind": "site",
+      "name": "🍠┃番薯┃动漫",
+      "api": "csp_AppGet",
+      "category": "spider",
+      "reason": "ext 目标站不可达 https://new.app.bytegooty.com|N4yj7l7xKxHF4*gz"
+    },
+    {
+      "kind": "site",
+      "name": "📚┃儿童┃启蒙",
+      "api": "http://w.junce.dpdns.org/api/drpy2.min.js",
+      "category": "js",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "site",
+      "name": "初见影视.py",
+      "api": "http://150.158.52.248/tgyg/py/初见影视.py",
+      "category": "py",
+      "reason": "太慢 TTFB=1673ms 吞吐=7KB/s"
+    },
+    {
+      "kind": "site",
+      "name": "指南｜免扫JX",
+      "api": "csp_Zhinan4K",
+      "category": "spider",
+      "reason": "HTTP 456"
+    },
+    {
+      "kind": "site",
+      "name": "💓‍4k-av",
+      "api": "https://pan.szfx.top/down.php/21da377c5e328d67e943a2acc1947ff3.py",
+      "category": "py",
+      "reason": "connect ECONNREFUSED 127.0.0.1:443"
+    },
+    {
+      "kind": "site",
+      "name": "天堂 • APP",
+      "api": "csp_AppDrama",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "橘汁 • APP",
+      "api": "csp_AppDrama",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "华谊 • APP",
+      "api": "csp_AppDrama",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "苹果 • APP",
+      "api": "csp_AppDrama",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "蓝鹰 • APP",
+      "api": "csp_AppQi",
+      "category": "spider",
+      "reason": "ext 目标站不可达 http://103.217.190.91:5566"
+    },
+    {
+      "kind": "site",
+      "name": "蓝鸟 • APP",
+      "api": "csp_AppQi",
+      "category": "spider",
+      "reason": "ext 目标站不可达 http://103.217.190.91:5566"
+    },
+    {
+      "kind": "site",
+      "name": "油管清单播放",
+      "api": "https://zhangqun1818.serv00.net/zh/yt/2243.php",
+      "category": "other",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "site",
+      "name": "🦢大鹅┃影视",
+      "api": "csp_YunDuo",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🍏苹果┃影视",
+      "api": "csp_AppDramaV5",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "🍊橘子┃影视",
+      "api": "csp_AppDramaV5",
+      "category": "spider",
+      "reason": "不是有效的 jar"
+    },
+    {
+      "kind": "site",
+      "name": "❤天空资源",
+      "api": "https://m3u8.tiankongapi.com/api.php/provide/vod/from/tkm3u8/?ac=list",
+      "category": "cj",
+      "reason": "ac=detail HTTP 200"
+    },
+    {
+      "kind": "site",
+      "name": "❤鱼乐资源",
+      "api": "https://api.yulecj.com/api.php/provide/vod/?ac=list",
+      "category": "cj",
+      "reason": "getaddrinfo ENOTFOUND api.yulecj.com"
+    },
+    {
+      "kind": "site",
+      "name": "❤猫咪",
+      "api": "http://zy.xiaomaomi.vip/api.php/provide/vod/?ac=list",
+      "category": "cj",
+      "reason": "getaddrinfo ENOTFOUND zy.xiaomaomi.vip"
+    },
+    {
+      "kind": "site",
+      "name": " 🦢小鸭看看",
+      "api": "csp_XBPQ",
+      "category": "spider",
+      "reason": "目标站测速失败 https://gh-proxy.com/raw.githubusercontent.com/yw88075/tvbox/main/XBPQ/小鸭看看.json"
+    },
+    {
+      "kind": "site",
+      "name": "云播影院 ",
+      "api": "https://gh-proxy.com/raw.githubusercontent.com/yw88075/tvbox/main/dr/lib/drpy2.min.js",
+      "category": "js",
+      "reason": "目标站测速失败 https://gh-proxy.com/raw.githubusercontent.com/yw88075/tvbox/main/dr/js/云播.js"
+    },
+    {
+      "kind": "site",
+      "name": "乐猪TV ",
+      "api": "https://gh-proxy.com/raw.githubusercontent.com/yw88075/tvbox/main/dr/lib/drpy2.min.js",
+      "category": "js",
+      "reason": "目标站测速失败 https://gh-proxy.com/raw.githubusercontent.com/yw88075/tvbox/main/dr/js/乐猪TV.js"
+    },
+    {
+      "kind": "site",
+      "name": "鸭奈飞 ",
+      "api": "https://gh-proxy.com/raw.githubusercontent.com/yw88075/tvbox/main/dr/lib/drpy2.min.js",
+      "category": "js",
+      "reason": "目标站测速失败 https://gh-proxy.com/raw.githubusercontent.com/yw88075/tvbox/main/dr/js/鸭奈飞.js"
+    },
+    {
+      "kind": "site",
+      "name": " 被窝电影 ",
+      "api": "https://gh-proxy.com/raw.githubusercontent.com/yw88075/tvbox/main/dr/lib/drpy2.min.js",
+      "category": "js",
+      "reason": "目标站测速失败 https://gh-proxy.com/raw.githubusercontent.com/yw88075/tvbox/main/dr/js/被窝电影.js"
+    },
+    {
+      "kind": "site",
+      "name": " 南柯电影 ",
+      "api": "https://gh-proxy.com/raw.githubusercontent.com/yw88075/tvbox/main/dr/lib/drpy2.min.js",
+      "category": "js",
+      "reason": "目标站测速失败 https://gh-proxy.com/raw.githubusercontent.com/yw88075/tvbox/main/dr/js/南柯电影网.js"
+    },
+    {
+      "kind": "site",
+      "name": "迷你库[V2]",
+      "api": "https://gh-proxy.com/raw.githubusercontent.com/yw88075/tvbox/main/dr/lib/drpy2.min.js",
+      "category": "js",
+      "reason": "目标站测速失败 https://gh-proxy.com/raw.githubusercontent.com/yw88075/tvbox/main/dr/js/迷你库[V2].js"
+    },
+    {
+      "kind": "site",
+      "name": " 柒之社 ",
+      "api": "https://gh-proxy.com/raw.githubusercontent.com/yw88075/tvbox/main/dr/lib/drpy2.min.js",
+      "category": "js",
+      "reason": "目标站测速失败 https://gh-proxy.com/raw.githubusercontent.com/yw88075/tvbox/main/dr/js/柒之社.js"
+    },
+    {
+      "kind": "site",
+      "name": " 路漫漫 ",
+      "api": "https://gh-proxy.com/raw.githubusercontent.com/yw88075/tvbox/main/dr/lib/drpy2.min.js",
+      "category": "js",
+      "reason": "目标站测速失败 https://gh-proxy.com/raw.githubusercontent.com/yw88075/tvbox/main/dr/js/路漫漫.js"
+    },
+    {
+      "kind": "site",
+      "name": " 看韩剧 ",
+      "api": "https://gh-proxy.com/raw.githubusercontent.com/yw88075/tvbox/main/dr/lib/drpy2.min.js",
+      "category": "js",
+      "reason": "目标站测速失败 https://gh-proxy.com/raw.githubusercontent.com/yw88075/tvbox/main/dr/js/看韩剧.js"
+    },
+    {
+      "kind": "site",
+      "name": "飞快影视",
+      "api": "csp_XBPQ",
+      "category": "spider",
+      "reason": "目标站测速失败 https://clun.top/js/s/飞快.json"
+    },
+    {
+      "kind": "site",
+      "name": "黑木耳 | 采集",
+      "api": "https://json02.heimuer.xyz/api.php/provide/vod/",
+      "category": "cj",
+      "reason": "ac=detail HTTP 200"
+    },
+    {
+      "kind": "site",
+      "name": "茅台 | 采集",
+      "api": "https://mtzy.me/api.php/provide/vod/",
+      "category": "cj",
+      "reason": "write EPROTO C0FCD68A06780000:error:0A000438:SSL routines:ssl3_read_bytes:tlsv1 alert internal error:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:1601:SSL alert number 80\n"
+    },
+    {
+      "kind": "site",
+      "name": "移动｜星源",
+      "api": "https://xy.183933.xyz/php/pt.php/provide/vod/",
+      "category": "cj",
+      "reason": "ac=detail HTTP 200"
+    },
+    {
+      "kind": "site",
+      "name": "酷我｜音乐",
+      "api": "https://xy.183933.xyz/php/kuwo.php/provide/vod",
+      "category": "cj",
+      "reason": "ac=detail HTTP 200"
+    },
+    {
+      "kind": "site",
+      "name": "咪咕｜音乐",
+      "api": "https://xy.183933.xyz/php/miguyy.php/provide/vod",
+      "category": "cj",
+      "reason": "ac=detail HTTP 200"
+    },
+    {
+      "kind": "site",
+      "name": "A站｜星源",
+      "api": "https://xy.183933.xyz/php/acfun.php/provide/vod",
+      "category": "cj",
+      "reason": "ac=detail HTTP 200"
+    },
+    {
+      "kind": "site",
+      "name": "小咕｜星源",
+      "api": "https://xy.183933.xyz/php/咪咕.php",
+      "category": "cj",
+      "reason": "ac=detail HTTP 200"
+    },
+    {
+      "kind": "site",
+      "name": "小乐｜星源",
+      "api": "https://xy.183933.xyz/php/ls.php/vod",
+      "category": "cj",
+      "reason": "ac=detail HTTP 200"
+    },
+    {
+      "kind": "site",
+      "name": "♥️Q群621399056",
+      "api": "http://120.53.102.254/dsp999",
+      "category": "other",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "site",
+      "name": "➡️快车秒播",
+      "api": "https://caiji.kczyapi.com/api.php/provide/vod/",
+      "category": "cj",
+      "reason": "socket hang up"
+    },
+    {
+      "kind": "site",
+      "name": "➡️优选影视",
+      "api": "http://hdzyk.com/inc/apijson.php",
+      "category": "cj",
+      "reason": "ac=list HTTP 200"
+    },
+    {
+      "kind": "site",
+      "name": "➡️八戒资源",
+      "api": "http://cj.bajiecaiji.com/inc/bjm3u8.php",
+      "category": "cj",
+      "reason": "getaddrinfo ENOTFOUND cj.bajiecaiji.com"
+    },
+    {
+      "kind": "site",
+      "name": "➡️鸟叔采集",
+      "api": "https://api.tiankongapi.com/api.php/provide/vod/",
+      "category": "cj",
+      "reason": "ac=detail HTTP 200"
+    },
+    {
+      "kind": "site",
+      "name": "➡️华为影吧",
+      "api": "https://cjhwba.com/api.php/provide/vod/?ac=list",
+      "category": "cj",
+      "reason": "ac=detail HTTP 200"
+    },
+    {
+      "kind": "site",
+      "name": "🐦┃视觉┃影视",
+      "api": "csp_Xinsj",
+      "category": "spider",
+      "reason": "目标站测速失败 https://www.80yy3.com/"
+    },
+    {
+      "kind": "site",
+      "name": "🦸┃咕噜┃影视",
+      "api": "csp_Movie2",
+      "category": "spider",
+      "reason": "HTTP 456"
+    },
+    {
+      "kind": "site",
+      "name": " 🎋┃Voflix┃影视",
+      "api": "csp_Voflix",
+      "category": "spider",
+      "reason": "目标站测速失败 https://www.voflix.me/"
+    },
+    {
+      "kind": "site",
+      "name": "📚┃听书┃音频",
+      "api": "csp_BookTing",
+      "category": "spider",
+      "reason": "目标站测速失败 https://m.ting275.com"
+    },
+    {
+      "kind": "site",
+      "name": "🅱┃哔哩┃合集",
+      "api": "https://jihulab.com/jyqhkd1/kai/-/raw/main/lib/drpy2.min.js",
+      "category": "js",
+      "reason": "内容不像脚本"
+    },
+    {
+      "kind": "site",
+      "name": "七七｜采集",
+      "api": "http://6.qqqtv.top/api.php/provide/vod/",
+      "category": "cj",
+      "reason": "connect ECONNREFUSED 154.219.110.67:80"
+    },
+    {
+      "kind": "site",
+      "name": "天天｜APP",
+      "api": "csp_AppRJ",
+      "category": "spider",
+      "reason": "ext 目标站不可达 http://v.rbotv.cn"
+    },
+    {
+      "kind": "site",
+      "name": "浪酷｜APP",
+      "api": "csp_AppRJ",
+      "category": "spider",
+      "reason": "ext 目标站不可达 http://v.rbotv.cn"
+    },
+    {
+      "kind": "site",
+      "name": "天堂｜APP",
+      "api": "csp_AppYsV2",
+      "category": "spider",
+      "reason": "ext 目标站不可达 http://cmstt.lfytv.cn/api.php/app/"
+    },
+    {
+      "kind": "site",
+      "name": "下饭｜APP",
+      "api": "csp_AppYs",
+      "category": "spider",
+      "reason": "ext 目标站不可达 http://jxfmax.juxiafan.com/icciu_api.php/v1.vod"
+    },
+    {
+      "kind": "site",
+      "name": "布雷｜影视",
+      "api": "https://jiekou.netlify.app/drpy_libs/drpy2.min.js",
+      "category": "js",
+      "reason": "内容不像脚本"
+    },
+    {
+      "kind": "site",
+      "name": "全看｜影视",
+      "api": "csp_Quanwk",
+      "category": "spider",
+      "reason": "目标站测速失败 https://www.91qkw.com"
+    },
+    {
+      "kind": "site",
+      "name": "白白｜影视",
+      "api": "csp_SuBaiBai",
+      "category": "spider",
+      "reason": "ext 目标站不可达 https://www.subaibai.com"
+    },
+    {
+      "kind": "site",
+      "name": "卧龙｜采集",
+      "api": "https://collect.wolongzy.cc/api.php/provide/vod/",
+      "category": "cj",
+      "reason": "getaddrinfo ENOTFOUND collect.wolongzy.cc"
+    },
+    {
+      "kind": "site",
+      "name": "华为吧｜采集",
+      "api": "https://huawei8.live/api.php/provide/vod/",
+      "category": "cj",
+      "reason": "ac=detail HTTP 200"
+    },
+    {
+      "kind": "site",
+      "name": "魔抓｜采集",
+      "api": "https://mozhuazy.com/api.php/provide/vod/",
+      "category": "cj",
+      "reason": "ac=list HTTP 200"
+    },
+    {
+      "kind": "site",
+      "name": "黑木耳｜采集",
+      "api": "https://json.heimuer.xyz/api.php/provide/vod/",
+      "category": "cj",
+      "reason": "ac=detail HTTP 200"
+    },
+    {
+      "kind": "site",
+      "name": "白嫖｜采集",
+      "api": "csp_HBPQ",
+      "category": "spider",
+      "reason": "ext 目标站不可达 https://www.6699z.cn"
+    },
+    {
+      "kind": "site",
+      "name": "翘楚｜采集",
+      "api": "csp_HBPQ",
+      "category": "spider",
+      "reason": "目标站测速失败 https://www.qyzf88.com"
+    },
+    {
+      "kind": "site",
+      "name": "资源｜采集",
+      "api": "https://okzyw9.com/api.php/provide/vod/",
+      "category": "cj",
+      "reason": "getaddrinfo ENOTFOUND okzyw9.com"
+    },
+    {
+      "kind": "site",
+      "name": "️无限｜采集",
+      "api": "https://api.wuxianzy.net/api.php/provide/vod/",
+      "category": "cj",
+      "reason": "getaddrinfo ENOTFOUND api.wuxianzy.net"
+    },
+    {
+      "kind": "site",
+      "name": "小城┃采集",
+      "api": "csp_AppYs",
+      "category": "spider",
+      "reason": "目标站测速失败 http://v.cute6.cn/api.php/v1.vod"
+    },
+    {
+      "kind": "site",
+      "name": "幸福｜拾光",
+      "api": "csp_HBPQ",
+      "category": "spider",
+      "reason": "目标站测速失败 https://www.qyzf88.com"
+    },
+    {
+      "kind": "site",
+      "name": "快看｜真六",
+      "api": "csp_AppYsV2",
+      "category": "spider",
+      "reason": "ext 目标站不可达 http://kkwk123.top/api.php/app/"
+    },
+    {
+      "kind": "site",
+      "name": "💥豆瓣",
+      "api": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/libs/drpy2.min.js",
+      "category": "js",
+      "reason": "内容过小"
+    },
+    {
+      "kind": "site",
+      "name": "💥短剧网",
+      "api": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/libs/drpy2.min.js",
+      "category": "js",
+      "reason": "内容过小"
+    },
+    {
+      "kind": "site",
+      "name": "💥斗鱼直播",
+      "api": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/libs/drpy2.min.js",
+      "category": "js",
+      "reason": "内容过小"
+    },
+    {
+      "kind": "site",
+      "name": "💥虎牙直播",
+      "api": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/libs/drpy2.min.js",
+      "category": "js",
+      "reason": "内容过小"
+    },
+    {
+      "kind": "site",
+      "name": "💥哔哩直播",
+      "api": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/libs/drpy2.min.js",
+      "category": "js",
+      "reason": "内容过小"
+    },
+    {
+      "kind": "site",
+      "name": "💥哔哩合集",
+      "api": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/libs/drpy2.min.js",
+      "category": "js",
+      "reason": "内容过小"
+    },
+    {
+      "kind": "site",
+      "name": "💥爱看",
+      "api": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/libs/drpy2.min.js",
+      "category": "js",
+      "reason": "内容过小"
+    },
+    {
+      "kind": "site",
+      "name": "💥厂长",
+      "api": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/libs/drpy2.min.js",
+      "category": "js",
+      "reason": "内容过小"
+    },
+    {
+      "kind": "site",
+      "name": "💥低端",
+      "api": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/libs/drpy2.min.js",
+      "category": "js",
+      "reason": "内容过小"
+    },
+    {
+      "kind": "site",
+      "name": "💥两个BT",
+      "api": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/libs/drpy2.min.js",
+      "category": "js",
+      "reason": "内容过小"
+    },
+    {
+      "kind": "site",
+      "name": "💥怡萱动漫",
+      "api": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/libs/drpy2.min.js",
+      "category": "js",
+      "reason": "内容过小"
+    },
+    {
+      "kind": "site",
+      "name": "💥子子影视",
+      "api": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/libs/drpy2.min.js",
+      "category": "js",
+      "reason": "内容过小"
+    },
+    {
+      "kind": "site",
+      "name": "快帆",
+      "api": "https://api.kuaifan.tv/api.php/provide/vod",
+      "category": "cj",
+      "reason": "getaddrinfo ENOTFOUND api.kuaifan.tv"
+    },
+    {
+      "kind": "site",
+      "name": "☀荐片🔹vip线",
+      "api": "csp_Jianpian",
+      "category": "spider",
+      "reason": "不是有效的 jar"
     },
     {
       "kind": "site",
@@ -8820,33 +9630,21 @@
     },
     {
       "kind": "site",
-      "name": "影视 | 暴風[直连]",
-      "api": "https://bfzyapi.com/api.php/provide/vod/?ac=list",
-      "reason": "与另一站点内容相同"
+      "name": "🐯虎牙采集",
+      "api": "https://www.huyaapi.com/api.php/provide/vod/from/hym3u8",
+      "reason": "与另一站点内容相同(更快者保留)"
+    },
+    {
+      "kind": "site",
+      "name": "🌪️暴风影音",
+      "api": "https://app.bfzyapi.com/api.php/provide/vod/",
+      "reason": "与另一站点内容相同(更快者保留)"
     },
     {
       "kind": "site",
       "name": "影视 | 电影天堂",
       "api": "http://caiji.dyttzyapi.com/api.php/provide/vod",
       "reason": "与另一站点内容相同(更快者保留)"
-    },
-    {
-      "kind": "site",
-      "name": "红牛资源(切)",
-      "api": "https://www.hongniuzy2.com/api.php/provide/vod/",
-      "reason": "与另一站点内容相同"
-    },
-    {
-      "kind": "site",
-      "name": "闪电资源(切)",
-      "api": "http://sdzyapi.com/api.php/provide/vod/",
-      "reason": "与另一站点内容相同"
-    },
-    {
-      "kind": "site",
-      "name": "💖分享非凡",
-      "api": "http://cj.ffzyapi.com/api.php/provide/vod/",
-      "reason": "与另一站点内容相同"
     },
     {
       "kind": "site",
@@ -8868,50 +9666,158 @@
     },
     {
       "kind": "site",
-      "name": "🐝┃纯净┃采集",
-      "api": "https://api.wsyzy.net/api.php/provide/vod/?ac=list",
-      "reason": "与另一站点内容相同"
-    },
-    {
-      "kind": "site",
-      "name": "🍀┃非凡┃资源",
-      "api": "http://ffzy5.tv/api.php/provide/vod",
-      "reason": "与另一站点内容相同"
-    },
-    {
-      "kind": "site",
       "name": "索尼┃资源",
       "api": "https://suoniapi.com/api.php/provide/vod/from/snm3u8/",
       "reason": "与另一站点内容相同"
     },
     {
       "kind": "site",
-      "name": "三六零",
-      "api": "https://360zy.com/api.php/provide/vod",
+      "name": "🍀｜360｜采集",
+      "api": "https://360zy.com/api.php/seaxml/vod/",
+      "reason": "与另一站点内容相同(更快者保留)"
+    },
+    {
+      "kind": "site",
+      "name": "🥑┃量子┃资源",
+      "api": "https://lzizy1.com/api.php/provide/vod/",
+      "reason": "与另一站点内容相同(更快者保留)"
+    },
+    {
+      "kind": "site",
+      "name": "🌼金鹰┃资源🌼",
+      "api": "https://jyzyapi.com/provide/vod/from/jinyingm3u8/at/json",
+      "reason": "与另一站点内容相同"
+    },
+    {
+      "kind": "site",
+      "name": "🌐天天影视",
+      "api": "https://api.1080zyku.com/inc/apijson.php",
+      "reason": "与另一站点内容相同(更快者保留)"
+    },
+    {
+      "kind": "site",
+      "name": "💖分享最大",
+      "api": "https://api.zuidapi.com/api.php/provide/vod/?ac=list",
+      "reason": "与另一站点内容相同"
+    },
+    {
+      "kind": "site",
+      "name": "💖分享金鹰",
+      "api": "https://jyzyapi.com/provide/vod/",
+      "reason": "与另一站点内容相同"
+    },
+    {
+      "kind": "site",
+      "name": "🔥无尽资源🔥",
+      "api": "https://api.wujinapi.me/api.php/provide/vod/?ac=list",
+      "reason": "与另一站点内容相同"
+    },
+    {
+      "kind": "site",
+      "name": "牛牛┃资源",
+      "api": "https://api.niuniuzy.me/api.php/provide/vod/",
+      "reason": "与另一站点内容相同"
+    },
+    {
+      "kind": "site",
+      "name": "无尽┃资源",
+      "api": "https://api.wujinapi.com/api.php/provide/vod/",
+      "reason": "与另一站点内容相同"
+    },
+    {
+      "kind": "site",
+      "name": "💝分享猫眼",
+      "api": "https://api.maoyanapi.top/api.php/provide/vod/at/json",
+      "reason": "与另一站点内容相同(更快者保留)"
+    },
+    {
+      "kind": "site",
+      "name": "影视 | 暴風[直连]",
+      "api": "https://bfzyapi.com/api.php/provide/vod/?ac=list",
+      "reason": "与另一站点内容相同(更快者保留)"
+    },
+    {
+      "kind": "site",
+      "name": "ok┃资源",
+      "api": "https://okzyw.cc/api.php/provide/vod/",
+      "reason": "与另一站点内容相同"
+    },
+    {
+      "kind": "site",
+      "name": "无尽 | 采集",
+      "api": "https://api.wujinapi.net/api.php/provide/vod/",
+      "reason": "与另一站点内容相同"
+    },
+    {
+      "kind": "site",
+      "name": "金鹰 | 采集",
+      "api": "https://jyzyapi.com/api.php/provide/vod/",
+      "reason": "与另一站点内容相同"
+    },
+    {
+      "kind": "site",
+      "name": "速播┃资源",
+      "api": "https://subocj.com/api.php/provide/vod/",
+      "reason": "与另一站点内容相同(更快者保留)"
+    },
+    {
+      "kind": "site",
+      "name": "优质 | 采集",
+      "api": "https://api.yyzy-tv.vip/inc/apijson.php",
+      "reason": "与另一站点内容相同"
+    },
+    {
+      "kind": "site",
+      "name": "➡️极速秒播",
+      "api": "https://jszyapi.com/api.php/provide/vod/from/jsm3u8",
+      "reason": "与另一站点内容相同"
+    },
+    {
+      "kind": "site",
+      "name": "➡️速播资源",
+      "api": "https://subocaiji.com/api.php/provide/vod/from/subm3u8/",
       "reason": "与另一站点内容相同"
     },
     {
       "kind": "site",
       "name": "🌼魔都┃影视🌼",
       "api": "https://www.mdzyapi.com/api.php/provide/vod",
-      "reason": "与另一站点内容相同"
-    },
-    {
-      "kind": "site",
-      "name": "💝分享高清",
-      "api": "https://api.yzzy-api.com/inc/apijson.php",
-      "reason": "与另一站点内容相同"
-    },
-    {
-      "kind": "site",
-      "name": "🐉┃索尼┃高清",
-      "api": "https://suoniapi.com/api.php/provide/vod/?ac=list",
       "reason": "与另一站点内容相同(更快者保留)"
     },
     {
       "kind": "site",
-      "name": "影视 • 尤酷[直连]",
-      "api": "https://api.ukuapi.com/api.php/provide/vod/?ac=list",
+      "name": "➡️最大资源",
+      "api": "http://zuidazy.me/api.php/provide/vod/",
+      "reason": "与另一站点内容相同"
+    },
+    {
+      "kind": "site",
+      "name": "iQIYI｜采集",
+      "api": "https://www.iqiyizyapi.com/api.php/provide/vod/?ac=list",
+      "reason": "与另一站点内容相同"
+    },
+    {
+      "kind": "site",
+      "name": "快车｜采集",
+      "api": "https://caiji.kuaichezy.org/api.php/provide/vod/",
+      "reason": "与另一站点内容相同"
+    },
+    {
+      "kind": "site",
+      "name": "丫丫｜采集",
+      "api": "https://yayazy2.com/api.php/provide/vod/",
+      "reason": "与另一站点内容相同"
+    },
+    {
+      "kind": "site",
+      "name": "闪电资源(切)",
+      "api": "http://sdzyapi.com/api.php/provide/vod/",
+      "reason": "与另一站点内容相同(更快者保留)"
+    },
+    {
+      "kind": "site",
+      "name": "☀天堂🔹采集",
+      "api": "http://caiji.dyttzyapi.com/api.php/provide/vod/from/dyttm3u8/at/json/?ac=list",
       "reason": "与另一站点内容相同"
     },
     {
@@ -8942,6 +9848,12 @@
       "kind": "live",
       "name": "IPV6",
       "api": "https://raw.githubusercontent.com/liu673cn/box/main/lib/tv/ipv6.m3u",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "live",
+      "name": "直播",
+      "api": "http://home.jundie.top:81/Cat/tv/live.txt",
       "reason": "HTTP 404"
     },
     {
@@ -8982,9 +9894,9 @@
     },
     {
       "kind": "live",
-      "name": "直播",
-      "api": "http://home.jundie.top:81/Cat/tv/live.txt",
-      "reason": "HTTP 404"
+      "name": "superiptv",
+      "api": "http://127.0.0.1:5266/iptv.m3u",
+      "reason": "connect ECONNREFUSED 127.0.0.1:5266"
     },
     {
       "kind": "live",
@@ -9009,90 +9921,6 @@
       "name": "live",
       "api": "http://hucongrong.web3v.work/风水/fxz/lib/live10378.txt",
       "reason": "HTTP 403"
-    },
-    {
-      "kind": "live",
-      "name": "裤佬",
-      "api": "https://gh-proxy.org/https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/refs/heads/Jsnzkpg/Jsnzkpg1",
-      "reason": "HTTP 404"
-    },
-    {
-      "kind": "live",
-      "name": "Kimentanm",
-      "api": "https://gh.llkk.cc/https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u",
-      "reason": "HTTP 522"
-    },
-    {
-      "kind": "live",
-      "name": "综合直播",
-      "api": "https://ds65.tv1288.xyz",
-      "reason": "HTTP 403"
-    },
-    {
-      "kind": "live",
-      "name": "日后",
-      "api": "http://rihou.cc:555/gggg.nzk",
-      "reason": "getaddrinfo ENOTFOUND rihou.cc"
-    },
-    {
-      "kind": "live",
-      "name": "宫殿",
-      "api": "https://gongdian.top/tv/iptv",
-      "reason": "getaddrinfo ENOTFOUND gongdian.top"
-    },
-    {
-      "kind": "live",
-      "name": "develop202",
-      "api": "https://gh-proxy.org/https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt",
-      "reason": "解析不出频道"
-    },
-    {
-      "kind": "live",
-      "name": "酒店源",
-      "api": "https://gongdian.top/tv/guovin",
-      "reason": "getaddrinfo ENOTFOUND gongdian.top"
-    },
-    {
-      "kind": "live",
-      "name": "superiptv",
-      "api": "http://127.0.0.1:5266/iptv.m3u",
-      "reason": "connect ECONNREFUSED 127.0.0.1:5266"
-    },
-    {
-      "kind": "live",
-      "name": "migu(优)",
-      "api": "https://fastgit.cc/https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt",
-      "reason": "HTTP 403"
-    },
-    {
-      "kind": "live",
-      "name": "migu",
-      "api": "https://migu.heropx.dpdns.org/",
-      "reason": "HTTP 404"
-    },
-    {
-      "kind": "live",
-      "name": "iptv(简)",
-      "api": "https://im5k.fun/vip.m3u",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "live",
-      "name": "migu720",
-      "api": "https://fastgit.cc/https://raw.githubusercontent.com/iTCoffe/Collect-iTV/main/MiGu.m3u",
-      "reason": "HTTP 403"
-    },
-    {
-      "kind": "live",
-      "name": "iTV",
-      "api": "https://fastgit.cc/https://raw.githubusercontent.com/iTCoffe/Collect-iTV/main/Internet_iTV.m3u",
-      "reason": "HTTP 403"
-    },
-    {
-      "kind": "live",
-      "name": "港澳台",
-      "api": "http://rihou.cc:567/gggg.nzk",
-      "reason": "getaddrinfo ENOTFOUND rihou.cc"
     },
     {
       "kind": "live",
@@ -9228,6 +10056,84 @@
     },
     {
       "kind": "live",
+      "name": "裤佬",
+      "api": "https://gh-proxy.org/https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/refs/heads/Jsnzkpg/Jsnzkpg1",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "live",
+      "name": "Kimentanm",
+      "api": "https://gh.llkk.cc/https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u",
+      "reason": "HTTP 522"
+    },
+    {
+      "kind": "live",
+      "name": "综合直播",
+      "api": "https://ds65.tv1288.xyz",
+      "reason": "HTTP 403"
+    },
+    {
+      "kind": "live",
+      "name": "日后",
+      "api": "http://rihou.cc:555/gggg.nzk",
+      "reason": "getaddrinfo ENOTFOUND rihou.cc"
+    },
+    {
+      "kind": "live",
+      "name": "宫殿",
+      "api": "https://gongdian.top/tv/iptv",
+      "reason": "getaddrinfo ENOTFOUND gongdian.top"
+    },
+    {
+      "kind": "live",
+      "name": "develop202",
+      "api": "https://gh-proxy.org/https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt",
+      "reason": "解析不出频道"
+    },
+    {
+      "kind": "live",
+      "name": "酒店源",
+      "api": "https://gongdian.top/tv/guovin",
+      "reason": "getaddrinfo ENOTFOUND gongdian.top"
+    },
+    {
+      "kind": "live",
+      "name": "港澳台",
+      "api": "http://rihou.cc:567/gggg.nzk",
+      "reason": "getaddrinfo ENOTFOUND rihou.cc"
+    },
+    {
+      "kind": "live",
+      "name": "migu(优)",
+      "api": "https://fastgit.cc/https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt",
+      "reason": "HTTP 403"
+    },
+    {
+      "kind": "live",
+      "name": "migu",
+      "api": "https://migu.heropx.dpdns.org/",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "live",
+      "name": "iptv(简)",
+      "api": "https://im5k.fun/vip.m3u",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "live",
+      "name": "migu720",
+      "api": "https://fastgit.cc/https://raw.githubusercontent.com/iTCoffe/Collect-iTV/main/MiGu.m3u",
+      "reason": "HTTP 403"
+    },
+    {
+      "kind": "live",
+      "name": "iTV",
+      "api": "https://fastgit.cc/https://raw.githubusercontent.com/iTCoffe/Collect-iTV/main/Internet_iTV.m3u",
+      "reason": "HTTP 403"
+    },
+    {
+      "kind": "live",
       "name": "夜空",
       "api": "https://pan.szfx.top/down.php/4f5dad27633e1293d7ef2317ee9c801e.txt",
       "reason": "connect ECONNREFUSED 127.0.0.1:443"
@@ -9258,6 +10164,30 @@
     },
     {
       "kind": "live",
+      "name": "牛播一(新版影视仓/ok影视)",
+      "api": "http://127.0.0.1:9978/proxy?do=饭太硬&type=liveList",
+      "reason": "connect ECONNREFUSED 127.0.0.1:9978"
+    },
+    {
+      "kind": "live",
+      "name": "IPV4",
+      "api": "https://ghp.ci/raw.githubusercontent.com/MemoryCollection/IPTV/refs/heads/main/itvlist.txt",
+      "reason": "getaddrinfo ENOTFOUND ghp.ci"
+    },
+    {
+      "kind": "live",
+      "name": "IPV6①",
+      "api": "https://ghp.ci/raw.githubusercontent.com/fanmingming/live/refs/heads/main/tv/m3u/ipv6.m3u",
+      "reason": "getaddrinfo ENOTFOUND ghp.ci"
+    },
+    {
+      "kind": "live",
+      "name": "IPV6②",
+      "api": "https://ghp.ci/raw.githubusercontent.com/wwb521/live/refs/heads/main/tv.m3u",
+      "reason": "getaddrinfo ENOTFOUND ghp.ci"
+    },
+    {
+      "kind": "live",
       "name": "驸马影视•直播合集",
       "api": "https://www.iyouhun.com/tv/json/lib/tvlive.txt",
       "reason": "解析不出频道"
@@ -9279,18 +10209,6 @@
       "name": "驸马影视•港澳台",
       "api": "http://110.185.171.226:93/dsch/gat.txt",
       "reason": "connect ECONNREFUSED 110.185.171.226:93"
-    },
-    {
-      "kind": "live",
-      "name": "live",
-      "api": "http://box.ufuzi.com/tv/qq/%E7%9F%AD%E5%89%A7%E9%A2%91%E9%81%93/lives/live.txt",
-      "reason": "连接超时"
-    },
-    {
-      "kind": "live",
-      "name": "live",
-      "api": "https://download.kstore.space/download/3313/mao/shaoerzb.txt",
-      "reason": "HTTP 401"
     },
     {
       "kind": "live",
@@ -9324,27 +10242,15 @@
     },
     {
       "kind": "live",
-      "name": "牛播一",
-      "api": "http://127.0.0.1:9978/proxy?do=饭太硬&type=liveList",
-      "reason": "connect ECONNREFUSED 127.0.0.1:9978"
+      "name": "live",
+      "api": "http://box.ufuzi.com/tv/qq/%E7%9F%AD%E5%89%A7%E9%A2%91%E9%81%93/lives/live.txt",
+      "reason": "连接超时"
     },
     {
       "kind": "live",
-      "name": "IPV4",
-      "api": "https://ghp.ci/raw.githubusercontent.com/MemoryCollection/IPTV/refs/heads/main/itvlist.txt",
-      "reason": "getaddrinfo ENOTFOUND ghp.ci"
-    },
-    {
-      "kind": "live",
-      "name": "IPV6①",
-      "api": "https://ghp.ci/raw.githubusercontent.com/fanmingming/live/refs/heads/main/tv/m3u/ipv6.m3u",
-      "reason": "getaddrinfo ENOTFOUND ghp.ci"
-    },
-    {
-      "kind": "live",
-      "name": "IPV6②",
-      "api": "https://ghp.ci/raw.githubusercontent.com/wwb521/live/refs/heads/main/tv.m3u",
-      "reason": "getaddrinfo ENOTFOUND ghp.ci"
+      "name": "live",
+      "api": "https://download.kstore.space/download/3313/mao/shaoerzb.txt",
+      "reason": "HTTP 401"
     },
     {
       "kind": "live",
@@ -9380,7 +10286,7 @@
       "kind": "live",
       "name": "Guovin",
       "api": "http://124.71.19.220/live/1/1?v=1794883444",
-      "reason": "播放列表与另一源完全相同"
+      "reason": "连接超时"
     },
     {
       "kind": "live",
@@ -9411,6 +10317,186 @@
       "name": "16万•MV",
       "api": "https://gh.tryxd.cn/raw.githubusercontent.com/lystv/short/main/影视/tvb/MTV.txt",
       "reason": "解析不出频道"
+    },
+    {
+      "kind": "live",
+      "name": "👖裤佬百战直播",
+      "api": "https://baizhan.445569.xyz/live.m3u",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "live",
+      "name": "Kimentanm",
+      "api": "http://w.junce.dpdns.org/lives/Kimentanm.txt",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "live",
+      "name": "develop202",
+      "api": "http://w.junce.dpdns.org/lives/develop202.txt",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "live",
+      "name": "政治时事",
+      "api": "http://zhangqun66.com/141.php",
+      "reason": "getaddrinfo ENOTFOUND zhangqun66.com"
+    },
+    {
+      "kind": "live",
+      "name": "野火直播",
+      "api": "https://zhangqun1818.serv00.net/zq/野火改.txt",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "live",
+      "name": "心魔",
+      "api": "https://raw.gitmirror.com/yw88075/tvbox/main/live.txt",
+      "reason": "getaddrinfo ENOTFOUND raw.gitmirror.com"
+    },
+    {
+      "kind": "live",
+      "name": "wqwqwq",
+      "api": "https://la1.wqwqwq.sbs/tv.m3u",
+      "reason": "HTTP 530"
+    },
+    {
+      "kind": "live",
+      "name": "epg.pw All",
+      "api": "https://m3u.002397.xyz/all.m3u",
+      "reason": "HTTP 530"
+    },
+    {
+      "kind": "live",
+      "name": "iptv.org All",
+      "api": "https://m3u.002397.xyz/o_all.m3u",
+      "reason": "HTTP 530"
+    },
+    {
+      "kind": "live",
+      "name": "live",
+      "api": "https://pan.shangui.cc/f/xamXtZ/%E5%87%AF%E5%BC%9F.txt",
+      "reason": "getaddrinfo ENOTFOUND pan.shangui.cc"
+    },
+    {
+      "kind": "live",
+      "name": "IPv4",
+      "api": "http://101.200.122.188/66",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "live",
+      "name": "AI拾光",
+      "api": "https://ghproxy.net/raw.githubusercontent.com/xmbjm/IPTV/master/output/user_result.txt",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "live",
+      "name": "AIGuovin",
+      "api": "https://gitee.com/mytv-android/iptv-api/raw/master/output/result.m3u",
+      "reason": "HTTP 451"
+    },
+    {
+      "kind": "live",
+      "name": "世界杯拾光",
+      "api": "https://www.freetv.top/mgevent.m3u",
+      "reason": "HTTP 512"
+    },
+    {
+      "kind": "live",
+      "name": "电影频道",
+      "api": "https://ghproxy.cn/https://raw.githubusercontent.com/qinvision/Film-Television/main/dujuejiami.txt",
+      "reason": "解析不出频道"
+    },
+    {
+      "kind": "live",
+      "name": "smt直播",
+      "api": "http://iptv.herissmon.dpdns.org/jiekou/live.txt",
+      "reason": "getaddrinfo ENOTFOUND iptv.herissmon.dpdns.org"
+    },
+    {
+      "kind": "live",
+      "name": "拾光AI",
+      "api": "https://gh-proxy.com/https://raw.githubusercontent.com/xmbjm/IPTV/master/output/user_result.m3u",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "live",
+      "name": "咪咕直播",
+      "api": "https://yun.urldwz.com/f/Q6y3ca/migu.m3u",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "live",
+      "name": "虎牙一起看",
+      "api": "https://yun.urldwz.com/f/BE9PSL/huyayqk.m3u",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "live",
+      "name": "斗鱼一起看",
+      "api": "https://yun.urldwz.com/f/NR9qiA/douyuyqk.m3u",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "live",
+      "name": "YY轮播",
+      "api": "https://yun.urldwz.com/f/dlkycZ/yylunbo.m3u",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "live",
+      "name": "B站直播",
+      "api": "https://yun.urldwz.com/f/9XBkHK/bilibili.m3u",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "live",
+      "name": "肥羊直播",
+      "api": "https://9877.kstore.space/Live/live.m3u",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "live",
+      "name": "AI直播",
+      "api": "https://wget.la/https://raw.githubusercontent.com/PizazzGY/TV/master/output/user_result.txt",
+      "reason": "HTTP 404"
+    },
+    {
+      "kind": "live",
+      "name": "虎牙一起看",
+      "api": "https://9877.kstore.space/Live/huyayqk.m3u",
+      "reason": "HTTP 502"
+    },
+    {
+      "kind": "live",
+      "name": "斗鱼一起看",
+      "api": "https://9877.kstore.space/Live/douyuyqk.m3u",
+      "reason": "HTTP 502"
+    },
+    {
+      "kind": "live",
+      "name": "YY轮播",
+      "api": "https://9877.kstore.space/Live/yylunbo.m3u",
+      "reason": "HTTP 502"
+    },
+    {
+      "kind": "live",
+      "name": "APTV",
+      "api": "https://wget.la/https://github.com/Kimentanm/aptv/raw/master/m3u/iptv.m3u",
+      "reason": "播放列表与另一源完全相同"
+    },
+    {
+      "kind": "live",
+      "name": "线路⑤",
+      "api": "http://iptv.4666888.xyz/FYTV.m3u",
+      "reason": "连接超时"
+    },
+    {
+      "kind": "live",
+      "name": "FMM_IPV6",
+      "api": "https://m3u.ibert.me/txt/fmml_ipv6.txt",
+      "reason": "播放列表与另一源完全相同"
     }
   ]
 }

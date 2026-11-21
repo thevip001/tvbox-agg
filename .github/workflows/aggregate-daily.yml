@@ -117,12 +117,17 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # ！！这里绝对不能用 "git pull --rebase --autostash || true" ！！
-          # 产物文件是整份重写的，rebase 必然冲突；--autostash 会把冲突标记
-          # （<<<<<<< Updated upstream）弹回工作区，再被 git add 提交上去 → 产物直接损坏。
+          # ===== 为什么不用 git pull --rebase --autostash =====
+          # 产物是整份重写的，rebase 必然冲突；--autostash 会把冲突标记
+          # （<<<<<<< Updated upstream）弹回工作区，加上 "|| true" 吞掉错误，
+          # 接着 git add 就把损坏内容提交了 → 线上产物全部报废（真实发生过）。
           #
-          # 正确做法：产物是权威版本，先把它挪到临时目录，
-          # 干净地重置到远端最新，再把产物放回来提交。
+          # ===== 现在的做法 =====
+          # 1) 把本轮产物拷到临时目录（只拷产物，不碰累积数据）
+          # 2) 干净地同步到远端最新
+          # 3) 把本轮产物覆盖回去
+          # 这样永远不进入冲突路径，也不会冲掉 pool/history 的累积内容。
+          # 本轮生成的所有结果都先存起来（产物 + 累积数据）
           STAGE=$(mktemp -d)
           cp -r 聚合接口 "$STAGE/" 2>/dev/null || true
           cp README.md "$STAGE/README.md" 2>/dev/null || true
@@ -132,18 +137,22 @@ jobs:
           git fetch --depth=1 origin main
           git reset --hard FETCH_HEAD
 
-          rm -rf 聚合接口 && cp -r "$STAGE/聚合接口" ./ && rm -rf "$STAGE/聚合接口"
+          rm -rf 聚合接口
+          cp -r "$STAGE/聚合接口" ./ 2>/dev/null || true
           cp "$STAGE/README.md" README.md 2>/dev/null || true
+          # 累积数据：本轮的版本已经是"远端旧内容 + 本轮新增"，所以用它覆盖是对的
           cp "$STAGE/pool.json" data/pool.json 2>/dev/null || true
           cp "$STAGE/history.json" data/history.json 2>/dev/null || true
+          rm -rf "$STAGE"
 
-          # 提交前闸门：不许有冲突标记，且每个 JSON 必须合法
+          # ===== 提交前闸门 =====
           if grep -rqE "^(<<<<<<< |=======$|>>>>>>> )" 聚合接口/ README.md 2>/dev/null; then
             echo "❌ 产物里有冲突标记，拒绝提交"
             exit 1
           fi
           for f in 聚合接口/*.json; do
-            node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" || { echo "❌ $f 不是合法 JSON"; exit 1; }
+            node -e "JSON.parse(require('fs').readFileSync(process.argv[1],'utf8'))" "$f" \
+              || { echo "❌ $f 不是合法 JSON，拒绝提交"; exit 1; }
           done
           echo "✅ 产物校验通过（无冲突标记、JSON 合法）"
 

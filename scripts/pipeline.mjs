@@ -27,8 +27,6 @@ export function readOptions(env = process.env) {
     // 用户点开几乎是秒开。实测过 MIN_KBPS=50 会把 TTFB 133~366ms 的健康站全删掉。
     // slowTtfb：超过就判「慢」（strict 下删除）
     slowTtfb: Number(env.SLOW_TTFB_MS || 1500),
-    // okTtfb：超过就降到「普通」档（仍保留，只是排在精选后面）
-    okTtfb: Number(env.OK_TTFB_MS || 800),
     // fastTtfb：低于就是「精选」
     fastTtfb: Number(env.FAST_TTFB_MS || 300),
     // csp_* 内置爬虫站测的是目标站首页（HTML 更重），阈值放宽一些
@@ -411,9 +409,8 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
 
     if (ttfb <= 0) return "ok"; // 没有测速数据（内置爬虫等），按普通保留
     if (ttfb > limit) return "slow";
-    if (ttfb > o.okTtfb) return "ok";
     if (ttfb <= o.fastTtfb) return "fast";
-    return "ok";
+    return "ok"; // 精选~慢档阈值之间一律算普通，保留
   };
 
   /** 预算用尽：本轮没测到，不能算慢站（算慢站等于随机删站） */
@@ -849,7 +846,7 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
     "| 档位 | 数量 | 处理 |",
     "| --- | ---: | --- |",
     `| 🟢 精选（TTFB≤${opts.fastTtfb}ms） | ${g.fast || 0} | 保留，排最前 |`,
-    `| 🔵 正常（TTFB≤${opts.okTtfb}ms） | ${g.ok || 0} | 保留 |`,
+    `| 🔵 正常（${opts.fastTtfb}<TTFB≤${opts.slowTtfb}ms） | ${g.ok || 0} | 保留 |`,
     `| 🟡 偏慢（TTFB>${opts.slowTtfb}ms） | ${g.slow || 0} | ${opts.strictness === "strict" ? "**已剔除**" : "保留在文末"} |`,
     `| 🟠 测不准（限流/403） | ${g.uncertain || 0} | 保留（下轮重测） |`,
     `| ⚪ 未测到（本轮预算用尽） | ${g.unsure || 0} | 保留（下轮补测） |`,

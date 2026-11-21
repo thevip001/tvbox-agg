@@ -233,8 +233,7 @@ git push
 | 变量 | 默认 | 说明 |
 |---|---|---|
 | `STRICTNESS` | `strict` | `strict` 只留快站（默认，定时任务即此档）/ `balanced` 死站删·慢站留文末 / `loose` 只删死站 |
-| `SLOW_TTFB_MS` | 1500 | 首字节超过这个判为慢（strict 下删除） |
-| `OK_TTFB_MS` | 800 | 超过算普通档（仍保留） |
+| `SLOW_TTFB_MS` | 1500 | 首字节超过这个判为慢（strict 下删除），中间一律算普通保留 |
 | `FAST_TTFB_MS` | 300 | 低于算精选，排最前 |
 | `CRAWLER_SLOW_TTFB_MS` | 3000 | 内置爬虫站（csp_*）放宽阈值，因为测的是目标站首页 |
 | `KEEP_UNPROBED` | 1 | 预算用尽没测到的站标 `unsure` 保留，下轮补测（0=当死站丢弃） |

@@ -472,7 +472,6 @@ export function contentFingerprint(samples) {
 
 export const SPEED = {
   FAST_TTFB: Number(process.env.FAST_TTFB_MS || 300),
-  OK_TTFB: Number(process.env.OK_TTFB_MS || 800),
   SLOW_TTFB: Number(process.env.SLOW_TTFB_MS || 1500),
 };
 

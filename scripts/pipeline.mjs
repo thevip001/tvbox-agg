@@ -945,11 +945,27 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
       `> **最新数量**（${when} 更新）：点播合集 **${c.all}**（采集 ${c.cj} · Py ${c.py} · JS ${c.js} · Jar ${c.spider} · 其它 ${c.other}）｜直播源 **${c.liveSources}**｜直播频道 **${c.channels}**`,
       `<!-- 站点数量:end -->`,
     ].join("\n");
-    // 表格里的占位符 <!--N:all-->? 也一起替换
-    // 占位符后面可能还跟着上次写入的数字，一起吞掉
-    let out = rootReadme.replace(/<!--N:(all|cj|py|js|spider|other|liveSources|channels)-->\d*/g, (m, k) =>
-      String(c[k] ?? "?"),
-    );
+    // 表格里的数量单元格：用「文件名 → 该行数量格」的方式定位，
+    // 这样即使标记被误删/被替换成纯数字，也能自我修复（幂等）
+    const numRows = [
+      ["点播合集.json", "all", ""],
+      ["点播-采集站.json", "cj", ""],
+      ["点播-Py站.json", "py", ""],
+      ["点播-JS站.json", "js", ""],
+      ["点播-Jar爬虫站.json", "spider", ""],
+      ["live.json", "liveSources", " 个源"],
+      ["live.m3u", "channels", " 个频道"],
+    ];
+    let out = rootReadme;
+    for (const [file, key, suffix] of numRows) {
+      const val = c[key] ?? "?";
+      const cell = `<!--NUM:${key}-->${val}${suffix}`;
+      const re = new RegExp(
+        `(\\|\\s*${file.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\$&")}\\s*\\|[^\\n|]*\\|)\\s*[^|]*(\\|\\s*https://raw\\.githubusercontent)`,
+      );
+      if (re.test(out)) out = out.replace(re, (m, a, b) => `${a} ${cell} ${b}`);
+    }
+
     if (out.includes("<!-- 站点数量:start")) {
       out = out.replace(/<!-- 站点数量:start[\s\S]*?<!-- 站点数量:end -->/, stats);
     } else {

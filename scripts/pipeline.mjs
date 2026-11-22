@@ -1,7 +1,7 @@
 /**
  * pipeline.mjs —— 筛选整理层：探活 → 测速 → 去重 → 分类 → 输出
  */
-import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import {
   GRADE_ORDER,
@@ -955,9 +955,13 @@ const FILES = {
   removed: "剔除报告.json",
 };
 
+/** 旧口径的遗留产物：直播频道合并列表（live.m3u）已于 2026-11-22 废弃，跑一轮就顺手清掉 */
+const LEGACY_FILES = ["live.m3u", "海量点播聚合接口.json", "海量直播聚合接口.json"];
+
 export async function writeOutputs({ result, opts, rawUrl, when }) {
   const dir = opts.outDir;
   await mkdir(dir, { recursive: true });
+  for (const legacy of LEGACY_FILES) await rm(join(dir, legacy), { force: true });
 
   const payload = {
     [FILES.all]: result.files.all,

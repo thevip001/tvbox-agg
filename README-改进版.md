@@ -94,7 +94,7 @@ tvbox-agg-改进版/
 │   ├── tvbox.mjs              ← 配置解析 + 多仓递归 + 探活（含抗误杀）
 │   ├── core.mjs               ← HTTP/解码/归一/去重键/测速分档
 │   ├── pipeline.mjs           ← 筛选整理 + 分类 + 输出
-│   └── selftest.mjs           ← 47 项离线自检（含快站筛选 / 频道抽查 / 种子 / 屏蔽域名端到端）
+│   └── selftest.mjs           ← 48 项离线自检（含快站筛选 / 频道抽查 / 种子 / 屏蔽域名端到端）
 ├── apilinks.txt               ← 人工种子（沿用你原来的格式）
 ├── data/
 │   ├── pool.json              ← 发现池（自动维护，含来源与失败历史）
@@ -243,7 +243,7 @@ config/liveupstreams.txt（直播种子）→ 不进池子，直接并入直播�
 
 ```bash
 # 需要 Node 18+，不需要 npm install
-node scripts/selftest.mjs           # 先跑离线自检（47 项，全程不出网）
+node scripts/selftest.mjs           # 先跑离线自检（48 项，全程不出网）
 node scripts/main.mjs --dry-run     # 只看会抓哪些源，不写文件
 node scripts/main.mjs               # 真跑一轮
 ```

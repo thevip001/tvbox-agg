@@ -5,8 +5,12 @@
  * 全程不出网。
  */
 import assert from "node:assert";
+import { existsSync, readFileSync } from "node:fs";
+import { mkdtemp, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
-import { mergeLiveSeeds, parseLiveSeeds, pickSample, readOptions, runPipeline, selectFastOnly } from "./pipeline.mjs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { FILES, mergeLiveSeeds, parseLiveSeeds, pickSample, readOptions, runPipeline, selectFastOnly, writeOutputs } from "./pipeline.mjs";
 import { mergePool } from "./collect.mjs";
 import {
   normUrl,
@@ -286,23 +290,25 @@ await (async () => {
   let result;
   let seeds;
   let rejected;
+  let e2eOpts;
   try {
     const parsed = parseLiveSeeds(
       ["# 种子清单", `种子A, ${base}/seed.txt, txt`, `死种子, ${base}/dead.txt, txt`, `误配的多仓, ${base}/depot.json, json`].join("\n"),
     );
     seeds = parsed.seeds;
     rejected = parsed.rejected;
+    e2eOpts = {
+      ...readOptions({}),
+      budgetFetch: 60,
+      budgetProbe: 30,
+      budgetLive: 60,
+      budgetLiveProbe: 60,
+      blockedHosts: parseBlockedHosts("# 测试用\n7moor-fs1.com\n"),
+    };
     result = await runPipeline({
       candidates: [{ name: "本地假接口", url: `${base}/box.json` }],
       liveSeedSources: seeds,
-      opts: {
-        ...readOptions({}),
-        budgetFetch: 60,
-        budgetProbe: 30,
-        budgetLive: 60,
-        budgetLiveProbe: 60,
-        blockedHosts: parseBlockedHosts("# 测试用\n7moor-fs1.com\n"),
-      },
+      opts: e2eOpts,
       onProgress: () => {},
     });
   } finally {
@@ -348,6 +354,34 @@ await (async () => {
     assert.strictEqual(result.counts.channels, undefined, "不该再有频道合并计数");
     assert.ok(!names.some((n) => /合并去重/.test(n)), "不该有置顶合并条目");
     assert.strictEqual(lives.length, 2, `种子A + 接口独有源，实际：${names.join("、")}`);
+  });
+
+  /* 落盘：遗留的 live.m3u 必须被清掉，且不再出现在文件清单里。
+     临时把 cwd 换到输出目录，免得 writeOutputs 去回写仓库根 README。 */
+  const tmp = await mkdtemp(join(tmpdir(), "tvbox-out-"));
+  await writeFile(join(tmp, "live.m3u"), "#EXTM3U\n遗留的合并列表\n", "utf8");
+  await writeFile(join(tmp, "海量直播聚合接口.json"), "{}", "utf8");
+  const cwd0 = process.cwd();
+  let sizes = [];
+  try {
+    process.chdir(tmp);
+    sizes = await writeOutputs({
+      result,
+      opts: { ...e2eOpts, outDir: "." },
+      rawUrl: (f) => `https://example.test/${f}`,
+      when: "2026-11-22 12:00",
+    });
+  } finally {
+    process.chdir(cwd0);
+  }
+  await ta("落盘：清掉废弃的 live.m3u / 旧聚合文件，写出新口径全套产物", () => {
+    assert.ok(!existsSync(join(tmp, "live.m3u")), "遗留 live.m3u 应被删除");
+    assert.ok(!existsSync(join(tmp, "海量直播聚合接口.json")), "遗留旧文件应被删除");
+    for (const f of Object.values(FILES)) assert.ok(existsSync(join(tmp, f)), `缺少产物 ${f}`);
+    assert.ok(!sizes.some(([f]) => f === "live.m3u"), "文件清单里不该再有 live.m3u");
+    const liveOnDisk = JSON.parse(readFileSync(join(tmp, FILES.live), "utf8"));
+    assert.strictEqual(liveOnDisk.lives.length, 2);
+    assert.ok(!liveOnDisk.lives.some((l) => /合并/.test(String(l.name))), "落盘的 live.json 不该有合并条目");
   });
 })();
 

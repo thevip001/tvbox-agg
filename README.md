@@ -85,7 +85,7 @@
 - `data/pool.json`：候选池（自动累积，记录每条地址的成功/失败次数）
 - `聚合接口/`：每日生成的聚合文件
 - `scripts/main.mjs`：入口（收集 → 抓取 → 探活测速 → 去重 → 分类输出，无第三方依赖，需 Node.js 18+）
-- `scripts/selftest.mjs`：离线自检 47 项（`node scripts/selftest.mjs`，全程不出网；含快站筛选、频道抽查、种子与屏蔽域名的端到端用例）
+- `scripts/selftest.mjs`：离线自检 48 项（`node scripts/selftest.mjs`，全程不出网；含快站筛选、频道抽查、种子与屏蔽域名的端到端用例）
 - `.github/workflows/aggregate-daily.yml`：每日定时任务
 
 ## 产物保留（30 天）

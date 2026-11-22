@@ -34,6 +34,17 @@
 
 - 同一个站点（type + api + ext 相同）只保留一个。比较时忽略协议、www、末尾斜杠和 GitHub 代理前缀的差异。
 - 采集站（type 0/1）会请求 `?ac=list` 检测，失效的剔除。
+- **深度体检：探活通过 ≠ 点开能用**（2026-11-22 新增，思路取自 [MisaTV](https://github.com/yagami-hue/MisaTV) 的「源体检」）。
+  以前探活只验「接口文件还在」，于是产物里混着一堆点开就报错的站。现在对探活通过的站点按类型实跑一次：
+  | 类型 | 怎么验 | 判为不可用的条件 |
+  | --- | --- | --- |
+  | 采集站（type 0/1） | 真的解析结构化数据：有分类就用首个分类再刷一页 | 只有空列表（`{"code":0,"list":[]}` 的空壳站）/ 有分类但取不到任何条目 |
+  | Jar 爬虫站（`csp_*`） | 解包 jar 的 `classes.dex`，看有没有 `com.github.catvod.spider.类名` | **类不在包里** —— TVBox 一加载就 ClassNotFoundException，站点列表里看得见、点开全报错 |
+  | 规则型爬虫 / JS 站 | 把 `ext` 规则拉下来，抽出规则里的目标站逐个探活 | 规则无效 / 目标站**全部**不可达（域名已不存在、停站页） |
+  - **jar 缺类时会先尝试换 jar**：同一份配置里别的 jar 带着这个类，就只换 jar 不删站（实测 GitHub 上 16 个 jar 里就有 18 处「站点指向的类不在包里」，覆盖 122 个站）。
+  - **判不准的一律保留**：403 / 429 / 5xx / 超时 / 跑测机网络受限，只降档不删除，下轮重测。
+  - 开关：`DEEP_CHECK=0` 整体关；`DEEP_CHECK_CATEGORIES=cj,js,spider` 选类型；`DEEP_JAR_CLASS=0` 关类名校验；预算 `BUDGET_DEEP_CHECK`（默认 600 秒）。
+  - 体检结果写进 `聚合接口/剔除报告.json` 的「深度体检」区，每条都带 `health` 状态（`empty` / `no-class` / `no-target` / `needs-ext` / `no-rule`）和具体原因。
 - **测速只看首字节（TTFB），不看吞吐**：接口本身就是几十 KB 的 JSON/脚本，KB/s 低只代表文件小；
   实测按 50KB/s 判会删掉 TTFB 只有 130~360ms 的健康站。
   - 普通站：TTFB > 1500ms 判慢（strict 下剔除），≤300ms 为精选，≤800ms 为正常
@@ -88,7 +99,8 @@
 - `data/pool.json`：候选池（自动累积，记录每条地址的成功/失败次数）
 - `聚合接口/`：每日生成的聚合文件
 - `scripts/main.mjs`：入口（收集 → 抓取 → 探活测速 → 去重 → 分类输出，无第三方依赖，需 Node.js 18+）
-- `scripts/selftest.mjs`：离线自检 51 项（`node scripts/selftest.mjs`，全程不出网；含快站筛选、频道抽查、测不准分类、种子与屏蔽域名的端到端用例）
+- `scripts/deepcheck.mjs`：深度体检（按类型实跑：采集站内容 / jar 类名 / 规则目标站；零依赖自己读 ZIP+dex）
+- `scripts/selftest.mjs`：离线自检 63 项（`node scripts/selftest.mjs`，全程不出网；含快站筛选、频道抽查、测不准分类、种子与屏蔽域名、深度体检的端到端用例）
 - `.github/workflows/aggregate-daily.yml`：每日定时任务
 
 ## 产物保留（30 天）

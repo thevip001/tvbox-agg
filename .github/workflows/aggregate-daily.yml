@@ -78,6 +78,18 @@ jobs:
           CRAWLER_SLOW_TTFB_MS: "3000"  # 内置爬虫站测的是网站首页，放宽到 3 秒
           KEEP_UNPROBED: "1"          # 预算用尽没测到的站先保留，下轮补测
           MAX_FAILS: "3"              # 连续失败 3 轮才永久剔除
+          # ---- 深度体检：探活通过 ≠ 点开能用（学 MisaTV 的源体检）----
+          #  采集站：解析结构化数据，有分类必须能刷出条目（旧版会放过 {"code":0,"list":[]} 空壳）
+          #  Jar 站：解包 jar 看 dex 里有没有 csp_XXX 对应的类（否则 TVBox 一加载就 ClassNotFoundException）
+          #  规则站：把 ext 规则拉下来，规则里的目标站要有一个活着才算可用
+          # 判不准（403/429/超时/跑测机网络受限）一律保留，下轮重测。
+          DEEP_CHECK: "1"
+          DEEP_CHECK_CATEGORIES: "cj,js,spider"
+          DEEP_JAR_CLASS: "1"         # 校验「jar 里有没有这个爬虫类」
+          DEEP_CHECK_WORKERS: "16"
+          BUDGET_DEEP_CHECK: "600"     # 深度体检预算（秒）；到点收工，没测到的按原档位保留
+          DEEP_TARGET_TIMEOUT_MS: "8000"
+          DEEP_MAX_TARGETS: "3"
           # ---- 点播：只收录快站 ----
           VOD_ONLY_FAST: "1"          # 输出只留 TTFB≤FAST_TTFB_MS 的站；其余进剔除报告，池子保留下轮重测
           # ---- 直播：只剔不合，不做频道合并 ----
@@ -98,6 +110,7 @@ jobs:
           # 预算用尽的站不会被删（标 unsure 下轮补测），但会排到后面；
           # 探活是最慢的一步（每个站要测 2 轮），给足 26 分钟。
           BUDGET_FETCH: "900"
+          # 探活 1560 + 深度体检 600 = 36 分钟，仍在 60 分钟作业上限内（抓取/直播另有预算）
           BUDGET_PROBE: "1560"
           BUDGET_LIVE: "600"
           FETCH_WORKERS: "8"

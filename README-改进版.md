@@ -274,6 +274,11 @@ git push
 | `KEEP_UNPROBED` | 1 | 预算用尽没测到的站标 `unsure` 保留，下轮补测（0=当死站丢弃） |
 | `MAX_FAILS` | 3 | 连续失败几轮才永久剔除 |
 | `VOD_ONLY_FAST` | 1 | 点播输出只收录快站（TTFB≤`FAST_TTFB_MS`） |
+| `DEEP_CHECK` | 1 | 深度体检开关：探活通过后再按类型实跑一次（采集站内容 / jar 类名 / 规则目标站） |
+| `DEEP_CHECK_CATEGORIES` | `cj,js,spider` | 深度体检覆盖哪几类（逗号分隔） |
+| `DEEP_JAR_CLASS` | 1 | 校验「jar 里有没有 csp_XXX 这个类」；发现的缺类会先尝试换 jar，换不到才剔 |
+| `DEEP_CHECK_STRICT` | 跟随 STRICTNESS | 0 = 只剔硬证据（缺 ext / 类不存在 / 空壳 / 规则无效），目标站全挂与报错保留 |
+| `DEEP_CHECK_WORKERS` / `BUDGET_DEEP_CHECK` / `DEEP_TARGET_TIMEOUT_MS` / `DEEP_MAX_TARGETS` | 16 / 600 / 8000 / 3 | 并发 / 阶段预算（秒）/ 目标站探活超时 / 每站最多探几个目标站 |
 | `LIVE_PROBE_CHANNELS` | 3 | 每个直播源随机抽查几个频道，全失败且均确定死才剔除（测不准不算失败） |
 | `LIVE_PROBE_TIMEOUT_MS` / `LIVE_PROBE_WORKERS` / `BUDGET_LIVE_PROBE` | 6000/12/300 | 抽查单频道超时 / 并发 / 阶段预算（秒） |
 | `DROP_LOCAL_REF` | 1 | 去掉 127.0.0.1 引用 |

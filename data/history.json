@@ -262,5 +262,38 @@
   "fetched": 135,
   "candidates": 293,
   "elapsed": 880
+ },
+ {
+  "when": "2026-11-22 12:11",
+  "counts": {
+   "all": 2779,
+   "cj": 56,
+   "py": 398,
+   "js": 380,
+   "spider": 1944,
+   "other": 1,
+   "liveSources": 77,
+   "channels": 12100,
+   "rawChannels": 26818
+  },
+  "grades": {
+   "fast": 1840,
+   "ok": 670,
+   "uncertain": 305,
+   "unsure": 0,
+   "slow": 69,
+   "dead": 958
+  },
+  "uncertain": null,
+  "dropped": {
+   "dead": 958,
+   "slow": 69,
+   "local": 220,
+   "dup": 9278,
+   "nonTv": 431793
+  },
+  "fetched": 122,
+  "candidates": 311,
+  "elapsed": 831
  }
 ]

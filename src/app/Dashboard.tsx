@@ -21,6 +21,9 @@ type Live = { id: number; name: string; url: string; ua: string | null; sources:
 type Stats = Record<string, number>;
 type Data = { sources: Source[]; sites: Site[]; lives: Live[]; stats: Stats | null; running: boolean; job: { id: number; status: string; startedAt: string; finishedAt: string | null; trigger: string } | null };
 
+/** 每个直播源随机抽查几个频道（与后端 LIVE_PROBE_CHANNELS 默认值一致，仅用于文案） */
+const LIVE_PROBE_N = 3;
+
 const TABS = [
   { id: "agg", label: "🔗 聚合接口" },
   { id: "vod", label: "📺 点播接口" },
@@ -262,7 +265,7 @@ export default function Dashboard() {
             <StatCard title="点播接口" dedup={st?.sourcesWithData} extra={st ? `本轮成功 ${st.sourcesOk} / ${st.sourcesTotal}` : undefined} />
             <StatCard title="点播站点" raw={st?.rawSites} dedup={st?.dedupSites} />
             <StatCard title="直播源" raw={st?.rawLives} dedup={st ? st.dedupLives - st.liveContentDup : undefined} extra={st ? `可用 ${st.liveAlive}，内容重复 ${st.liveContentDup}` : undefined} />
-            <StatCard title="直播频道" raw={st?.rawChannels} dedup={st?.dedupChannels} />
+            <StatCard title="抽查剔除" dedup={st?.liveProbeDropped} extra={st ? `每源随机抽 ${LIVE_PROBE_N} 个频道，全失败即剔除` : undefined} />
           </div>
 
           <div className="rounded-2xl border border-sky-500/30 bg-gradient-to-br from-sky-950/60 to-slate-900 p-5">
@@ -287,16 +290,14 @@ export default function Dashboard() {
           <div className="rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-950/50 to-slate-900 p-5">
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-lg font-bold text-emerald-200">📡 海量直播聚合接口</h2>
-              <span className="text-xs text-slate-400">{st ? `${st.dedupLives - st.liveContentDup} 个去重直播源 · ${st.dedupChannels} 个去重频道` : ""}</span>
+              <span className="text-xs text-slate-400">{st ? `${st.dedupLives - st.liveContentDup - (st.liveProbeDropped ?? 0)} 个可用直播源` : ""}</span>
             </div>
             <div className="space-y-2">
               <UrlRow label="TVBox 配置" url={`${origin}/live.json`} />
-              <UrlRow label="合并 M3U" url={`${origin}/live.m3u`} />
-              <UrlRow label="合并 TXT" url={`${origin}/live.txt`} />
               <UrlRow label="含失效源" url={`${origin}/api/live?all=1`} />
             </div>
             <p className="mt-3 text-xs text-slate-400">
-              三层去重：① 直播源 URL 规范化去重 ② 下载内容后按频道地址集合哈希，剔除内容完全相同的重复源 ③ 所有频道按播放地址合并去重，生成单一 M3U / TXT。
+              只剔不合：① 直播源 URL 规范化去重 ② 按频道地址集合哈希剔除内容完全相同的重复源 ③ 每源随机抽 {LIVE_PROBE_N} 个频道实测，全部失败就剔除整个源。接口里只有源本身，不再产出合并的 M3U / TXT。
             </p>
           </div>
         </section>

@@ -15,6 +15,12 @@
 
 # ---------- 结构化清单（命中率最高，优先维护） ----------
 影sir配置源, https://raw.githubusercontent.com/Lightconer/tvbox-ysc-config/main/config/sources.json, json
+Supprise0901·仓库, https://raw.githubusercontent.com/Supprise0901/TVBox_live/main/warehouse.txt, json
+# ↑ 2026-11-22 从 config/liveupstreams.txt 挪过来：它是 {"urls":[{url,name}]} 形式的
+#   多仓索引（实测 66 条接口地址：天天&巧计 / api / baxian / HG / 南风 / 王二小 / 小马 /
+#   嗷呜 / 饭太硬 / 肥猫 / 小不点 / 小米 / 潇洒 …），不是播放列表。
+#   放在直播清单里只会「解析不出频道」被剔；放这里正好被 extractFromJson 递归抽出全部地址。
+#   同仓库的 live.txt（真播放列表）仍留在 config/liveupstreams.txt。
 轩源接口清单, https://raw.githubusercontent.com/xuyuan714/tvboxapi01/main/tvbox-api-list.txt, links
 TVAPP精选, https://raw.githubusercontent.com/youhunwl/TVAPP/main/README.md, readme
 安卓4适配仓, https://raw.githubusercontent.com/dxyc0922/Tvbox4.x_api/main/README.md, readme

@@ -70,7 +70,8 @@ export async function buildVodConfig(opts: { cat?: VodCategory; alive?: boolean;
     flags: extras.flags ?? [],
   };
   if (opts.withLive) {
-    cfg.lives = [{ name: "海量直播聚合(去重)", type: 0, url: `${opts.origin}/api/live/m3u` }];
+    // 直播不再产出合并播放列表：这里挂的是「只装源」的直播聚合配置
+    cfg.lives = [{ name: "海量直播聚合(只含源)", type: 0, url: `${opts.origin}/live.json` }];
   }
   return cfg;
 }
@@ -78,9 +79,8 @@ export async function buildVodConfig(opts: { cat?: VodCategory; alive?: boolean;
 export async function buildLiveConfig(opts: { origin: string; all?: boolean }) {
   const rows = await db.select().from(liveSources).orderBy(asc(liveSources.sortOrder));
   const nameOf = uniqueNamer();
-  const lives: AnyObj[] = [
-    { name: nameOf("海量直播·频道去重合并"), type: 0, url: `${opts.origin}/api/live/m3u` },
-  ];
+  // 只装「过了频道抽查的源」本身：2026-11-22 起不再置顶任何频道合并列表
+  const lives: AnyObj[] = [];
   for (const r of rows) {
     if (!opts.all && (!r.alive || r.duplicateOf)) continue;
     const l: AnyObj = { ...r.live };

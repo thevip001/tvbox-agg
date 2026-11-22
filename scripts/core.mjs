@@ -386,6 +386,42 @@ export function normUrl(u, opts = {}) {
   return host + path;
 }
 
+/* ============================ 屏蔽域名 ============================ */
+
+/**
+ * 解析 config/blocked-hosts.txt：每行一个域名，# 开头为注释。
+ * 匹配规则是「该域名本身 + 它的全部子域」——写 7moor-fs1.com 就能命中
+ * fs-im-kefu.7moor-fs1.com。容忍误写成完整 URL（自动只取域名部分）。
+ */
+export function parseBlockedHosts(text) {
+  const set = new Set();
+  for (const raw of String(text || "").split(/\r?\n/)) {
+    const line = raw.trim().toLowerCase();
+    if (!line || line.startsWith("#")) continue;
+    let h = line.replace(/^[a-z][a-z0-9+.-]*:\/\//i, "").split("/")[0].split("?")[0];
+    h = h.replace(/^www\./, "").replace(/:\d+$/, "");
+    if (h) set.add(h);
+  }
+  return set;
+}
+
+/**
+ * URL 是否命中屏蔽域名；命中返回那个域名，没命中返回 ""。
+ * 先过 normUrl：被 GitHub 代理套娃藏起来的屏蔽域名（gh-proxy.org/https://坏域/...）
+ * 剥壳之后同样认得出来。
+ */
+export function isBlockedUrl(url, hosts) {
+  if (!hosts || !hosts.size) return "";
+  const n = normUrl(String(url || ""));
+  const slash = n.indexOf("/");
+  const host = (slash < 0 ? n : n.slice(0, slash)).toLowerCase();
+  if (!host) return "";
+  for (const h of hosts) {
+    if (host === h || host.endsWith("." + h)) return h;
+  }
+  return "";
+}
+
 /** 相对路径补全（备份后到处都能用） */
 const isRelPath = (s) => /^(\.\.?\/|\/[^/])/.test(s);
 export function resolveUrl(value, base) {

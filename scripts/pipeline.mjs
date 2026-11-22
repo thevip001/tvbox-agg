@@ -1,18 +1,18 @@
 /**
  * pipeline.mjs —— 筛选整理层：探活 → 测速 → 去重 → 分类 → 输出
  */
-import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import {
   GRADE_ORDER,
   contentFingerprint,
+  httpGet,
+  isBlockedUrl,
   measureLatency,
   normUrl,
   pool,
   siteCategory,
   siteDedupKey,
-  speedGrade,
-  stableStringify,
 } from "./core.mjs";
 import { fetchTvboxConfig, probeCmsSite, probeJar, probeScript, extractExtTargets, probeHost } from "./tvbox.mjs";
 
@@ -35,10 +35,13 @@ export function readOptions(env = process.env) {
     keepUnprobed: (env.KEEP_UNPROBED || "1") !== "0",
     // 连续失败多少轮才永久剔除
     maxFails: Number(env.MAX_FAILS || 3),
-    // 每个频道保留几个源
-    livePerChannel: Number(env.LIVE_PER_CHANNEL || 3),
-    // 是否过滤非直播内容（MV/音乐/公告等）
-    filterNonTv: (env.FILTER_NON_TV || "1") !== "0",
+    // 直播：每个源随机抽查几个频道，全失败就剔除整个源（只剔不合，不产出合并列表）
+    liveProbeChannels: Number(env.LIVE_PROBE_CHANNELS || 3),
+    liveProbeTimeout: Number(env.LIVE_PROBE_TIMEOUT_MS || 6000),
+    concurrencyLiveProbe: Number(env.LIVE_PROBE_WORKERS || 12),
+    budgetLiveProbe: Number(env.BUDGET_LIVE_PROBE || 300),
+    // 点播：输出只保留「精选(fast)」档，其余进剔除报告（池子不受影响，下轮重测还有机会）
+    vodFastOnly: (env.VOD_ONLY_FAST || "1") !== "0",
     // 是否去掉 127.0.0.1 本地引用
     dropLocalRef: (env.DROP_LOCAL_REF || "1") !== "0",
     // 是否保留「｜来源」后缀（默认不加，改为重名加序号）
@@ -54,8 +57,6 @@ export function readOptions(env = process.env) {
     budgetLive: Number(env.BUDGET_LIVE || 420),
     // 每轮最多抓多少个候选接口
     maxCandidates: Number(env.MAX_CANDIDATES || 600),
-    // 安全阀：不低于上次产物的这个比例才允许覆盖
-    minRatio: Number(env.MIN_RATIO || 0.5),
     outDir: env.OUT_DIR || "聚合接口",
     poolFile: env.POOL_FILE || "data/pool.json",
     historyFile: env.HISTORY_FILE || "data/history.json",
@@ -78,6 +79,23 @@ function uniqueNamer({ keepSuffix = false } = {}) {
 }
 
 const isLocalRef = (s) => /(127\.0\.0\.1|localhost|0\.0\.0\.0)/i.test(JSON.stringify(s));
+
+/**
+ * 站点的哪个功能字段命中屏蔽域名（config/blocked-hosts.txt）。
+ * 只看 jar / api / ext / playUrl / url 这五个「真会发起连接」的字段；
+ * logo 之类装饰字段不算（图挂了只是不显示，不该因此删掉整个站）。
+ * 命中返回 { field, host }，没命中返回 null。
+ */
+function blockedFieldHit(site, hosts) {
+  if (!hosts || !hosts.size) return null;
+  for (const field of ["jar", "api", "ext", "playUrl", "url"]) {
+    const v = site[field];
+    if (typeof v !== "string" || !v) continue;
+    const h = isBlockedUrl(v, hosts);
+    if (h) return { field, host: h };
+  }
+  return null;
+}
 
 /** 解析播放列表（M3U 或 「名称,地址」TXT） */
 export function parsePlaylist(text) {
@@ -121,76 +139,83 @@ export function parsePlaylist(text) {
   return out;
 }
 
-/** 频道名归一：CCTV1 / CCTV-1 / 央视一套 / CCTV1高清 → 同一个频道 */
-const CN_NUM = { 一: 1, 二: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9, 十: 10, 十一: 11, 十二: 12, 十三: 13, 十四: 14, 十五: 15, 十六: 16, 十七: 17 };
-export function canonChannel(name) {
-  let n = String(name || "").trim();
-  // 去掉台标 emoji / 装饰
-  n = n.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu, "");
-  n = n.replace(/[\s\-_·•|｜:：]+/g, "");
-  // 央视各套
-  const cctvCn = /^(?:CCTV|央视|中央)(十[一二三四五六七]|十|[一二三四五六七八九])(?:套|台|频道)?(综合|财经|综艺|中文国际|体育|电影|军事农业|军事|电视剧|纪录|科教|戏曲|社会与法|新闻|少儿)?/i.exec(n);
-  if (cctvCn) {
-    const num = CN_NUM[cctvCn[1]] ?? cctvCn[1];
-    return `CCTV${num}${cctvCn[2] ? "|" + cctvCn[2] : ""}`;
-  }
-  const cctv = /^CCTV0?(\d{1,2})(\+|\-)?(.*)$/i.exec(n);
-  if (cctv) {
-    const suffix = cctv[2] === "+" ? "+" : "";
-    return `CCTV${Number(cctv[1])}${suffix}`;
-  }
-  // 卫视/其它：去掉画质与备用后缀
-  n = n.replace(/(高清|超清|蓝光|标清|原画|4K|8K|UHD|FHD|HD|SD)(备用|线路)?\d*$/i, "");
-  n = n.replace(/(备用|线路)\d+$/i, "");
-  // 只去掉「3 位以上」的尾部编号（比如 CCTV 系列的台标号），
-  // 不要动 CCTV5+ 里的 5、CCTV-1 里的 1 这种有效信息
-  n = n.replace(/(?<=[\u4e00-\u9fa5A-Z])\d{3,}$/i, "");
-  return n.toUpperCase();
-}
+/* 频道归一 canonChannel() 与分组过滤的四个正则（NON_TV_RE / TV_GROUP_RE / VOD_GROUP_RE /
+ * MAX_GROUP_CHANNELS）已于 2026-11-22 随「直播只剔不合、不再合并」一起删除：
+ * 它们只服务于频道级合并输出，现在不产出合并列表，留着就是死代码。 */
 
-const NON_TV_RE = new RegExp(
-  [
-    "MV", "音乐", "短视频", "抖音", "快手", "公告", "官网", "广告", "福利", "测试", "回看", "一起看",
-    "原创IP", "轮播", "电台", "收音", "斗鱼", "虎牙", "B站", "哔哩", "点播", "APP下载", "加群", "客服",
-    // 实战新增：点歌台/歌单/歌手专辑这类「不是直播频道」的内容
-    "点歌", "MTV", "劲爆", "歌单", "专辑", "歌手", "演唱会", "舞曲", "DJ", "慢摇", "情歌",
-    "小品", "相声", "评书", "有声", "小说", "听书", "戏曲选段",
-  ].join("|"),
-  "i",
-);
-
-/** 单个分组里频道数超过这个值，基本不是电视直播（是点歌台/影音库），整组丢弃 */
-const MAX_GROUP_CHANNELS = Number(process.env.MAX_GROUP_CHANNELS || 3000);
+/* ============================ 直播源清单种子 ============================ */
 
 /**
- * 分组模式：
- *   tv  （默认）只保留「像电视频道」的分组 —— CCTV/卫视/地方/港澳台/体育/新闻/少儿/频道…
- *   all         保留全部分组，只丢掉明显垃圾分组
- * 实测：很多所谓"直播源"其实是影视轮播库（分组名是 动作片/战争片/李玟/原创/手工绘画），
- * 它们在 TVBox 的直播板块里没有意义，而且占了 80% 的体积。
+ * 解析 config/liveupstreams.txt：每行「名称, URL, 类型」。
+ *   类型 txt / m3u = 播放列表（直接产出频道）
+ *   类型 json      = 多仓/接口索引（不是播放列表，会被明确拒绝并提示换文件）
+ * 这是仓库里的静态文件，跟「去上游捞新接口」是两件事，所以 --no-collect 也该照常生效。
  */
-const LIVE_GROUP_MODE = (process.env.LIVE_GROUP_MODE || "tv").toLowerCase();
+export function parseLiveSeeds(text) {
+  const out = [];
+  const bad = [];
+  for (const raw of String(text || "").split(/\r?\n/)) {
+    const line = raw.trim();
+    if (!line || line.startsWith("#")) continue;
+    const parts = line.split(/[,，]/).map((x) => x.trim()).filter(Boolean);
+    const url = parts.find((x) => /^https?:\/\//i.test(x));
+    if (!url) continue;
+    const declared = (parts.find((x) => /^(txt|m3u|json|depot)$/i.test(x)) || "txt").toLowerCase();
+    let name = parts[0] === url ? "" : parts[0];
+    if (!name) {
+      try {
+        name = new URL(url).hostname;
+      } catch {
+        name = "直播源";
+      }
+    }
+    if (declared === "json" || declared === "depot" || /\.json(\?|$)/i.test(url)) {
+      // 这类文件里是「一堆接口地址」，不是频道列表；解析不出频道只会白占一次探活
+      bad.push({ name, url });
+      continue;
+    }
+    out.push({ name, url, type: declared === "m3u" ? "m3u" : "txt", origin: "config/liveupstreams.txt" });
+  }
+  return { seeds: out, rejected: bad };
+}
 
-/** 像电视频道的分组名 */
-const TV_GROUP_RE = new RegExp(
-  [
-    "CCTV", "央视", "中央", "卫视", "卫星", "地方", "国内", "国际", "港澳", "香港", "澳门", "台湾",
-    "体育", "新闻", "少儿", "卡通", "纪录", "剧场", "频道", "综合", "影视", "电影", "电视剧",
-    "4K", "8K", "超清", "高清", "HD", "IPTV", "数字", "咪咕", "移动", "联通", "电信",
-    "省", "市", "县", "区", "广播", "戏曲", "财经", "生活", "法制", "军事", "农业", "教育",
-  ].join("|"),
-  "i",
-);
-
-/** 明确是影视点播/歌库的分组名（这些一定不是直播频道） */
-const VOD_GROUP_RE = new RegExp(
-  [
-    "动作片", "喜剧片", "爱情片", "科幻片", "恐怖片", "战争片", "剧情片", "纪录片", "动画片",
-    "悬疑片", "冒险片", "犯罪片", "奇幻片", "伦理片", "恐怖", "综艺", "动漫", "短剧", "电视剧",
-    "电影", "轮播", "点播", "原创", "手工", "绘画", "歌", "舞", "MV", "MTV",
-  ].join("|"),
-  "i",
-);
+/**
+ * 把直播源清单种子并进 liveMap。
+ *
+ * 为什么要单独一层：这些清单是别人已经做过测速/筛选的公开直播源，质量比从点播接口
+ * lives 里顺手捞出来的杂源高，所以给它们两个特权（在 runPipeline 里兑现）：
+ *   1. 排在 liveList 最前 —— pool 按数组顺序取任务，预算不够时先保证种子被测到；
+ *      内容哈希去重又是「先到先得」，所以种子优先当正本，副本被剔。
+ *   2. 不受本轮直播预算限制 —— 绝不会因为「预算用尽」被判死。
+ * 同一个地址如果点播接口里也有，就地升级成种子（不重复计一条）。
+ */
+export function mergeLiveSeeds(liveMap, seeds = [], stats = null) {
+  let added = 0;
+  let promoted = 0;
+  for (const s of seeds || []) {
+    const url = String(s?.url || "").trim();
+    if (!/^https?:\/\//i.test(url)) continue;
+    const k = normUrl(url);
+    const exist = liveMap.get(k);
+    if (exist) {
+      exist.seed = true;
+      promoted++;
+      continue;
+    }
+    const live = { name: String(s.name || "直播源"), type: 0, url };
+    if (typeof s.ua === "string" && s.ua) live.ua = s.ua;
+    if (typeof s.epg === "string" && s.epg) live.epg = s.epg;
+    liveMap.set(k, { live, origin: s.origin || "config/liveupstreams.txt", seed: true });
+    added++;
+  }
+  if (stats) {
+    stats.rawLives = (stats.rawLives || 0) + added;
+    stats.liveSeeds = added + promoted;
+    stats.liveSeedsNew = added;
+    stats.liveSeedsPromoted = promoted;
+  }
+  return { added, promoted };
+}
 
 /* ============================ 主流程 ============================ */
 
@@ -205,13 +230,18 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
     rawParses: 0,
     afterDedupSites: 0,
     afterDedupLives: 0,
-    dropped: { dead: 0, slow: 0, local: 0, dup: 0, nonTv: 0 },
+    dropped: { dead: 0, slow: 0, local: 0, dup: 0, blocked: 0, notFast: 0, liveProbe: 0 },
     fetchFail: [],
     subSources: [],
     removed: [], // 剔除报告
     skippedByBudget: 0,
     probeSkipped: 0,
     liveSkipped: 0,
+    // 直播源清单种子（config/liveupstreams.txt）
+    liveSeeds: 0,
+    liveSeedsNew: 0,
+    liveSeedsPromoted: 0,
+    liveSeedsKept: 0,
   };
   let phaseStart = Date.now();
 
@@ -269,6 +299,19 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
         stats.removed.push({ kind: "site", name: site.name, api: site.api, reason: "引用本机地址(127.0.0.1)" });
         continue;
       }
+      // 屏蔽域名一票否决：典型场景是上游把 spider jar 挂在报毒/客服类域名下，
+      // TVBox 的 java 进程一加载就去连，杀毒软件会一直拦。整站剔除，不给它换壳的机会。
+      const bh = blockedFieldHit(site, opts.blockedHosts);
+      if (bh) {
+        stats.dropped.blocked++;
+        stats.removed.push({
+          kind: "site",
+          name: site.name,
+          api: site.api,
+          reason: `${bh.field} 命中屏蔽域名 ${bh.host}（config/blocked-hosts.txt）`,
+        });
+        continue;
+      }
       stats.rawSites++;
       const k = siteDedupKey(site);
       const exist = siteMap.get(k);
@@ -282,6 +325,12 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
     for (const live of cfg.lives) {
       const url = String(live.url || "");
       if (!/^https?:\/\//i.test(url)) continue;
+      const bl = isBlockedUrl(url, opts.blockedHosts);
+      if (bl) {
+        stats.dropped.blocked++;
+        stats.removed.push({ kind: "live", name: live.name, api: url, reason: `命中屏蔽域名 ${bl}（config/blocked-hosts.txt）` });
+        continue;
+      }
       stats.rawLives++;
       const k = normUrl(url);
       if (liveMap.has(k)) {
@@ -291,6 +340,12 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
       liveMap.set(k, { live, origin: r.url });
     }
     for (const p of cfg.parses) {
+      const bp = isBlockedUrl(String(p.url || ""), opts.blockedHosts);
+      if (bp) {
+        stats.dropped.blocked++;
+        stats.removed.push({ kind: "parse", name: p.name, api: p.url, reason: `命中屏蔽域名 ${bp}（config/blocked-hosts.txt）` });
+        continue;
+      }
       stats.rawParses++;
       const k = normUrl(String(p.url));
       if (k && !parseMap.has(k)) parseMap.set(k, p);
@@ -299,6 +354,14 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
   }
   stats.afterDedupSites = siteMap.size;
   stats.grades = { fast: 0, ok: 0, uncertain: 0, unsure: 0, slow: 0, dead: 0 };
+
+  /* 直播源清单种子（config/liveupstreams.txt）：独立于点播接口，本身就是频道列表 */
+  const seedMerge = mergeLiveSeeds(liveMap, liveSeedSources, stats);
+  if (seedMerge.added || seedMerge.promoted) {
+    onProgress?.(
+      `  直播种子：新增 ${seedMerge.added} 条，点播接口里已有、升级为种子 ${seedMerge.promoted} 条（优先测、优先当正本）`,
+    );
+  }
   stats.afterDedupLives = liveMap.size;
 
   onProgress?.(`汇总：站点 ${stats.rawSites} → ${siteMap.size}；直播 ${stats.rawLives} → ${liveMap.size}`);
@@ -440,7 +503,7 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
   });
 
   /* ---------- 4. 按策略决定保留谁 ---------- */
-  const kept = [];
+  let kept = [];
   for (const e of entries) {
     const g = e.grade || "dead";
     if (g === "dead") {
@@ -479,6 +542,9 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
     kept.push(e);
   }
 
+  /* ---------- 4b. 点播只留快站 ---------- */
+  kept = selectFastOnly(kept, opts, stats);
+
   // 内容指纹二次去重（同一资源站换域名）
   const byFingerprint = new Map();
   const finalSites = [];
@@ -510,12 +576,15 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
     return (a.probe?.ttfb ?? 9e9) - (b.probe?.ttfb ?? 9e9);
   });
 
-  /* ---------- 5. 直播：探活 + 测速 + 频道归一 ---------- */
-  const liveList = [...liveMap.values()];
+  /* ---------- 5. 直播：探活 + 测速 + 内容去重（不合并频道） ---------- */
+  // 种子源排最前：pool 按数组顺序派活，预算不够时先保证种子被测到；
+  // 后面的内容哈希去重是「先到先得」，种子也就自然成了正本。（sort 稳定，其余顺序不变）
+  const liveList = [...liveMap.values()].sort((a, b) => (b.seed ? 1 : 0) - (a.seed ? 1 : 0));
   const liveInfo = new Map();
   phaseStart = Date.now();
   await pool(liveList, opts.concurrencyLive, async (v) => {
-    if (Date.now() - phaseStart > opts.budgetLive * 1000) {
+    // 种子只有几条，且是人工确认过的清单，永远不受本轮预算限制
+    if (!v.seed && Date.now() - phaseStart > opts.budgetLive * 1000) {
       stats.liveSkipped++;
       liveInfo.set(v.live.url, { alive: false, reason: "本轮预算用尽，未检测", channels: [], hash: null, budgetSkipped: true });
       return;
@@ -533,15 +602,21 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
   const liveKept = [];
   for (const v of liveList) {
     const info = liveInfo.get(v.live.url);
+    const tag = v.seed ? "（直播源清单种子）" : "";
     if (!info?.alive) {
       // 预算用尽的源下一轮还会再测，不能算永久失效
       const reason = info?.budgetSkipped ? "本轮预算用尽，下轮重测" : info?.reason || "不可用";
-      stats.removed.push({ kind: "live", name: v.live.name, api: v.live.url, reason });
+      stats.removed.push({ kind: "live", name: v.live.name, api: v.live.url, reason: reason + tag });
       continue;
     }
     if (info.hash && owner.has(info.hash)) {
       stats.dropped.dup++;
-      stats.removed.push({ kind: "live", name: v.live.name, api: v.live.url, reason: "播放列表与另一源完全相同" });
+      stats.removed.push({
+        kind: "live",
+        name: v.live.name,
+        api: v.live.url,
+        reason: `播放列表与另一源完全相同（正本：${owner.get(info.hash)}）${tag}`,
+      });
       continue;
     }
     if (info.hash) owner.set(info.hash, v.live.url);
@@ -549,64 +624,58 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
   }
   liveKept.sort((a, b) => (a.info.ttfb ?? 9e9) - (b.info.ttfb ?? 9e9));
 
-  // 先统计每个分组的规模，用于整组过滤
-  const groupSize = new Map();
-  for (const v of liveKept) {
-    for (const ch of v.info.channels) groupSize.set(ch.group, (groupSize.get(ch.group) || 0) + 1);
-  }
-  const droppedGroups = new Map(); // group -> 原因
-  if (opts.filterNonTv) {
-    for (const [g, n] of groupSize) {
-      if (n > MAX_GROUP_CHANNELS) {
-        droppedGroups.set(g, "分组过大(影音库)");
-        continue;
-      }
-      if (VOD_GROUP_RE.test(g)) {
-        droppedGroups.set(g, "影视点播分组");
-        continue;
-      }
-      if (NON_TV_RE.test(g)) {
-        droppedGroups.set(g, "非直播内容");
-        continue;
-      }
-      // tv 模式：分组名不像电视频道就不收
-      if (LIVE_GROUP_MODE === "tv" && !TV_GROUP_RE.test(g)) {
-        droppedGroups.set(g, "非电视频道分组");
-      }
+  /* ---------- 5b. 频道抽查：每个源随机抽几个频道实测，全失败就剔除整个源 ----------
+   * 只剔不合、不做合并：不产出任何频道级合并列表，live.json 里只留「源」本身。
+   * 抽查的是频道流地址（m3u8/ts/flv…），看「能不能连通、有没有内容」；
+   * 证书校验不在这层管（管道侧一律宽松），交给客户端自己的策略。 */
+  const sampleSize = Math.max(1, opts.liveProbeChannels);
+  phaseStart = Date.now();
+  const probeInfo = new Map(); // url -> { sample, results, ok } | { skipped: true }
+  await pool(liveKept, opts.concurrencyLiveProbe, async (v) => {
+    if (!v.seed && Date.now() - phaseStart > opts.budgetLiveProbe * 1000) {
+      stats.liveProbeSkipped = (stats.liveProbeSkipped || 0) + 1;
+      probeInfo.set(v.live.url, { skipped: true });
+      return;
     }
-    if (droppedGroups.size) {
-      const lost = [...droppedGroups.keys()].reduce((a, g) => a + groupSize.get(g), 0);
-      stats.droppedGroups = [...droppedGroups].slice(0, 100).map(([g, why]) => ({ group: g, channels: groupSize.get(g), reason: why }));
-      onProgress?.(`  分组过滤(${LIVE_GROUP_MODE} 模式)：剔除 ${droppedGroups.size} 个分组，共 ${lost} 条频道`);
+    const sample = pickSample(v.info.channels || [], sampleSize);
+    if (!sample.length) {
+      // 没频道可抽（理论上探活阶段就该被剔了），不凭 0 个样本判死
+      probeInfo.set(v.live.url, { sample: [], results: [], ok: 0 });
+      return;
     }
-  }
+    const results = await Promise.all(sample.map((ch) => probeChannel(ch, v.live.ua, opts)));
+    probeInfo.set(v.live.url, { sample, results, ok: results.filter((r) => r.ok).length });
+  });
 
-  // 频道归一 + 每台保留 N 个源
-  const channelMap = new Map(); // canon -> [{...ch}]
-  let totalChannels = 0;
+  const liveFinal = [];
   for (const v of liveKept) {
-    for (const ch of v.info.channels) {
-      if (opts.filterNonTv && (droppedGroups.has(ch.group) || NON_TV_RE.test(ch.name) || NON_TV_RE.test(ch.group))) {
-        stats.dropped.nonTv++;
-        continue;
-      }
-      const canon = canonChannel(ch.name);
-      if (!canon) continue;
-      const list = channelMap.get(canon) || [];
-      const key = normUrl(ch.url);
-      if (list.some((x) => normUrl(x.url) === key)) continue;
-      list.push({ ...ch, canon, fromSource: v.live.name, sourceTtfb: v.info.ttfb ?? 9e9 });
-      channelMap.set(canon, list);
-      totalChannels++;
+    const p = probeInfo.get(v.live.url);
+    const tag = v.seed ? "（直播源清单种子）" : "";
+    if (p?.skipped) {
+      // 预算用尽 ≠ 频道全死：保留，下轮再抽
+      liveFinal.push(v);
+      continue;
     }
+    if (p && p.ok === 0 && p.sample.length) {
+      stats.dropped.liveProbe++;
+      const detail = p.sample.map((ch, i) => `${ch.name}→${p.results[i].reason}`).join("；");
+      stats.removed.push({
+        kind: "live",
+        name: v.live.name,
+        api: v.live.url,
+        reason: `抽查 ${p.sample.length} 个频道全部失败（${detail}）${tag}`,
+      });
+      continue;
+    }
+    if (v.seed) stats.liveSeedsKept++;
+    stats.liveProbed = (stats.liveProbed || 0) + 1;
+    liveFinal.push(v);
   }
-  const mergedChannels = [];
-  for (const [canon, list] of channelMap) {
-    list.sort((a, b) => a.sourceTtfb - b.sourceTtfb);
-    for (const ch of list.slice(0, opts.livePerChannel)) mergedChannels.push(ch);
-  }
-  // 稳定排序，减少每日 diff
-  mergedChannels.sort((a, b) => (a.group === b.group ? a.canon.localeCompare(b.canon, "zh") : a.group.localeCompare(b.group, "zh")));
+  liveFinal.sort((a, b) => (a.info.ttfb ?? 9e9) - (b.info.ttfb ?? 9e9));
+  onProgress?.(
+    `  频道抽查：${liveKept.length} 个源各抽 ≤${sampleSize} 频道（实测 ${stats.liveProbed || 0} 源${stats.liveProbeSkipped ? `，预算跳过 ${stats.liveProbeSkipped} 源` : ""}），` +
+      `全死剔除 ${stats.dropped.liveProbe} 个，剩 ${liveFinal.length} 个源`,
+  );
 
   /* ---------- 6. 组装输出 ---------- */
   const parseNamer = uniqueNamer({ keepSuffix: opts.keepSourceSuffix });
@@ -715,15 +784,13 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
     };
   };
 
+  /* 直播接口 = 「通过抽查的源」本身，不再置顶任何合并列表 */
   const liveConfig = {
-    lives: [
-      { name: "海量直播·频道合并去重", type: 0, url: "__M3U_PLACEHOLDER__" },
-      ...liveKept.map((v) => {
-        const l = { ...v.live };
-        delete l.name;
-        return { ...l, name: v.live.name };
-      }),
-    ],
+    lives: liveFinal.map((v) => {
+      const l = { ...v.live };
+      delete l.name;
+      return { ...l, name: v.live.name };
+    }),
   };
 
   return {
@@ -743,11 +810,8 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
       js: jsEntries.length,
       spider: spiderEntries.length,
       other: otherEntries.length,
-      liveSources: liveKept.length,
-      channels: mergedChannels.length,
-      rawChannels: totalChannels,
+      liveSources: liveFinal.length,
     },
-    m3u: buildM3u(mergedChannels, liveKept),
     fetchResults,
     elapsed: Math.round((Date.now() - t0) / 1000),
   };
@@ -755,12 +819,27 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
 
 /* ============================ 直播辅助 ============================ */
 
+/**
+ * 「解析不出频道」太笼统，排查时根本看不出是配错了还是源挂了。
+ * 把最常见的两种误配说清楚：多仓索引 JSON、HTML 页面。
+ */
+function noChannelReason(text) {
+  const t = String(text || "").trim();
+  if (!t) return "空内容";
+  if (/^[{[]/.test(t) && /"(urls|sites|lives|storeHouse|API_LIST)"\s*:/.test(t)) {
+    return "内容是多仓/接口索引 JSON，不是播放列表（这类清单应放进 config/upstreams.txt）";
+  }
+  if (/^<!doctype html|^<html/i.test(t)) return "返回的是 HTML 页面，不是播放列表";
+  return "解析不出频道";
+}
+
 async function fetchLive(url, ua, opts) {
   const { httpGet } = await import("./core.mjs");
   let cur = url;
   const t0 = Date.now();
   let channels = [];
   let size = 0;
+  let lastText = "";
   for (let depth = 0; depth < 5; depth++) {
     const r = await httpGet(cur, { ua: typeof ua === "string" && ua ? ua : undefined, timeoutMs: 20000, maxBytes: 8 * 1024 * 1024 });
     if (!r.ok) {
@@ -768,7 +847,8 @@ async function fetchLive(url, ua, opts) {
       break;
     }
     size = r.body.length;
-    channels = parsePlaylist(r.body.toString("utf8"));
+    lastText = r.body.toString("utf8");
+    channels = parsePlaylist(lastText);
     if (channels.length) {
       const uniq = [...new Set(channels.map((c) => normUrl(c.url)))].sort();
       return {
@@ -780,27 +860,64 @@ async function fetchLive(url, ua, opts) {
         hash: contentFingerprint(uniq),
       };
     }
-    const t = r.body.toString("utf8").trim();
+    const t = lastText.trim();
     if (/^https?:\/\/\S+$/.test(t) && t !== cur) {
       cur = t;
       continue;
     }
     break;
   }
-  return { alive: false, reason: "解析不出频道", channels: [] };
+  return { alive: false, reason: noChannelReason(lastText), channels: [] };
 }
 
-function buildM3u(channels, sources) {
-  const epg = sources.map((s) => s.live.epg).find((e) => typeof e === "string" && /^https?:\/\//.test(e) && !e.includes("{"));
-  const esc = (s) => String(s || "").replace(/["\r\n]/g, " ").trim();
-  const lines = [`#EXTM3U${epg ? ` x-tvg-url="${esc(epg)}"` : ""}`];
-  for (const ch of channels) {
-    lines.push(
-      `#EXTINF:-1 tvg-name="${esc(ch.name)}"${ch.logo ? ` tvg-logo="${esc(ch.logo)}"` : ""} group-title="${esc(ch.group)}",${esc(ch.name)}`,
-    );
-    lines.push(ch.url);
+/**
+ * 点播只留快站（VOD_ONLY_FAST，默认开）：
+ * 其余档位（正常/偏慢/测不准/未测到）本轮不进产物，但**不进死名单** ——
+ * 池子照旧保留它们，下轮探活测成 fast 还会回来，所以这不是「删除」而是「本轮不收录」。
+ */
+function selectFastOnly(kept, opts, stats) {
+  if (!opts.vodFastOnly) return kept;
+  const fast = [];
+  for (const e of kept) {
+    if (e.grade === "fast") {
+      fast.push(e);
+      continue;
+    }
+    stats.dropped.notFast++;
+    stats.removed.push({
+      kind: "site",
+      name: e.site.name,
+      api: e.site.api,
+      category: e.category,
+      reason: `非快站（档位=${e.grade} TTFB=${e.probe?.ttfb ?? "?"}ms），本轮只收录快站`,
+    });
   }
-  return lines.join("\n") + "\n";
+  return fast;
+}
+
+/** 随机抽 n 条（Fisher–Yates 洗牌后取前 n）；抽查就是要随机，每轮重抽 */
+function pickSample(arr, n) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a.slice(0, Math.min(n, a.length));
+}
+
+/**
+ * 探一个频道流地址：只看「连通 + 有内容」，取前 64KB 就够。
+ * 证书照样宽松（rejectUnauthorized:false 在 core.mjs 里统一管），这层只判断死没死。
+ */
+async function probeChannel(ch, ua, opts) {
+  const r = await httpGet(ch.url, {
+    ua: typeof ua === "string" && ua ? ua : undefined,
+    timeoutMs: opts.liveProbeTimeout,
+    maxBytes: 64 * 1024,
+  });
+  if (!r.ok) return { ok: false, reason: r.error || `HTTP ${r.status}` };
+  if (!r.body.length) return { ok: false, reason: "空内容" };
+  return { ok: true, ttfb: r.ttfb };
 }
 
 /** flags 归并：优 酷 / 优酷 / 优酷视频 → 优酷 */
@@ -834,19 +951,17 @@ const FILES = {
   js: "点播-JS站.json",
   spider: "点播-Jar爬虫站.json",
   live: "live.json",
-  m3u: "live.m3u",
   readme: "README.md",
   removed: "剔除报告.json",
 };
 
+/** 旧口径的遗留产物：直播频道合并列表（live.m3u）已于 2026-11-22 废弃，跑一轮就顺手清掉 */
+const LEGACY_FILES = ["live.m3u", "海量点播聚合接口.json", "海量直播聚合接口.json"];
+
 export async function writeOutputs({ result, opts, rawUrl, when }) {
   const dir = opts.outDir;
   await mkdir(dir, { recursive: true });
-
-  const live = { ...result.files.live };
-  live.lives = live.lives.map((l) =>
-    l.url === "__M3U_PLACEHOLDER__" ? { ...l, url: encodeURI(rawUrl(FILES.m3u)) } : l,
-  );
+  for (const legacy of LEGACY_FILES) await rm(join(dir, legacy), { force: true });
 
   const payload = {
     [FILES.all]: result.files.all,
@@ -854,13 +969,11 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
     [FILES.py]: result.files.py,
     [FILES.js]: result.files.js,
     [FILES.spider]: result.files.spider,
-    [FILES.live]: live,
+    [FILES.live]: result.files.live,
   };
   for (const [name, data] of Object.entries(payload)) {
     await writeFile(join(dir, name), JSON.stringify(data, null, 2) + "\n", "utf8");
   }
-  await writeFile(join(dir, FILES.m3u), result.m3u, "utf8");
-
   // 剔除报告（可追溯：谁、为什么、实测多快）
   const removed = {
     更新时间: when,
@@ -871,6 +984,7 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
 
   // README —— 站点数量放在最前面，一眼可见
   const c = result.counts;
+  const s = result.stats;
   const g = result.stats.grades || {};
   const d = result.stats.dropped || {};
   const modeName = { strict: "严格（只留快站，慢站也删）", balanced: "平衡（删死站，慢站留文末）", loose: "宽松（只删死站）" }[opts.strictness] || opts.strictness;
@@ -890,10 +1004,10 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
     `| 　JS 站 | ${c.js} | [${FILES.js}](${rawUrl(FILES.js)}) |`,
     `| 　Jar 爬虫站 | ${c.spider} | [${FILES.spider}](${rawUrl(FILES.spider)}) |`,
     `| 　其它 | ${c.other} | 包含在合集内 |`,
-    `| **直播源** | **${c.liveSources}** | [${FILES.live}](${rawUrl(FILES.live)}) |`,
-    `| **直播频道** | **${c.channels}** | [${FILES.m3u}](${rawUrl(FILES.m3u)}) |`,
+    `| **直播源** | **${c.liveSources}**${s.liveSeedsKept ? `（含清单种子 ${s.liveSeedsKept}）` : ""} | [${FILES.live}](${rawUrl(FILES.live)}) |`,
     "",
-    `> 以上 ${c.all} 个点播站点全部通过存活检测${opts.strictness === "strict" ? "与测速筛选（慢站已剔除）" : ""}，按实测速度排序，快的在前。`,
+    `> 以上 ${c.all} 个点播站点${opts.vodFastOnly ? `全部是实测 TTFB≤${opts.fastTtfb}ms 的快站（本轮只收录快站）` : "全部通过存活检测"}，按实测速度排序，快的在前。`,
+    `> 直播源均通过「随机抽查 ${opts.liveProbeChannels} 个频道、全失败即剔除」；不再产出频道合并列表，live.json 里只有源本身。`,
     "",
     "## 🔍 本轮过滤明细",
     "",
@@ -906,18 +1020,21 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
     `| 　├ 剔除·失效 | ${d.dead || 0} | 连不上/内容异常 |`,
     `| 　├ 剔除·太慢 | ${d.slow || 0} | 首字节超阈值（已实测） |`,
     `| 　├ 剔除·本机引用 | ${d.local || 0} | 127.0.0.1 等 |`,
-    `| 　└ 剔除·非直播内容 | ${d.nonTv || 0} | 直播侧，MV/点歌台等 |`,
+    `| 　├ 剔除·屏蔽域名 | ${d.blocked || 0} | config/blocked-hosts.txt 一票否决（jar/api/ext/直播/解析） |`,
+    `| 　├ 剔除·非快站 | ${d.notFast || 0} | 点播侧，本轮只收录快站（池子保留，下轮重测） |`,
+    `| 　└ 剔除·直播抽查全死 | ${d.liveProbe || 0} | 每源随机抽 ${opts.liveProbeChannels} 个频道全部失败（实测 ${s.liveProbed || 0} 源${s.liveProbeSkipped ? `，预算跳过 ${s.liveProbeSkipped} 源` : ""}） |`,
+    `| 直播源清单种子 | ${s.liveSeeds || 0} | config/liveupstreams.txt：新增 ${s.liveSeedsNew || 0}、点播接口里已有并升级 ${s.liveSeedsPromoted || 0}、存活保留 ${s.liveSeedsKept || 0} |`,
     `| **最终输出** | **${c.all}** | |`,
     "",
     "### 速度分档（探活结果）",
     "",
     "| 档位 | 数量 | 处理 |",
     "| --- | ---: | --- |",
-    `| 🟢 精选（TTFB≤${opts.fastTtfb}ms） | ${g.fast || 0} | 保留，排最前 |`,
-    `| 🔵 正常（${opts.fastTtfb}<TTFB≤${opts.slowTtfb}ms） | ${g.ok || 0} | 保留 |`,
-    `| 🟡 偏慢（TTFB>${opts.slowTtfb}ms） | ${g.slow || 0} | ${opts.strictness === "strict" ? "**已剔除**" : "保留在文末"} |`,
-    `| 🟠 测不准（限流/403） | ${g.uncertain || 0} | 保留（下轮重测） |`,
-    `| ⚪ 未测到（本轮预算用尽） | ${g.unsure || 0} | 保留（下轮补测） |`,
+    `| 🟢 精选（TTFB≤${opts.fastTtfb}ms） | ${g.fast || 0} | ${opts.vodFastOnly ? "**唯一收录档**，排最前" : "保留，排最前"} |`,
+    `| 🔵 正常（${opts.fastTtfb}<TTFB≤${opts.slowTtfb}ms） | ${g.ok || 0} | ${opts.vodFastOnly ? "不收录（下轮重测）" : "保留"} |`,
+    `| 🟡 偏慢（TTFB>${opts.slowTtfb}ms） | ${g.slow || 0} | ${opts.vodFastOnly ? "不收录" : opts.strictness === "strict" ? "**已剔除**" : "保留在文末"} |`,
+    `| 🟠 测不准（限流/403） | ${g.uncertain || 0} | ${opts.vodFastOnly ? "不收录（下轮重测）" : "保留（下轮重测）"} |`,
+    `| ⚪ 未测到（本轮预算用尽） | ${g.unsure || 0} | ${opts.vodFastOnly ? "不收录（下轮补测）" : "保留（下轮补测）"} |`,
     `| 🔴 失效 | ${g.dead || 0} | 已剔除 |`,
     "",
     `> 判定阈值（只看首字节，故意不看吞吐）：普通站 TTFB>${opts.slowTtfb}ms 判慢，内置爬虫站（csp_*）放宽到 ${opts.crawlerSlowTtfb}ms —— 内置站测的是目标站首页，HTML 更重。`,
@@ -942,7 +1059,7 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
     const rootReadme = await readFile("README.md", "utf8");
     const stats = [
       `<!-- 站点数量:start（由每日聚合自动生成，勿手改） -->`,
-      `> **最新数量**（${when} 更新）：点播合集 **${c.all}**（采集 ${c.cj} · Py ${c.py} · JS ${c.js} · Jar ${c.spider} · 其它 ${c.other}）｜直播源 **${c.liveSources}**｜直播频道 **${c.channels}**`,
+      `> **最新数量**（${when} 更新）：点播合集 **${c.all}**（采集 ${c.cj} · Py ${c.py} · JS ${c.js} · Jar ${c.spider} · 其它 ${c.other}，只含快站）｜直播源 **${c.liveSources}**（抽查存活）`,
       `<!-- 站点数量:end -->`,
     ].join("\n");
     // 表格里的数量单元格：用「文件名 → 该行数量格」的方式定位，
@@ -954,7 +1071,6 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
       ["点播-JS站.json", "js", ""],
       ["点播-Jar爬虫站.json", "spider", ""],
       ["live.json", "liveSources", " 个源"],
-      ["live.m3u", "channels", " 个频道"],
     ];
     let out = rootReadme;
     for (const [file, key, suffix] of numRows) {
@@ -979,7 +1095,7 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
   }
 
   const sizes = [];
-  for (const f of [...Object.keys(payload), FILES.m3u, FILES.readme, FILES.removed]) {
+  for (const f of [...Object.keys(payload), FILES.readme, FILES.removed]) {
     try {
       const st = await stat(join(dir, f));
       sizes.push([f, st.size]);
@@ -990,15 +1106,4 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
   return sizes;
 }
 
-/** 与上次产物比较，防止异常时用空壳覆盖 */
-export async function readPreviousCounts(outDir) {
-  try {
-    const raw = await readFile(join(outDir, FILES.all), "utf8");
-    const d = JSON.parse(raw);
-    return { sites: (d.sites || []).length };
-  } catch {
-    return null;
-  }
-}
-
-export { FILES };
+export { FILES, selectFastOnly, pickSample };

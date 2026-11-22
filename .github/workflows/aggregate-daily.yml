@@ -77,10 +77,13 @@ jobs:
           CRAWLER_SLOW_TTFB_MS: "3000"  # 内置爬虫站测的是网站首页，放宽到 3 秒
           KEEP_UNPROBED: "1"          # 预算用尽没测到的站先保留，下轮补测
           MAX_FAILS: "3"              # 连续失败 3 轮才永久剔除
-          # ---- 直播 ----
-          LIVE_PER_CHANNEL: "3"       # 每个频道保留几个源
-          FILTER_NON_TV: "1"          # 过滤 MV/音乐/点歌台等非直播内容
-          MAX_GROUP_CHANNELS: "3000"  # 单分组超过这个数整体丢弃
+          # ---- 点播：只收录快站 ----
+          VOD_ONLY_FAST: "1"          # 输出只留 TTFB≤FAST_TTFB_MS 的站；其余进剔除报告，池子保留下轮重测
+          # ---- 直播：只剔不合，不做频道合并 ----
+          LIVE_PROBE_CHANNELS: "3"    # 每个直播源随机抽查几个频道，全失败剔除整个源
+          LIVE_PROBE_TIMEOUT_MS: "6000"
+          LIVE_PROBE_WORKERS: "12"
+          BUDGET_LIVE_PROBE: "300"    # 抽查阶段预算（秒）；预算用尽没抽到的源保留，下轮再抽
           # ---- 保留策略：产物/统计只留最近 30 天 ----
           # 产物是每天覆盖重写的（聚合接口/ 永远只有最新一份）；
           # 这里控制的是会累积的东西：历史统计、候选池。

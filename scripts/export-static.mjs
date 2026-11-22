@@ -1,5 +1,5 @@
 /**
- * 把运行中的实例导出成静态 JSON / M3U，方便放到 GitHub Pages 作为镜像备份。
+ * 把运行中的实例导出成静态 JSON，方便放到 GitHub Pages 作为镜像备份。
  * 用法：node scripts/export-static.mjs https://你的域名
  */
 import { mkdir, writeFile } from "node:fs/promises";
@@ -15,8 +15,6 @@ const targets = [
   ["vod-cj.json", "/api/vod?cat=cj&alive=1&pretty=1"],
   ["vod-py.json", "/api/vod?cat=py&pretty=1"],
   ["live.json", "/api/live?pretty=1"],
-  ["live.m3u", "/api/live/m3u"],
-  ["live.txt", "/api/live/txt"],
   ["apilinks.txt", "/api/sources"],
   ["data.json", "/api/data"],
 ];

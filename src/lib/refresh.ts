@@ -29,6 +29,17 @@ function pickSample<T>(arr: T[], n: number): T[] {
 
 /* ---------------- 接口配置文本（apilinks.txt 格式） ---------------- */
 
+/** 直播频道抽查失败是否为「确定死」。与 scripts/pipeline.mjs 的 classifyChannelFailure 同口径：
+ *  无 IPv6/无路由（ENETUNREACH/EHOSTUNREACH…）、AggregateError、非 HTTP 应答（RTSP 等）
+ *  属跑测环境限制＝测不准，不算源死；其余（HTTP 4xx/5xx、超时、空内容、拒连）算确定死。 */
+function isCertainChannelFailure(reason: string): boolean {
+  const s = String(reason || "");
+  if (/EHOSTUNREACH|ENETUNREACH|ENETDOWN|ENONET|EAFNOSUPPORT|EADDRNOTAVAIL/i.test(s)) return false;
+  if (/AggregateError/i.test(s)) return false;
+  if (/Parse Error: Expected HTTP/i.test(s)) return false;
+  return true;
+}
+
 export function parseSourceText(text: string): { name: string; urls: string[] }[] {
   const map = new Map<string, string[]>();
   for (const raw of text.split(/\r?\n/)) {
@@ -298,11 +309,20 @@ async function runRefresh(jobId: number) {
     const results = await Promise.all(
       sample.map(async (ch) => {
         const r = await httpGet(ch.url, { ua, timeoutMs: probeTimeout, maxBytes: 64 * 1024 });
-        if (!r.ok) return `${ch.name}→${r.error || `HTTP ${r.status}`}`;
-        return r.body.length ? null : `${ch.name}→空内容`;
+        if (!r.ok) {
+          const reason = r.error || `HTTP ${r.status}`;
+          return { name: ch.name, reason, certain: isCertainChannelFailure(reason) };
+        }
+        return r.body.length ? null : { name: ch.name, reason: "空内容", certain: true };
       }),
     );
-    if (results.every((x) => x !== null)) probeFail.set(k, `抽查 ${sample.length} 个频道全部失败（${results.join("；")}）`);
+    const fails = results.filter((x): x is { name: string; reason: string; certain: boolean } => x !== null);
+    if (fails.length === sample.length && sample.length) {
+      const detail = fails.map((f) => `${f.name}→${f.reason}`).join("；");
+      // 与 scripts/pipeline.mjs 同口径：测不准不算失败，抽样全部「确定死」才剔源
+      if (fails.every((f) => f.certain)) probeFail.set(k, `抽查 ${sample.length} 个频道全部失败且均确定死（${detail}）`);
+      else await log(`⚠️ 直播源抽查全失败但属测不准（不算死、保留）${String(liveMap.get(k)?.live.name || k)}：${detail}`);
+    }
   });
   for (const [k, reason] of probeFail) {
     const info = liveInfo.get(k);

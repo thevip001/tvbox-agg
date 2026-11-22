@@ -8,19 +8,19 @@
 
 | 文件 | 内容 | **站点数量** | 地址 |
 | --- | --- | ---: | --- |
-| 点播合集.json | 全部点播站点合并去重（采集站、Py、JS、Jar 及其它类型） | <!--NUM:all-->3056 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播合集.json |
-| 点播-采集站.json | 点播 · 采集站（只保留检测可用的） | <!--NUM:cj-->48 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-采集站.json |
-| 点播-Py站.json | 点播 · Py 站 | <!--NUM:py-->397 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Py站.json |
-| 点播-JS站.json | 点播 · JS 站 | <!--NUM:js-->603 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-JS站.json |
-| 点播-Jar爬虫站.json | 点播 · Jar 爬虫站 | <!--NUM:spider-->2007 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Jar爬虫站.json |
-| live.json | 直播聚合接口（TVBox 配置格式） | <!--NUM:liveSources-->81 个源 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/live.json |
+| 点播合集.json | 全部点播站点合并去重（采集站、Py、JS、Jar 及其它类型） | <!--NUM:all-->2103 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播合集.json |
+| 点播-采集站.json | 点播 · 采集站（只保留检测可用的） | <!--NUM:cj-->22 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-采集站.json |
+| 点播-Py站.json | 点播 · Py 站 | <!--NUM:py-->295 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Py站.json |
+| 点播-JS站.json | 点播 · JS 站 | <!--NUM:js-->314 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-JS站.json |
+| 点播-Jar爬虫站.json | 点播 · Jar 爬虫站 | <!--NUM:spider-->1472 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Jar爬虫站.json |
+| live.json | 直播聚合接口（TVBox 配置格式） | <!--NUM:liveSources-->55 个源 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/live.json |
 
 > 上表的数量由每日聚合任务自动回写（见下方的「最新数量」块），和产物永远一致。
 > 四个分类文件相加 = 点播合集（极少数条目会因内容指纹去重略有出入）。
 > `聚合接口/README.md` 里有更详细的分档和过滤明细。
 
 <!-- 站点数量:start（由每日聚合自动生成，勿手改） -->
-> **最新数量**（2026-11-22 08:13 更新）：点播合集 **3056**（采集 48 · Py 397 · JS 603 · Jar 2007 · 其它 1；下一轮起只含快站）｜直播源 **81**（下一轮起按频道抽查过滤、不再产出合并列表）
+> **最新数量**（2026-11-22 13:26 更新）：点播合集 **2103**（采集 22 · Py 295 · JS 314 · Jar 1472 · 其它 0，只含快站）｜直播源 **55**（抽查存活）
 <!-- 站点数量:end -->
 
 ## 更新时间

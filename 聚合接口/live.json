@@ -1,11 +1,6 @@
 {
   "lives": [
     {
-      "name": "海量直播·频道合并去重",
-      "type": 0,
-      "url": "https://raw.githubusercontent.com/thevip001/tvbox-agg/main/%E8%81%9A%E5%90%88%E6%8E%A5%E5%8F%A3/live.m3u"
-    },
-    {
       "type": 0,
       "url": "https://file.icve.com.cn/file_doc/254/346/3FB56B2C49DF92B3252352FBE5CD00F1.m3u",
       "playerType": 2,

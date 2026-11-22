@@ -11,7 +11,7 @@
  * 全部结果写进 data/pool.json（发现池），记录来源、首次发现时间、连续失败次数。
  */
 import { readFile } from "node:fs/promises";
-import { httpGet, log, normUrl, pool } from "./core.mjs";
+import { httpGet, isBlockedUrl, log, normUrl, pool } from "./core.mjs";
 
 const URL_RE = /https?:\/\/[^\s"'`,，\t<>)\]}|｜]+/g;
 const NOT_API =
@@ -172,7 +172,7 @@ export function subsFromConfig(cfg) {
  *   prevPool       上次运行留下的池（data/pool.json）
  *   fromConfigs    本次抓取的配置里冒出来的多仓子地址
  */
-export function mergePool({ upstreams = [], seeds = [], prevPool = {}, fromConfigs = [] }) {
+export function mergePool({ upstreams = [], seeds = [], prevPool = {}, fromConfigs = [], blockedHosts = null }) {
   const now = new Date().toISOString();
   const map = new Map(); // normKey -> entry
 
@@ -198,6 +198,8 @@ export function mergePool({ upstreams = [], seeds = [], prevPool = {}, fromConfi
   const add = (url, source, weight) => {
     const clean = cleanUrl(url);
     if (!/^https?:\/\//i.test(clean)) return;
+    // 屏蔽域名一票否决：上游灌进来的、多仓冒出来的都不收
+    if (isBlockedUrl(clean, blockedHosts)) return;
     const k = normUrl(clean, { dropQuery: false });
     if (!k) return;
     const hit = map.get(k);
@@ -223,9 +225,15 @@ export function mergePool({ upstreams = [], seeds = [], prevPool = {}, fromConfi
   //    第二天重新灌回来时又白测一轮）。压缩后单条约 100 字节，不会撑大仓库。
   let droppedOld = 0;
   let compactedFail = 0;
+  let droppedBlocked = 0;
   for (const e of prevPool.entries || []) {
     const k = normUrl(e.url, { dropQuery: false });
     if (!k) continue;
+    // 进了屏蔽名单的地址从池子里彻底删掉（不然明天又会被 pick 出来白抓一轮）
+    if (isBlockedUrl(e.url, blockedHosts)) {
+      droppedBlocked++;
+      continue;
+    }
     const seen = Math.max(toTs(e.lastSeen), toTs(e.lastOk), toTs(e.firstSeen));
     if (seen && seen < cutoffTs) {
       droppedOld++;
@@ -263,8 +271,12 @@ export function mergePool({ upstreams = [], seeds = [], prevPool = {}, fromConfi
   // ④ 人工种子
   for (const s of seeds) add(s.url, s.name || "种子", 1);
 
-  if (droppedOld || compactedFail) {
-    log(`  池子清理：过期(>${keepDays}天) 删 ${droppedOld} 条、反复失败压缩保留 ${compactedFail} 条，剩余 ${map.size} 条`);
+  if (droppedOld || compactedFail || droppedBlocked) {
+    log(
+      `  池子清理：过期(>${keepDays}天) 删 ${droppedOld} 条、反复失败压缩保留 ${compactedFail} 条` +
+        (droppedBlocked ? `、屏蔽域名删 ${droppedBlocked} 条` : "") +
+        `，剩余 ${map.size} 条`,
+    );
   }
   return [...map.values()];
 }

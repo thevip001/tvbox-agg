@@ -11,9 +11,9 @@
  */
 import { appendFile, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { log, stamp } from "./core.mjs";
+import { log, stamp, parseBlockedHosts, isBlockedUrl } from "./core.mjs";
 import { harvestAll, loadUpstreams, mergePool, pickCandidates, updatePool, searchGithubRepos, repoToCandidates } from "./collect.mjs";
-import { runPipeline, readOptions, writeOutputs, readPreviousCounts, FILES } from "./pipeline.mjs";
+import { runPipeline, readOptions, writeOutputs, parseLiveSeeds, FILES } from "./pipeline.mjs";
 
 const ARGS = new Set(process.argv.slice(2));
 const NO_COLLECT = ARGS.has("--no-collect");
@@ -60,8 +60,13 @@ function parseSeeds(text) {
 async function main() {
   const t0 = Date.now();
   const opts = readOptions();
+  /* 屏蔽域名（config/blocked-hosts.txt）：全流程一票否决，加新域名改那个文件即可 */
+  opts.blockedHosts = parseBlockedHosts(await readText("config/blocked-hosts.txt"));
+  if (opts.blockedHosts.size) {
+    log(`  屏蔽域名：${[...opts.blockedHosts].join(", ")}（候选、站点 jar/api/ext、直播、解析全拦）`);
+  }
   log("=".repeat(72));
-  log(`TVBox 每日聚合·改进版  策略=${opts.strictness}  每频道${opts.livePerChannel}源`);
+  log(`TVBox 每日聚合·改进版  策略=${opts.strictness}  点播${opts.vodFastOnly ? "只留快站" : "全档"}  直播每源抽查${opts.liveProbeChannels}频道`);
   log("=".repeat(72));
 
   /* ---------- 1. 收集层 ---------- */
@@ -113,37 +118,37 @@ async function main() {
     }
   }
 
-  let poolAll = mergePool({ upstreams: [...upstreamHits, ...ghHits], seeds, prevPool, fromConfigs: [] });
+  let poolAll = mergePool({ upstreams: [...upstreamHits, ...ghHits], seeds, prevPool, fromConfigs: [], blockedHosts: opts.blockedHosts });
   const candidates = pickCandidates(poolAll, { limit: opts.maxCandidates, maxFails: opts.maxFails });
   log(`  候选池合计 ${poolAll.length} 条，本轮抓取 ${candidates.length} 条`);
 
+  /* 直播源清单种子（config/liveupstreams.txt）：独立于点播接口，本身就是频道列表。
+   * 放在 NO_COLLECT / DRY 判断之外 ——
+   *   · --no-collect 的意思是「别去上游捞新点播接口」，不该把仓库里写好的直播种子一起丢掉
+   *     （以前就是这么丢的：种子解析整段被包在 if (!NO_COLLECT) 里）
+   *   · --dry-run 也该把种子列出来，不然看不出这层有没有生效 */
+  const { seeds: seedAll, rejected: badLiveSeeds } = parseLiveSeeds(
+    await readText("config/liveupstreams.txt"),
+  );
+  const liveSeedSources = seedAll.filter((s) => !isBlockedUrl(s.url, opts.blockedHosts));
+  if (liveSeedSources.length !== seedAll.length) {
+    log(`  ⚠️ ${seedAll.length - liveSeedSources.length} 个直播种子命中屏蔽域名，已拒收`);
+  }
+  log(`  直播源清单种子：${liveSeedSources.length} 个（优先测、优先当正本、不受直播预算限制）`);
+  for (const b of badLiveSeeds) {
+    log(`  ⚠️ 跳过直播种子 ${b.name}：${b.url}`);
+    log(`     那是多仓/接口索引 JSON，不是播放列表 —— 请挪到 config/upstreams.txt 按 json 类型收集`);
+  }
+
   if (DRY) {
-    log("--dry-run：以下为将要抓取的地址（前 40 条）");
+    log("--dry-run：以下为将要抓取的点播接口地址（前 40 条）");
     candidates.slice(0, 40).forEach((c) => log(`   ${c.url}`));
+    log(`--dry-run：直播源清单种子（全部 ${liveSeedSources.length} 条）`);
+    liveSeedSources.forEach((s) => log(`   [${s.type}] ${s.name}  ${s.url}`));
     return;
   }
 
   /* ---------- 2~5. 抓取 → 探活 → 去重 → 分类输出 ---------- */
-  /* 直播源清单（独立于点播接口，直接就是频道列表） */
-  let liveSeedSources = [];
-  if (!NO_COLLECT) {
-    try {
-      const liveText = await readText("config/liveupstreams.txt");
-      for (const raw of liveText.split(/\r?\n/)) {
-        const line = raw.trim();
-        if (!line || line.startsWith("#")) continue;
-        const parts = line.split(/[,，]/).map((x) => x.trim()).filter(Boolean);
-        const url = parts.find((x) => /^https?:\/\//i.test(x));
-        if (!url) continue;
-        const type = (parts.find((x) => /^(txt|m3u)$/i.test(x)) || "txt").toLowerCase();
-        liveSeedSources.push({ name: parts[0] === url ? "直播源" : parts[0], url, type });
-      }
-      log(`  直播源清单：${liveSeedSources.length} 个（直接产出频道）`);
-    } catch {
-      log("  ⚠️ 没有 config/liveupstreams.txt，跳过直播源清单");
-    }
-  }
-
   log("【2/5】抓取接口配置（自动穿透多仓）");
   const result = await runPipeline({
     candidates,
@@ -155,23 +160,16 @@ async function main() {
   // 抓取过程中冒出来的多仓子地址，写回池子供下轮使用
   const fromConfigs = [...new Set(result.stats.subSources || [])];
   if (fromConfigs.length) {
-    poolAll = mergePool({ upstreams: [], seeds: [], prevPool: { entries: poolAll }, fromConfigs });
+    poolAll = mergePool({ upstreams: [], seeds: [], prevPool: { entries: poolAll }, fromConfigs, blockedHosts: opts.blockedHosts });
     log(`  发现新的多仓子地址 ${fromConfigs.length} 条，已写入池子`);
   }
   poolAll = updatePool(poolAll, result.fetchResults);
 
-  /* ---------- 安全检查：不允许异常覆盖 ---------- */
-  const prev = await readPreviousCounts(opts.outDir);
-  if (prev && prev.sites > 0) {
-    const ratio = result.counts.all / prev.sites;
-    if (ratio < opts.minRatio) {
-      log(`❌ 结果异常：本次 ${result.counts.all} 站 vs 上次 ${prev.sites} 站（${(ratio * 100).toFixed(0)}% < 阈值 ${(opts.minRatio * 100).toFixed(0)}%）`);
-      log("   为避免覆盖可用产物，本次不写文件。请检查上游是否集体故障。");
-      process.exitCode = 2;
-      return;
-    }
-  }
-
+  /* ---------- 写产物 ----------
+   * 这里刻意没有任何「安全阀」：不管本轮抓到多少站都照写。
+   * 原因：比例阀（MIN_RATIO）在上游集体抽风时会连着好几天拒绝更新，
+   * 产物反而越来越旧 —— 旧产物比空产物更误导人。
+   * 真出问题时靠 聚合接口/剔除报告.json + data/history.json 事后追溯。 */
   log("【3/5】写入聚合文件");
   const when = stamp().slice(0, 16);
   const sizes = await writeOutputs({ result, opts, rawUrl, when });
@@ -214,9 +212,13 @@ async function main() {
   log(`  点播合集 ${c.all} 站（采集站 ${c.cj} / Py ${c.py} / JS ${c.js} / Jar ${c.spider} / 其它 ${c.other}）`);
   const g = s.grades || {};
   log(`  速度分档：精选 ${g.fast || 0} / 普通 ${g.ok || 0} / 偏慢 ${g.slow || 0} / 失效 ${g.dead || 0}（测不准 ${g.uncertain || 0}、未测到 ${g.unsure || 0}，均保留）`);
-  log(`  剔除：失效 ${s.dropped.dead}、太慢 ${s.dropped.slow}、重复 ${s.dropped.dup}、本机引用 ${s.dropped.local}`);
+  log(`  剔除：失效 ${s.dropped.dead}、太慢 ${s.dropped.slow}、重复 ${s.dropped.dup}、本机引用 ${s.dropped.local}、屏蔽域名 ${s.dropped.blocked || 0}、非快站 ${s.dropped.notFast || 0}`);
   if (s.probeSkipped) log(`  ⚠️ 本轮有 ${s.probeSkipped} 个站因预算用尽没测到，已保留待下轮补测（不算慢站）`);
-  log(`  直播：${c.liveSources} 个源；频道 ${c.rawChannels} → 合并后 ${c.channels} 条`);
+  log(
+    `  直播：${c.liveSources} 个源（清单种子 ${s.liveSeeds || 0} 条 → 存活 ${s.liveSeedsKept || 0} 条）；` +
+      `频道抽查实测 ${s.liveProbed || 0} 源、全死剔除 ${s.dropped.liveProbe || 0} 源，不产出合并列表`,
+  );
+  if (opts.vodFastOnly) log(`  点播只留快站：收录 ${c.all} 站，非快站本轮不收录 ${s.dropped.notFast || 0} 个（池子保留，下轮重测）`);
   log(`  总用时 ${Math.round((Date.now() - t0) / 1000)} 秒`);
 
   log("【5/5】完成");
@@ -233,11 +235,12 @@ async function main() {
       `| 剔除·太慢 | ${s.dropped.slow} |`,
       `| 剔除·重复 | ${s.dropped.dup} |`,
       `| 剔除·本机引用 | ${s.dropped.local} |`,
-      `| 直播源 | ${c.liveSources} |`,
-      `| 频道（合并前 → 合并后） | ${c.rawChannels} → ${c.channels} |`,
+      `| 直播源 | ${c.liveSources}（清单种子 ${s.liveSeeds || 0} → 存活 ${s.liveSeedsKept || 0}） |`,
+      `| 直播抽查全死剔除 | ${s.dropped.liveProbe || 0} |`,
+      `| 点播非快站不收录 | ${s.dropped.notFast || 0} |`,
       `| 用时 | ${result.elapsed}s |`,
       "",
-      "分类产物：" + Object.values(FILES).filter((f) => f.endsWith(".json") || f.endsWith(".m3u")).join("、"),
+      "分类产物：" + Object.values(FILES).filter((f) => f.endsWith(".json")).join("、"),
       "",
     ].join("\n");
     await appendFile(process.env.GITHUB_STEP_SUMMARY, md);

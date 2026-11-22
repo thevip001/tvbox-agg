@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { asc, count, desc, eq, sql } from "drizzle-orm";
+import { asc, count, desc, eq, inArray, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { artifacts, jobs, liveSources, sources, vodSites } from "@/db/schema";
 import { SEED_SOURCES } from "./seed-sources";
@@ -16,6 +16,16 @@ import {
   siteCategory,
   siteDedupKey,
 } from "./tvbox";
+
+/** 随机抽 n 条（Fisher–Yates 洗牌后取前 n），不改动原数组 */
+function pickSample<T>(arr: T[], n: number): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a.slice(0, Math.min(n, a.length));
+}
 
 /* ---------------- 接口配置文本（apilinks.txt 格式） ---------------- */
 
@@ -223,9 +233,9 @@ async function runRefresh(jobId: number) {
   const cjAlive = [...aliveMap.values()].filter((v) => v.alive).length;
   await log(`采集站可用：${cjAlive} / ${cj.length}`);
 
-  /* ---- 4. 直播源下载 + 内容级去重 + 频道合并 ---- */
+  /* ---- 4. 直播源下载 + 内容级去重 + 频道抽查（只剔不合，不做频道合并） ---- */
   const liveEntries = [...liveMap.entries()];
-  await log(`下载 ${liveEntries.length} 个直播源（套壳最多穿透 5 层），进行内容级去重与频道合并…`);
+  await log(`下载 ${liveEntries.length} 个直播源（套壳最多穿透 5 层），内容级去重后逐源抽查频道…`);
   const liveInfo = new Map<string, { alive: boolean; channels: Channel[]; size: number; hash: string | null }>();
   await pool(liveEntries, 6, async ([k, v]) => {
     let url = String(v.live.url);
@@ -260,10 +270,7 @@ async function runRefresh(jobId: number) {
 
   const hashOwner = new Map<string, string>();
   const dupOf = new Map<string, string>();
-  const channelMap = new Map<string, Channel>();
-  const groupOrder: string[] = [];
-  let rawChannels = 0;
-  const MAX_CHANNELS = 300_000;
+  const keptLive: [string, { live: AnyObj; sources: string[]; order: number }][] = [];
   for (const [k, v] of liveEntries) {
     const info = liveInfo.get(k);
     if (!info?.alive) continue;
@@ -275,39 +282,38 @@ async function runRefresh(jobId: number) {
       }
       hashOwner.set(info.hash, String(v.live.name));
     }
-    for (const ch of info.channels) {
-      rawChannels++;
-      const ck = normUrl(ch.url);
-      if (!ck || channelMap.has(ck) || channelMap.size >= MAX_CHANNELS) continue;
-      channelMap.set(ck, ch);
-      if (!groupOrder.includes(ch.group)) groupOrder.push(ch.group);
-    }
+    keptLive.push([k, v]);
   }
-  const liveAlive = [...liveInfo.values()].filter((v) => v.alive).length;
-  await log(`直播源可用 ${liveAlive} / ${liveEntries.length}，内容完全相同的重复源 ${dupOf.size} 个；频道去重 ${rawChannels} → ${channelMap.size}`);
 
-  // 生成合并播放列表
-  const byGroup = new Map<string, Channel[]>();
-  for (const ch of channelMap.values()) {
-    const arr = byGroup.get(ch.group) ?? [];
-    arr.push(ch);
-    byGroup.set(ch.group, arr);
+  /* 频道抽查：每源随机抽 N 个频道实测流地址，全失败就把整个源判死。
+     与 scripts/pipeline.mjs 同一套口径（LIVE_PROBE_CHANNELS / LIVE_PROBE_TIMEOUT_MS）。 */
+  const probeN = Math.max(1, Number(process.env.LIVE_PROBE_CHANNELS || 3));
+  const probeTimeout = Number(process.env.LIVE_PROBE_TIMEOUT_MS || 6000);
+  const probeFail = new Map<string, string>();
+  await pool(keptLive, Number(process.env.LIVE_PROBE_WORKERS || 12), async ([k, v]) => {
+    const channels = liveInfo.get(k)?.channels ?? [];
+    if (!channels.length) return;
+    const ua = typeof v.live.ua === "string" && v.live.ua ? v.live.ua : undefined;
+    const sample = pickSample(channels, probeN);
+    const results = await Promise.all(
+      sample.map(async (ch) => {
+        const r = await httpGet(ch.url, { ua, timeoutMs: probeTimeout, maxBytes: 64 * 1024 });
+        if (!r.ok) return `${ch.name}→${r.error || `HTTP ${r.status}`}`;
+        return r.body.length ? null : `${ch.name}→空内容`;
+      }),
+    );
+    if (results.every((x) => x !== null)) probeFail.set(k, `抽查 ${sample.length} 个频道全部失败（${results.join("；")}）`);
+  });
+  for (const [k, reason] of probeFail) {
+    const info = liveInfo.get(k);
+    if (info) info.alive = false;
+    await log(`❌ 直播源剔除 ${String(liveMap.get(k)?.live.name || k)}：${reason}`);
   }
-  const epg = liveEntries.map(([, v]) => v.live.epg).find((e) => typeof e === "string" && /^https?:/.test(e as string)) as string | undefined;
-  const esc = (s: string) => s.replace(/"/g, "'").replace(/[\r\n]/g, " ");
-  const m3u: string[] = [epg && !epg.includes("{") ? `#EXTM3U x-tvg-url="${esc(epg)}"` : "#EXTM3U"];
-  const txt: string[] = [];
-  for (const gname of groupOrder) {
-    const list = byGroup.get(gname) ?? [];
-    txt.push(`${gname.replace(/,/g, " ")},#genre#`);
-    for (const ch of list) {
-      m3u.push(
-        `#EXTINF:-1 tvg-name="${esc(ch.tvgName || ch.name)}"${ch.logo ? ` tvg-logo="${esc(ch.logo)}"` : ""} group-title="${esc(gname)}",${ch.name.replace(/[\r\n]/g, " ")}`,
-      );
-      m3u.push(ch.url);
-      txt.push(`${ch.name.replace(/,/g, " ")},${ch.url}`);
-    }
-  }
+
+  const liveAlive = keptLive.length - probeFail.size;
+  await log(
+    `直播源可用 ${liveAlive} / ${liveEntries.length}，内容完全相同的重复源 ${dupOf.size} 个，抽查全死剔除 ${probeFail.size} 个`,
+  );
 
   /* ---- 5. 落库 ---- */
   const siteRows = siteEntries.map(([k, v]) => ({
@@ -352,8 +358,7 @@ async function runRefresh(jobId: number) {
     dedupLives: liveMap.size,
     liveAlive,
     liveContentDup: dupOf.size,
-    rawChannels,
-    dedupChannels: channelMap.size,
+    liveProbeDropped: probeFail.size,
     rawParses,
     dedupParses: parseMap.size,
   };
@@ -368,11 +373,11 @@ async function runRefresh(jobId: number) {
     "vod_extras",
     JSON.stringify({ spider: topSpider, wallpaper, parses: [...parseMap.values()], flags: [...flagSet] }),
   );
-  await upsertArtifact("live_m3u", m3u.join("\n") + "\n");
-  await upsertArtifact("live_txt", txt.join("\n") + "\n");
+  // 频道合并输出已于 2026-11-22 废弃（只剔不合），顺手清掉库里遗留的旧产物
+  await db.delete(artifacts).where(inArray(artifacts.key, ["live_m3u", "live_txt"]));
   await upsertArtifact("stats", JSON.stringify(stats));
 
-  await log(`🎉 完成：点播聚合 ${siteMap.size} 站，直播聚合 ${liveMap.size - dupOf.size} 源 / ${channelMap.size} 频道`);
+  await log(`🎉 完成：点播聚合 ${siteMap.size} 站，直播聚合 ${liveAlive} 源（只装源本身，不合并频道）`);
   await flush(true);
   await db.update(jobs).set({ status: "done", finishedAt: new Date(), stats }).where(eq(jobs.id, jobId));
 }

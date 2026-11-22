@@ -6,8 +6,6 @@ const nextConfig: NextConfig = {
     return [
       { source: "/vod.json", destination: "/api/vod" },
       { source: "/live.json", destination: "/api/live" },
-      { source: "/live.m3u", destination: "/api/live/m3u" },
-      { source: "/live.txt", destination: "/api/live/txt" },
     ];
   },
 };

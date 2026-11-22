@@ -5,7 +5,8 @@
     "slow": 110,
     "local": 315,
     "dup": 14983,
-    "nonTv": 91453
+    "nonTv": 91453,
+    "blocked": 6
   },
   "剔除列表": [
     {
@@ -11269,6 +11270,42 @@
       "name": "FMM_IPV6",
       "api": "https://m3u.ibert.me/txt/fmml_ipv6.txt",
       "reason": "播放列表与另一源完全相同"
+    },
+    {
+      "kind": "site",
+      "name": "🍰小鸭┃网盘",
+      "api": "csp_AList",
+      "reason": "jar 命中屏蔽域名 7moor-fs1.com（config/blocked-hosts.txt，2026-11-22 手工清理）"
+    },
+    {
+      "kind": "site",
+      "name": "👓视觉┃BPQ",
+      "api": "csp_XBPQ",
+      "reason": "jar 命中屏蔽域名 7moor-fs1.com（config/blocked-hosts.txt，2026-11-22 手工清理）"
+    },
+    {
+      "kind": "site",
+      "name": "🌟free┃BPQ",
+      "api": "csp_XBPQ",
+      "reason": "jar 命中屏蔽域名 7moor-fs1.com（config/blocked-hosts.txt，2026-11-22 手工清理）"
+    },
+    {
+      "kind": "site",
+      "name": "🛀03影┃BPQ",
+      "api": "csp_XBPQ",
+      "reason": "jar 命中屏蔽域名 7moor-fs1.com（config/blocked-hosts.txt，2026-11-22 手工清理）"
+    },
+    {
+      "kind": "site",
+      "name": "🦊黑狐┃BPQ",
+      "api": "csp_XBPQ",
+      "reason": "jar 命中屏蔽域名 7moor-fs1.com（config/blocked-hosts.txt，2026-11-22 手工清理）"
+    },
+    {
+      "kind": "site",
+      "name": "🥚双黄┃BPQ",
+      "api": "csp_XBPQ",
+      "reason": "jar 命中屏蔽域名 7moor-fs1.com（config/blocked-hosts.txt，2026-11-22 手工清理）"
     }
   ]
 }

@@ -1,14 +1,64 @@
-# ===== 收集层：直播源清单 =====
+# ===== 收集层：直播源清单（种子） =====
 # 每行：「名称, URL, 类型」
 #   类型：txt = 「名称,地址」或「#genre#」分组格式；m3u = M3U 播放列表
 #
 # 这些源会像普通 lives 一样被抓取、解析成频道，参与「频道归一合并」，
 # 频道级去重 + 每台保留 N 个源 之后再输出到 live.m3u。
 # 好处：它们是已经过别人测速筛过的，比从点播接口 lives 里捞出来的杂乱源质量高。
+#
+# ===== 种子的三个特权（scripts/pipeline.mjs 的 mergeLiveSeeds）=====
+#   1. 排在探活队列最前 —— pool 按顺序派活，直播预算不够时先保证种子被测到
+#   2. 内容哈希去重「先到先得」，种子优先当正本，与它内容相同的杂源被剔
+#   3. 不受本轮直播预算（BUDGET_LIVE）限制，绝不会因为「预算用尽」被判死
+#   同一个地址如果点播接口的 lives 里也有，就地升级成种子（不重复计一条）。
+#   被剔的种子会在 聚合接口/剔除报告.json 里带「（直播源清单种子）」标记，方便复查。
+#
+# ⚠️ 这里只能放**播放列表**。多仓/接口索引 JSON（形如 {"urls":[{"url":...}]}）
+#    解析不出频道，脚本会直接拒绝并提示；那类清单属于点播收集层，
+#    请放进 config/upstreams.txt 用 json 类型。（Supprise0901 的 warehouse.txt
+#    就是这种，2026-11-22 已挪走。）
+#
+# 收录标准（缺一不收，避免每天白测）：
+#   · GitHub 上的：用 api.github.com 确认文件存在且体积正常（见每行注释的实测大小）
+#   · 站内的：以 lubin776/tvbox-api-backup 的 livelist.txt 为交叉验证 —— 那里第五列是
+#     来源线路、第二列是下载日期，只收「当天成功下载且体积正常」的（它的 CI 每天北京 03:00 跑）
+#   · 明显是 MV/音乐/点歌台的（如 8MB 的「音乐所.txt」）不收：分组过滤会把它们全丢掉，白占带宽
 
 # ---------- 已做测速筛选的公开直播源 ----------
 IPTV精选·测速优选, https://raw.githubusercontent.com/Supprise0901/TVBox_live/main/live.txt, txt
-IPTV仓库·频道库, https://raw.githubusercontent.com/Supprise0901/TVBox_live/main/warehouse.txt, txt
+# ↑ 112,764 B / 698 行 / 5 个 #genre# 分组（河南地方台等），2026-11-22 经 api.github.com 核实
+
+# ---------- 公开 IPTV 仓库（GitHub，均已核实文件存在） ----------
+APTV·Kimentanm, https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u, m3u
+# ↑ 21,971 B（注意分支是 master）。上游 livelist 里的 APTV.m3u / Kimentanm3线.m3u 都是它的镜像
+素霜·IPv4, https://raw.githubusercontent.com/suxuang/myIPTV/main/ipv4.m3u, m3u
+# ↑ 268,591 B。你的 live.json 里本来就有（来自 clun / 东篱），挂成种子后升级为「优先正本」
+素霜·IPv6, https://raw.githubusercontent.com/suxuang/myIPTV/main/ipv6.m3u, m3u
+# ↑ 200,521 B，本仓此前没有
+YanG·Gather, https://raw.githubusercontent.com/YanG-1989/m3u/main/Gather.m3u, m3u
+# ↑ 26,227 B，本仓已有（走 gh-proxy.org 前缀），归一后视为同一条 → 升级成种子
+mlzlzj·TV, https://raw.githubusercontent.com/mlzlzj/TV/main/output/result.m3u, m3u
+# ↑ 516,450 B，本仓已有 → 升级成种子
+Guovin·iptv-api, https://raw.githubusercontent.com/Guovin/iptv-api/gd/output/result.m3u, m3u
+# ↑ 396,412 B（分支 gd），本仓已有 jsdelivr 镜像 → 归一后升级成种子
+
+# ---------- 站内直播源（上游 livelist.txt 2026-11-22 当天下载成功，本仓此前没有） ----------
+香雅情·BMCH, https://play.iptv365.org/香雅情/lives/BMCH.txt, txt
+# ↑ 190.6 K，来源线路=香雅情（play.iptv365.org 与 apilinks.txt 里的「香雅情」同站）
+香雅情·天目, https://play.iptv365.org/香雅情/lives/Tianmu.txt, txt
+# ↑ 18.7 K，来源线路=香雅情
+东篱·综合直播, https://ds65.tv1288.xyz, txt
+# ↑ 209.5 K，来源线路=东篱。无扩展名，内容是「名称,地址」TXT
+范明明·IPv6, https://m3u.ibert.me/txt/fmml_ipv6.txt, txt
+# ↑ 14.9 K，来源线路=高天流云_XYQ。需开 IPv6 才有画面，但清单本身是好的
+范明明·网易云, https://nos.netease.com/ysf/3d75a78a0fc7ede372c03598d6d10367.m3u, m3u
+# ↑ 12.5 K，来源线路=宝盒（同一文件在「挺好」那边也有一份镜像）
+咪咕·星微, http://www.52top.com.cn:678/downloads/migu.txt, txt
+# ↑ 101.2 K，来源线路=星微Vip。咪咕体育源，配合 scan 里那套 cache.ott.*.itv.cmvideo.cn
+#   hosts 改写才有画面 —— TVBox 侧由接口自己的 hosts 字段负责，这里只提供清单
+小马·手动整理, https://szyyds.cn/tv/live/x.txt, txt
+# ↑ 663.8 K，来源线路=小马。上游文件名叫「手动不知何时更新」，新鲜度靠不住但体量大，
+#   挂了会自动参与内容哈希去重，不会污染产物
 
 # ---------- 待补：其它公开直播源（确认存在后再取消注释） ----------
 # 示例, https://raw.githubusercontent.com/用户名/仓库/main/live.m3u, m3u

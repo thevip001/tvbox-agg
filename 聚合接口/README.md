@@ -6,16 +6,18 @@
 
 | 分类 | 输出站点数 | 文件 |
 | --- | ---: | --- |
-| **点播合集（全部）** | **3062** | [点播合集.json](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播合集.json) |
+| **点播合集（全部）** | **3056** | [点播合集.json](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播合集.json) |
 | 　采集站 | 48 | [点播-采集站.json](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-采集站.json) |
 | 　Py 站 | 397 | [点播-Py站.json](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Py站.json) |
 | 　JS 站 | 603 | [点播-JS站.json](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-JS站.json) |
-| 　Jar 爬虫站 | 2013 | [点播-Jar爬虫站.json](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Jar爬虫站.json) |
+| 　Jar 爬虫站 | 2007 | [点播-Jar爬虫站.json](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Jar爬虫站.json) |
 | 　其它 | 1 | 包含在合集内 |
 | **直播源** | **81** | [live.json](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/live.json) |
-| **直播频道** | **12357** | [live.m3u](https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/live.m3u) |
+| **直播抽查** | 每源随机 3 频道 | 全失败即剔除（2026-11-22 起不再产出 live.m3u 合并列表） |
 
-> 以上 3062 个点播站点全部通过存活检测与测速筛选（慢站已剔除），按实测速度排序，快的在前。
+> 以上 3056 个点播站点全部通过存活检测与测速筛选（慢站已剔除），按实测速度排序，快的在前。
+> ⚠️ 2026-11-22 手工清理：剔除 6 个 jar 命中屏蔽域名 7moor-fs1.com 的站点（见 config/blocked-hosts.txt），下方「本轮过滤明细」为当轮运行的原始记录，不含这次清理。
+> ⚠️ 2026-11-22 输出改版：删除 `live.m3u`，`live.json` 不再置顶「海量直播·频道合并去重」条目（现 81 个源全部是源本身）；点播侧下一轮起只收录快站。下方明细仍是旧口径。
 
 ## 🔍 本轮过滤明细
 
@@ -28,8 +30,8 @@
 | 　├ 剔除·失效 | 1090 | 连不上/内容异常 |
 | 　├ 剔除·太慢 | 110 | 首字节超阈值（已实测） |
 | 　├ 剔除·本机引用 | 315 | 127.0.0.1 等 |
-| 　└ 剔除·非直播内容 | 91453 | 直播侧，MV/点歌台等 |
-| **最终输出** | **3062** | |
+| 　└ 剔除·非直播内容 | 91453 | 直播侧，MV/点歌台等（该环节已随合并输出一起废弃） |
+| **最终输出** | **3056** | |
 
 ### 速度分档（探活结果）
 

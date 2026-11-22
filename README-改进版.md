@@ -94,7 +94,7 @@ tvbox-agg-改进版/
 │   ├── tvbox.mjs              ← 配置解析 + 多仓递归 + 探活（含抗误杀）
 │   ├── core.mjs               ← HTTP/解码/归一/去重键/测速分档
 │   ├── pipeline.mjs           ← 筛选整理 + 分类 + 输出
-│   └── selftest.mjs           ← 48 项离线自检（含快站筛选 / 频道抽查 / 种子 / 屏蔽域名端到端）
+│   └── selftest.mjs           ← 51 项离线自检（含快站筛选 / 频道抽查 / 测不准分类 / 种子 / 屏蔽域名端到端）
 ├── apilinks.txt               ← 人工种子（沿用你原来的格式）
 ├── data/
 │   ├── pool.json              ← 发现池（自动维护，含来源与失败历史）
@@ -243,7 +243,7 @@ config/liveupstreams.txt（直播种子）→ 不进池子，直接并入直播�
 
 ```bash
 # 需要 Node 18+，不需要 npm install
-node scripts/selftest.mjs           # 先跑离线自检（48 项，全程不出网）
+node scripts/selftest.mjs           # 先跑离线自检（51 项，全程不出网）
 node scripts/main.mjs --dry-run     # 只看会抓哪些源，不写文件
 node scripts/main.mjs               # 真跑一轮
 ```
@@ -269,11 +269,12 @@ git push
 | `STRICTNESS` | `strict` | `strict` 只留快站（默认，定时任务即此档）/ `balanced` 死站删·慢站留文末 / `loose` 只删死站 |
 | `SLOW_TTFB_MS` | 1500 | 首字节超过这个判为慢（strict 下删除），中间一律算普通保留 |
 | `FAST_TTFB_MS` | 300 | 低于算精选，排最前 |
+| `FAST_TTFB_CJ_MS` | 800 | 采集站（type 0/1）精选阈值：cms 后端首字节天然慢，放宽 |
 | `CRAWLER_SLOW_TTFB_MS` | 3000 | 内置爬虫站（csp_*）放宽阈值，因为测的是目标站首页 |
 | `KEEP_UNPROBED` | 1 | 预算用尽没测到的站标 `unsure` 保留，下轮补测（0=当死站丢弃） |
 | `MAX_FAILS` | 3 | 连续失败几轮才永久剔除 |
 | `VOD_ONLY_FAST` | 1 | 点播输出只收录快站（TTFB≤`FAST_TTFB_MS`） |
-| `LIVE_PROBE_CHANNELS` | 3 | 每个直播源随机抽查几个频道，全失败剔除整个源 |
+| `LIVE_PROBE_CHANNELS` | 3 | 每个直播源随机抽查几个频道，全失败且均确定死才剔除（测不准不算失败） |
 | `LIVE_PROBE_TIMEOUT_MS` / `LIVE_PROBE_WORKERS` / `BUDGET_LIVE_PROBE` | 6000/12/300 | 抽查单频道超时 / 并发 / 阶段预算（秒） |
 | `DROP_LOCAL_REF` | 1 | 去掉 127.0.0.1 引用 |
 | `KEEP_SOURCE_SUFFIX` | 0 | 名字是否加「｜来源」 |

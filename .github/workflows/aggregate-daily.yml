@@ -74,6 +74,7 @@ jobs:
           # 判慢只看首字节（TTFB），不看吞吐
           SLOW_TTFB_MS: "1500"        # 首字节超过 1.5 秒判为慢（strict 下剔除）
           FAST_TTFB_MS: "300"         # 低于 0.3 秒算精选
+          FAST_TTFB_CJ_MS: "800"      # 采集站（type 0/1）精选阈值放宽到 0.8 秒（cms 后端首字节天然慢）
           CRAWLER_SLOW_TTFB_MS: "3000"  # 内置爬虫站测的是网站首页，放宽到 3 秒
           KEEP_UNPROBED: "1"          # 预算用尽没测到的站先保留，下轮补测
           MAX_FAILS: "3"              # 连续失败 3 轮才永久剔除

@@ -10,7 +10,18 @@ import { mkdtemp, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { FILES, mergeLiveSeeds, parseLiveSeeds, pickSample, readOptions, runPipeline, selectFastOnly, writeOutputs } from "./pipeline.mjs";
+import {
+  FILES,
+  classifyChannelFailure,
+  gradeSite,
+  mergeLiveSeeds,
+  parseLiveSeeds,
+  pickSample,
+  readOptions,
+  runPipeline,
+  selectFastOnly,
+  writeOutputs,
+} from "./pipeline.mjs";
 import { mergePool } from "./collect.mjs";
 import {
   normUrl,
@@ -239,6 +250,8 @@ await (async () => {
     ["#EXTM3U", '#EXTINF:-1 group-title="卫视",湖南卫视', chan("b1").replace("PORT", port)].join("\n");
   const txtAllDead = (port) =>
     ["死组,#genre#", ...["d1", "d2", "d3"].map((d, i) => `死频道${i},${chan(d).replace("PORT", port)}`)].join("\n");
+  const txtUncertain = (port) =>
+    ["测不准组,#genre#", ...["g1", "g2", "g3"].map((gg, i) => `测不准频道${i},${chan(gg).replace("PORT", port)}`)].join("\n");
   const CMS_LIST = JSON.stringify({ list: [{ type_name: "动作" }], code: 1 });
   const CMS_DETAIL = JSON.stringify({ list: [{ vod_id: 1, vod_name: "样例片名" }] });
 
@@ -271,6 +284,7 @@ await (async () => {
             { name: "接口里的重复源", type: 0, url: `http://127.0.0.1:${port}/same-as-seed.txt` },
             { name: "接口里的独有源", type: 0, url: `http://127.0.0.1:${port}/extra.m3u` },
             { name: "全死源", type: 0, url: `http://127.0.0.1:${port}/alldead.txt` },
+            { name: "测不准源", type: 0, url: `http://127.0.0.1:${port}/uncertain.txt` },
           ],
         }),
         "application/json; charset=utf-8",
@@ -280,6 +294,13 @@ await (async () => {
     if (path === "/seed.txt" || path === "/same-as-seed.txt") return send(txtA(port));
     if (path === "/extra.m3u") return send(m3uB(port));
     if (path === "/alldead.txt") return send(txtAllDead(port));
+    if (path === "/uncertain.txt") return send(txtUncertain(port));
+    if (/^\/(g1|g2|g3)\.m3u8$/.test(path)) {
+      // 回一段非 HTTP 应答：客户端会报 Parse Error: Expected HTTP/, RTSP/ or ICE/（= 测不准）
+      res.socket.write("HELLO NOT HTTP\r\n\r\n");
+      res.socket.destroy();
+      return;
+    }
     if (/^\/(a1|a2|b1)\.m3u8$/.test(path)) return send("fake-ts-bytes");
     res.writeHead(404).end();
   });
@@ -339,6 +360,12 @@ await (async () => {
     assert.ok(dead.reason.includes("死频道0→HTTP 404"), dead.reason);
     assert.ok(!names.includes("全死源"));
   });
+  await ta("直播抽查：测不准（非 HTTP 应答）不算全死，源保留并在报告单列", () => {
+    assert.ok(names.includes("测不准源"), names.join("、"));
+    assert.strictEqual(result.stats.liveUncertainKept.length, 1);
+    assert.ok(/Parse Error: Expected HTTP/.test(result.stats.liveUncertainKept[0].reason), result.stats.liveUncertainKept[0].reason);
+    assert.strictEqual(result.stats.dropped.liveProbe, 1, "确定死的全死源仍该剔");
+  });
   await ta("抽查活着的源保留：种子与接口独有源都在", () => {
     assert.ok(names.includes("种子A"), names.join("、"));
     assert.ok(names.includes("接口里的独有源"), names.join("、"));
@@ -353,7 +380,7 @@ await (async () => {
     assert.strictEqual(result.m3u, undefined, "runPipeline 不该再返回 m3u");
     assert.strictEqual(result.counts.channels, undefined, "不该再有频道合并计数");
     assert.ok(!names.some((n) => /合并去重/.test(n)), "不该有置顶合并条目");
-    assert.strictEqual(lives.length, 2, `种子A + 接口独有源，实际：${names.join("、")}`);
+    assert.strictEqual(lives.length, 3, `种子A + 接口独有源 + 测不准源，实际：${names.join("、")}`);
   });
 
   /* 落盘：遗留的 live.m3u 必须被清掉，且不再出现在文件清单里。
@@ -380,7 +407,7 @@ await (async () => {
     for (const f of Object.values(FILES)) assert.ok(existsSync(join(tmp, f)), `缺少产物 ${f}`);
     assert.ok(!sizes.some(([f]) => f === "live.m3u"), "文件清单里不该再有 live.m3u");
     const liveOnDisk = JSON.parse(readFileSync(join(tmp, FILES.live), "utf8"));
-    assert.strictEqual(liveOnDisk.lives.length, 2);
+    assert.strictEqual(liveOnDisk.lives.length, 3);
     assert.ok(!liveOnDisk.lives.some((l) => /合并/.test(String(l.name))), "落盘的 live.json 不该有合并条目");
   });
 })();
@@ -419,6 +446,31 @@ t("候选池：屏蔽域名不管上游灌的还是池里存量的，一律不�
   });
   assert.strictEqual(entries.length, 1, `只该剩 ok.example.com，实际 ${entries.map((e) => e.url).join(", ")}`);
   assert.ok(entries[0].url.includes("ok.example.com"));
+});
+
+console.log("\n【11】采集站放宽 & 测不准不算失败");
+t("采集站精选阈值放宽到 800ms，普通站仍 300ms", () => {
+  const o = readOptions({});
+  assert.strictEqual(o.fastTtfbCj, 800);
+  assert.strictEqual(gradeSite({ alive: true, ttfb: 520 }, o, "cj", "http://x/api.php"), "fast");
+  assert.strictEqual(gradeSite({ alive: true, ttfb: 520 }, o, "js", "http://x/a.js"), "ok");
+  assert.strictEqual(gradeSite({ alive: true, ttfb: 800 }, o, "cj", "x"), "fast");
+  assert.strictEqual(gradeSite({ alive: true, ttfb: 801 }, o, "cj", "x"), "ok");
+  assert.strictEqual(gradeSite({ alive: true, ttfb: 1600 }, o, "cj", "x"), "slow");
+  assert.strictEqual(gradeSite({ alive: true, ttfb: 2500 }, o, "spider", "csp_X"), "ok", "内置爬虫站慢档阈值仍 3000ms");
+  assert.strictEqual(gradeSite({ alive: false }, o, "cj", "x"), "dead");
+  assert.strictEqual(readOptions({ FAST_TTFB_CJ_MS: "600" }).fastTtfbCj, 600);
+});
+t("频道失败分类：跑测环境限制=测不准，HTTP/超时/空内容=确定死", () => {
+  assert.strictEqual(classifyChannelFailure("connect ENETUNREACH 2409:8a00:22:1f02::9:443"), "uncertain");
+  assert.strictEqual(classifyChannelFailure("connect EHOSTUNREACH 2408:8000::1:80"), "uncertain");
+  assert.strictEqual(classifyChannelFailure("AggregateError"), "uncertain");
+  assert.strictEqual(classifyChannelFailure("Parse Error: Expected HTTP/, RTSP/ or ICE/"), "uncertain");
+  assert.strictEqual(classifyChannelFailure("HTTP 403"), "dead");
+  assert.strictEqual(classifyChannelFailure("HTTP 404"), "dead");
+  assert.strictEqual(classifyChannelFailure("连接超时"), "dead");
+  assert.strictEqual(classifyChannelFailure("connect ECONNREFUSED 1.2.3.4:443"), "dead");
+  assert.strictEqual(classifyChannelFailure("空内容"), "dead");
 });
 
 console.log(`\n${"=".repeat(50)}\n通过 ${pass} 项，失败 ${fail} 项\n`);

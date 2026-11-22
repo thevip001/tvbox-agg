@@ -29,6 +29,8 @@ export function readOptions(env = process.env) {
     slowTtfb: Number(env.SLOW_TTFB_MS || 1500),
     // fastTtfb：低于就是「精选」
     fastTtfb: Number(env.FAST_TTFB_MS || 300),
+    // 采集站（type 0/1 cms）首字节天然比静态资源慢，精选阈值单独放宽（批注：采集站可以放宽一些）
+    fastTtfbCj: Number(env.FAST_TTFB_CJ_MS || 800),
     // csp_* 内置爬虫站测的是目标站首页（HTML 更重），阈值放宽一些
     crawlerSlowTtfb: Number(env.CRAWLER_SLOW_TTFB_MS || 3000),
     // 预算用尽、本轮没测到的站不参与判慢（下轮补测），见 probeSkipped / grade=unsure
@@ -234,6 +236,7 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
     fetchFail: [],
     subSources: [],
     removed: [], // 剔除报告
+    liveUncertainKept: [], // 直播抽查全失败但属「测不准」（跑测环境限制），不算死、保留
     skippedByBudget: 0,
     probeSkipped: 0,
     liveSkipped: 0,
@@ -463,18 +466,7 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
    *  - csp_* 内置爬虫站（测的是目标站首页）：阈值放宽到 crawlerSlowTtfb
    *  - 吞吐只写进报告供参考，不参与判定（小文件 KB/s 天然低，会误杀健康站）
    */
-  const gradeWithOpts = (res, o, category, api) => {
-    if (!res || !res.alive) return "dead";
-    const ttfb = Number(res.ttfb) || 0;
-
-    const isCrawler = category === "spider" && !/^https?:\/\//i.test(String(api || ""));
-    const limit = isCrawler ? o.crawlerSlowTtfb : o.slowTtfb;
-
-    if (ttfb <= 0) return "ok"; // 没有测速数据（内置爬虫等），按普通保留
-    if (ttfb > limit) return "slow";
-    if (ttfb <= o.fastTtfb) return "fast";
-    return "ok"; // 精选~慢档阈值之间一律算普通，保留
-  };
+  const gradeWithOpts = gradeSite;
 
   /** 预算用尽：本轮没测到，不能算慢站（算慢站等于随机删站） */
   const markUnprobed = (e) => {
@@ -657,15 +649,25 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
       continue;
     }
     if (p && p.ok === 0 && p.sample.length) {
-      stats.dropped.liveProbe++;
       const detail = p.sample.map((ch, i) => `${ch.name}→${p.results[i].reason}`).join("；");
-      stats.removed.push({
-        kind: "live",
+      // 测不准不算失败：抽样频道全部「确定死」才剔除；
+      // 只要有一条是「测不准」（无 IPv6 / RTSP / AggregateError 等跑测限制），源保留、报告单列
+      if (p.results.every((r) => r.certain)) {
+        stats.dropped.liveProbe++;
+        stats.removed.push({
+          kind: "live",
+          name: v.live.name,
+          api: v.live.url,
+          reason: `抽查 ${p.sample.length} 个频道全部失败且均确定死（${detail}）${tag}`,
+        });
+        continue;
+      }
+      stats.liveUncertainKept.push({
+        kind: "live-uncertain",
         name: v.live.name,
         api: v.live.url,
-        reason: `抽查 ${p.sample.length} 个频道全部失败（${detail}）${tag}`,
+        reason: `抽查 ${p.sample.length} 个频道全失败但属测不准（跑测环境限制，不算死、保留）：${detail}${tag}`,
       });
-      continue;
     }
     if (v.seed) stats.liveSeedsKept++;
     stats.liveProbed = (stats.liveProbed || 0) + 1;
@@ -674,7 +676,7 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
   liveFinal.sort((a, b) => (a.info.ttfb ?? 9e9) - (b.info.ttfb ?? 9e9));
   onProgress?.(
     `  频道抽查：${liveKept.length} 个源各抽 ≤${sampleSize} 频道（实测 ${stats.liveProbed || 0} 源${stats.liveProbeSkipped ? `，预算跳过 ${stats.liveProbeSkipped} 源` : ""}），` +
-      `全死剔除 ${stats.dropped.liveProbe} 个，剩 ${liveFinal.length} 个源`,
+      `全死剔除 ${stats.dropped.liveProbe} 个，测不准保留 ${stats.liveUncertainKept.length} 个，剩 ${liveFinal.length} 个源`,
   );
 
   /* ---------- 6. 组装输出 ---------- */
@@ -895,6 +897,48 @@ function selectFastOnly(kept, opts, stats) {
   return fast;
 }
 
+/**
+ * 分档：只按首字节（TTFB），不按吞吐（导出供自检用）
+ *
+ *  - 采集站 / Py / JS / 其它（测的是接口本身）：TTFB > slowTtfb 判慢
+ *  - csp_* 内置爬虫站（测的是目标站首页）：阈值放宽到 crawlerSlowTtfb
+ *  - 采集站（type 0/1）精选阈值放宽到 fastTtfbCj：cms 后端首字节天然比静态资源慢，
+ *    跟全局 300ms 一刀切会把整类砍掉大半（批注：采集站可以放宽一些）
+ *  - 吞吐只写进报告供参考，不参与判定（小文件 KB/s 天然低，会误杀健康站）
+ */
+export function gradeSite(res, o, category, api) {
+  if (!res || !res.alive) return "dead";
+  const ttfb = Number(res.ttfb) || 0;
+
+  const isCrawler = category === "spider" && !/^https?:\/\//i.test(String(api || ""));
+  const limit = isCrawler ? o.crawlerSlowTtfb : o.slowTtfb;
+
+  if (ttfb <= 0) return "ok"; // 没有测速数据（内置爬虫等），按普通保留
+  if (ttfb > limit) return "slow";
+  const fastLimit = category === "cj" ? (o.fastTtfbCj ?? o.fastTtfb) : o.fastTtfb;
+  if (ttfb <= fastLimit) return "fast";
+  return "ok"; // 精选~慢档阈值之间一律算普通，保留
+}
+
+/**
+ * 直播频道抽查失败归类：「测不准」vs「确定死」（导出供自检用）
+ *
+ * 测不准 = 跑测环境的限制，不是源死的证据：
+ *  - connect ENETUNREACH / EHOSTUNREACH 等：跑测机没有 IPv6 / 没有路由，根本到不了该地址族
+ *  - AggregateError：多个解析地址全被拒连，出口 DNS 视图与用户家不同
+ *  - Parse Error: Expected HTTP/, RTSP/ or ICE/：端口上回来的不是 HTTP 应答（RTSP 流等），
+ *    HTTP 客户端读不了，播放器却可能播得了
+ * 其余（HTTP 4xx/5xx、连接超时、空内容、拒连等）一律算确定死。
+ * 批注口径：测不准不算失败 —— 抽样频道全部「确定死」才剔除源。
+ */
+export function classifyChannelFailure(reason) {
+  const s = String(reason || "");
+  if (/EHOSTUNREACH|ENETUNREACH|ENETDOWN|ENONET|EAFNOSUPPORT|EADDRNOTAVAIL/i.test(s)) return "uncertain";
+  if (/AggregateError/i.test(s)) return "uncertain";
+  if (/Parse Error: Expected HTTP/i.test(s)) return "uncertain";
+  return "dead";
+}
+
 /** 随机抽 n 条（Fisher–Yates 洗牌后取前 n）；抽查就是要随机，每轮重抽 */
 function pickSample(arr, n) {
   const a = [...arr];
@@ -915,8 +959,11 @@ async function probeChannel(ch, ua, opts) {
     timeoutMs: opts.liveProbeTimeout,
     maxBytes: 64 * 1024,
   });
-  if (!r.ok) return { ok: false, reason: r.error || `HTTP ${r.status}` };
-  if (!r.body.length) return { ok: false, reason: "空内容" };
+  if (!r.ok) {
+    const reason = r.error || `HTTP ${r.status}`;
+    return { ok: false, reason, certain: classifyChannelFailure(reason) === "dead" };
+  }
+  if (!r.body.length) return { ok: false, reason: "空内容", certain: true };
   return { ok: true, ttfb: r.ttfb };
 }
 
@@ -979,6 +1026,7 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
     更新时间: when,
     统计: result.stats.dropped,
     剔除列表: result.stats.removed.slice(0, 5000),
+    测不准但保留: (result.stats.liveUncertainKept || []).slice(0, 500),
   };
   await writeFile(join(dir, FILES.removed), JSON.stringify(removed, null, 2) + "\n", "utf8");
 
@@ -1006,8 +1054,8 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
     `| 　其它 | ${c.other} | 包含在合集内 |`,
     `| **直播源** | **${c.liveSources}**${s.liveSeedsKept ? `（含清单种子 ${s.liveSeedsKept}）` : ""} | [${FILES.live}](${rawUrl(FILES.live)}) |`,
     "",
-    `> 以上 ${c.all} 个点播站点${opts.vodFastOnly ? `全部是实测 TTFB≤${opts.fastTtfb}ms 的快站（本轮只收录快站）` : "全部通过存活检测"}，按实测速度排序，快的在前。`,
-    `> 直播源均通过「随机抽查 ${opts.liveProbeChannels} 个频道、全失败即剔除」；不再产出频道合并列表，live.json 里只有源本身。`,
+    `> 以上 ${c.all} 个点播站点${opts.vodFastOnly ? `全部是实测阈值内的快站（普通 TTFB≤${opts.fastTtfb}ms、采集站≤${opts.fastTtfbCj}ms，本轮只收录快站）` : "全部通过存活检测"}，按实测速度排序，快的在前。`,
+    `> 直播源均通过「随机抽查 ${opts.liveProbeChannels} 个频道、全失败即剔除」；全失败但属测不准（跑测机无 IPv6 / RTSP 流等环境限制）不算死、保留；不再产出频道合并列表，live.json 里只有源本身。`,
     "",
     "## 🔍 本轮过滤明细",
     "",
@@ -1022,7 +1070,10 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
     `| 　├ 剔除·本机引用 | ${d.local || 0} | 127.0.0.1 等 |`,
     `| 　├ 剔除·屏蔽域名 | ${d.blocked || 0} | config/blocked-hosts.txt 一票否决（jar/api/ext/直播/解析） |`,
     `| 　├ 剔除·非快站 | ${d.notFast || 0} | 点播侧，本轮只收录快站（池子保留，下轮重测） |`,
-    `| 　└ 剔除·直播抽查全死 | ${d.liveProbe || 0} | 每源随机抽 ${opts.liveProbeChannels} 个频道全部失败（实测 ${s.liveProbed || 0} 源${s.liveProbeSkipped ? `，预算跳过 ${s.liveProbeSkipped} 源` : ""}） |`,
+    `| 　└ 剔除·直播抽查全死 | ${d.liveProbe || 0} | 每源随机抽 ${opts.liveProbeChannels} 个频道全部失败且均确定死（实测 ${s.liveProbed || 0} 源${s.liveProbeSkipped ? `，预算跳过 ${s.liveProbeSkipped} 源` : ""}） |`,
+    ...(s.liveUncertainKept?.length
+      ? [`| 　├ 测不准保留·直播 | ${s.liveUncertainKept.length} | 抽查全失败但属跑测环境限制（无 IPv6 / RTSP / AggregateError），不算死、保留 |`]
+      : []),
     `| 直播源清单种子 | ${s.liveSeeds || 0} | config/liveupstreams.txt：新增 ${s.liveSeedsNew || 0}、点播接口里已有并升级 ${s.liveSeedsPromoted || 0}、存活保留 ${s.liveSeedsKept || 0} |`,
     `| **最终输出** | **${c.all}** | |`,
     "",
@@ -1030,14 +1081,14 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
     "",
     "| 档位 | 数量 | 处理 |",
     "| --- | ---: | --- |",
-    `| 🟢 精选（TTFB≤${opts.fastTtfb}ms） | ${g.fast || 0} | ${opts.vodFastOnly ? "**唯一收录档**，排最前" : "保留，排最前"} |`,
+    `| 🟢 精选（普通≤${opts.fastTtfb}ms / 采集站≤${opts.fastTtfbCj}ms） | ${g.fast || 0} | ${opts.vodFastOnly ? "**唯一收录档**，排最前" : "保留，排最前"} |`,
     `| 🔵 正常（${opts.fastTtfb}<TTFB≤${opts.slowTtfb}ms） | ${g.ok || 0} | ${opts.vodFastOnly ? "不收录（下轮重测）" : "保留"} |`,
     `| 🟡 偏慢（TTFB>${opts.slowTtfb}ms） | ${g.slow || 0} | ${opts.vodFastOnly ? "不收录" : opts.strictness === "strict" ? "**已剔除**" : "保留在文末"} |`,
     `| 🟠 测不准（限流/403） | ${g.uncertain || 0} | ${opts.vodFastOnly ? "不收录（下轮重测）" : "保留（下轮重测）"} |`,
     `| ⚪ 未测到（本轮预算用尽） | ${g.unsure || 0} | ${opts.vodFastOnly ? "不收录（下轮补测）" : "保留（下轮补测）"} |`,
     `| 🔴 失效 | ${g.dead || 0} | 已剔除 |`,
     "",
-    `> 判定阈值（只看首字节，故意不看吞吐）：普通站 TTFB>${opts.slowTtfb}ms 判慢，内置爬虫站（csp_*）放宽到 ${opts.crawlerSlowTtfb}ms —— 内置站测的是目标站首页，HTML 更重。`,
+    `> 判定阈值（只看首字节，故意不看吞吐）：普通站 TTFB>${opts.slowTtfb}ms 判慢，内置爬虫站（csp_*）放宽到 ${opts.crawlerSlowTtfb}ms —— 内置站测的是目标站首页，HTML 更重；采集站（type 0/1）精选阈值放宽到 ${opts.fastTtfbCj}ms —— cms 后端首字节天然比静态资源慢。`,
     `> 不看吞吐的原因：接口本身就是几十 KB 的 JSON/脚本，KB/s 低只代表文件小，点开几乎秒开；按吞吐会把 TTFB 一两百毫秒的健康站误删。`,
     "",
     "## 📁 剔除报告",

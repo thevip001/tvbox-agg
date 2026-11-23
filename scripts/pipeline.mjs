@@ -121,9 +121,39 @@ function blockedFieldHit(site, hosts) {
   if (!hosts || !hosts.size) return null;
   for (const field of ["jar", "api", "ext", "playUrl", "url"]) {
     const v = site[field];
-    if (typeof v !== "string" || !v) continue;
+    if (!v) continue;
+    // ext 常是对象（`{json: "https://…", cookie: ""}`），只看 string 会漏掉。
+    // 递归把里面所有字符串都过一遍，命中即在报告里点明是哪条地址。
+    if (typeof v === "object") {
+      const hit = findBlockedInValue(v, hosts, field);
+      if (hit) return hit;
+      continue;
+    }
+    if (typeof v !== "string") continue;
     const h = isBlockedUrl(v, hosts);
     if (h) return { field, host: h };
+  }
+  return null;
+}
+
+/** 在任意嵌套值里找屏蔽域名；返回命中的字段路径，便于报告写清楚 */
+function findBlockedInValue(val, hosts, path) {
+  if (typeof val === "string") {
+    const h = isBlockedUrl(val, hosts);
+    return h ? { field: path, host: h, url: val } : null;
+  }
+  if (Array.isArray(val)) {
+    for (let i = 0; i < val.length; i++) {
+      const hit = findBlockedInValue(val[i], hosts, `${path}[${i}]`);
+      if (hit) return hit;
+    }
+    return null;
+  }
+  if (val && typeof val === "object") {
+    for (const [k, v] of Object.entries(val)) {
+      const hit = findBlockedInValue(v, hosts, `${path}.${k}`);
+      if (hit) return hit;
+    }
   }
   return null;
 }

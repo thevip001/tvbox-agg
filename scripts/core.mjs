@@ -418,6 +418,13 @@ export function isBlockedUrl(url, hosts) {
   if (!host) return "";
   for (const h of hosts) {
     if (host === h || host.endsWith("." + h)) return h;
+    // 同一家的编号节点：屏蔽 7moor-fs1.com 时 7moor-fs2.com / 7moor-fs3.com 也要拦。
+    // 实测漏过一个把 bilibili 规则挂在 7moor-fs2.com 上的站 —— 逐个枚举子域永远追不上。
+    // 只对「尾部带数字的 fs 节点」放宽，且要求前缀完整一致，避免误伤无关域名。
+    const m = /^(.*?fs)\d+(\.[a-z]{2,})$/i.exec(h);
+    if (!m) continue;
+    const familyRe = new RegExp(`(^|\\.)${m[1].replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\d+${m[2].replace(/\./g, "\\.")}$`, "i");
+    if (familyRe.test(host)) return h;
   }
   return "";
 }

@@ -351,6 +351,15 @@ await (async () => {
         JSON.stringify({
           sites: [
             { key: "bad", name: "报毒站", type: 3, api: "csp_XBPQ", jar: "https://fs-im-kefu.7moor-fs1.com/x/c (1).txt" },
+            // 线上真实漏网形态：jar 干净，但 ext 是个对象，里面 json 指向同家的 fs2 节点
+            {
+              key: "bad2",
+              name: "报毒站·嵌套ext",
+              type: 3,
+              api: "csp_Bili",
+              jar: "https://gh-proxy.org/https://github.com/x/xiaomi.jar",
+              ext: { json: "https://cik07-cos.7moor-fs2.com/im/x/bilibil.json", cookie: "" },
+            },
             { key: "fast", name: "快站", type: 1, api: `http://127.0.0.1:${port}/cms-fast.php` },
             { key: "slowish", name: "慢站", type: 1, api: `http://127.0.0.1:${port}/cms-slow.php` },
           ],
@@ -422,9 +431,13 @@ await (async () => {
     assert.strictEqual(result.stats.dropped.local, 2, `快站+慢站都该因 127.0.0.1 被剔，实际 ${result.stats.dropped.local}`);
   });
   await ta("jar 命中屏蔽域名的站整站剔除，且不进产物", () => {
-    assert.strictEqual(result.stats.dropped.blocked, 1);
+    assert.strictEqual(result.stats.dropped.blocked, 2, "jar 命中 + 嵌套 ext 命中都要拦");
     const b = removed.find((x) => x.name === "报毒站");
     assert.ok(b && b.reason.includes("jar 命中屏蔽域名 7moor-fs1.com"), b && b.reason);
+    // 嵌套 ext 里的地址同样要拦，且报告写明命中的字段路径
+    const b2 = removed.find((x) => x.name === "报毒站·嵌套ext");
+    assert.ok(b2, "ext 对象里藏屏蔽域名也必须整站剔除");
+    assert.ok(b2.reason.includes("ext.json 命中屏蔽域名 7moor-fs1.com"), b2.reason);
   });
   await ta("直播抽查：频道全死的源被剔除，报告写明抽查明细", () => {
     assert.strictEqual(result.stats.dropped.liveProbe, 1);
@@ -499,6 +512,17 @@ t("命中域名本身和全部子域", () => {
   assert.strictEqual(isBlockedUrl("https://7moor-fs1.com.evil.io/x", h), "");
   assert.strictEqual(isBlockedUrl("https://example.com/7moor-fs1.com", h), "", "路径里出现域名不算命中");
 });
+t("同一家的编号节点一起拦：屏蔽 fs1 时 fs2/fs3… 也算命中（线上漏过 fs2）", () => {
+  const h = parseBlockedHosts("7moor-fs1.com");
+  assert.strictEqual(isBlockedUrl("https://cik07-cos.7moor-fs2.com/im/x/bilibil.json", h), "7moor-fs1.com");
+  assert.strictEqual(isBlockedUrl("https://foo.7moor-fs9.com/a", h), "7moor-fs1.com");
+  assert.strictEqual(isBlockedUrl("https://7moor-fs3.com/x", h), "7moor-fs1.com");
+  // 不相干的域名照样不能拦
+  assert.strictEqual(isBlockedUrl("https://not7moor-fs1.com/a", h), "");
+  assert.strictEqual(isBlockedUrl("https://7moor-fs1.com.evil.io/a", h), "");
+  assert.strictEqual(isBlockedUrl("https://example.com/a", h), "");
+});
+
 t("被 GitHub 代理套娃藏起来的屏蔽域名也认得", () => {
   const h = parseBlockedHosts("7moor-fs1.com");
   assert.strictEqual(

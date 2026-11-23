@@ -9,6 +9,7 @@
 import { createHash } from "node:crypto";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { decodeConfigText, httpGet, normUrl, parseLooseJson, resolveUrl } from "./core.mjs";
+import { parseCmsPayload } from "./deepcheck.mjs";
 
 /* ---------------- 抓取缓存 ---------------- */
 /**
@@ -224,7 +225,17 @@ export async function fetchTvboxConfig(url, opts = {}) {
   return { config: merged, size, subSources: [...subSources, ...deeper], multi: true };
 }
 
-/** 采集站接口探活：先 ?ac=list 看分类，再 ?ac=detail&pg=1 确认有真实数据（抗误杀） */
+/**
+ * 采集站接口探活：先 ?ac=list 看分类，再按真实有无「条目」判定。
+ *
+ * 2026-11-22 修：旧版只要求响应里出现 list/code/vod_name 字样，
+ * 而失效站最常见的就是 `{"code":0,"list":[]}` —— 两个条件全中，
+ * 于是「活着但一条内容都没有」的空壳站被当成健康站收录（用户反馈的主要来源）。
+ * 现在改成真的解析结构化数据：
+ *   - 分类有 id → 用首个分类刷一页，拿到条目才算活（MisaTV 的 homeFallback 思路）
+ *   - 只有空列表 / 报错 JSON → 判死
+ *   - 403/429/5xx/连不上 → uncertain，保留
+ */
 export async function probeCmsSite(api, opts = {}) {
   const clean = String(api).split(";")[0];
   const withAc = (ac) => clean + (clean.includes("?") ? "&" : "?") + ac;
@@ -234,29 +245,90 @@ export async function probeCmsSite(api, opts = {}) {
     return { alive: true, uncertain: true, grade: "slow", ttfb: r1.ttfb, ms: r1.ms, reason: `ac=list 限流/拒绝 HTTP ${r1.status}（保留）` };
   }
   const body1 = r1.body.toString("utf8");
-  const classOk = r1.ok && body1.length > 20 && /(class|list|vod|<rss|"code")/i.test(body1);
-  if (!classOk) return { alive: false, reason: r1.error || `ac=list HTTP ${r1.status}`, grade: "dead", ttfb: r1.ttfb };
-
-  const r2 = await getWithRetry(withAc("ac=detail&pg=1"), { ua: "Mozilla/5.0", timeoutMs: opts.timeoutMs || 8000, maxBytes: 768 * 1024, retries: 1 });
-  if (isUncertain(r2)) {
-    return { alive: true, uncertain: true, grade: "slow", ttfb: r1.ttfb, ms: r1.ms, reason: `ac=detail 限流/拒绝 HTTP ${r2.status}（保留）` };
+  if (!(r1.ok && body1.length > 20)) {
+    return { alive: false, reason: r1.error || `ac=list HTTP ${r1.status}`, grade: "dead", ttfb: r1.ttfb };
   }
-  const body2 = r2.body.toString("utf8");
-  const hasVod = r2.ok && /vod_id|vod_name|"list"|<\?xml/i.test(body2);
-  const title = (/"vod_name"\s*:\s*"([^"]+)"/.exec(body2) || [])[1] || "";
-  const totalMs = r1.ms + r2.ms;
-  const totalBytes = r1.body.length + r2.body.length;
+
+  const first = parseCmsPayload(body1, 0);
+  const hasClasses = first.classes.length > 0;
+  const looksCms = hasClasses || first.items.length > 0 || /"(class|list)"\s*:|<rss/i.test(body1);
+
+  // ① 主页直接有条目
+  if (first.items.length) {
+    return cmsAlive(r1, first, first.items.length, first.classes.length);
+  }
+  // ② 只有分类：用首个分类确认后端有真实数据
+  if (hasClasses) {
+    const tid = first.classes.find((c) => c.id)?.id;
+    if (!tid) return { alive: false, grade: "dead", reason: "有分类但都没有 id，无法取内容", ttfb: r1.ttfb };
+    const r2 = await getWithRetry(withAc(`ac=detail&t=${encodeURIComponent(tid)}&pg=1`), {
+      ua: "Mozilla/5.0",
+      timeoutMs: opts.timeoutMs || 8000,
+      maxBytes: 768 * 1024,
+      retries: 1,
+    });
+    if (isUncertain(r2)) {
+      return { alive: true, uncertain: true, grade: "slow", ttfb: r1.ttfb, ms: r1.ms, reason: `首个分类取内容限流/拒绝 HTTP ${r2.status}（保留）`, classes: first.classes.length };
+    }
+    const second = parseCmsPayload(r2.body.toString("utf8"), 0);
+    if (second.items.length) return cmsAlive(r1, second, second.items.length, first.classes.length, r2);
+    return {
+      alive: false,
+      grade: "dead",
+      reason: `有 ${first.classes.length} 个分类，但首个分类取不到任何内容（空壳站，源站可能已失效）`,
+      ttfb: r1.ttfb,
+      classes: first.classes.length,
+    };
+  }
+  // ③ 没有分类：退回 ac=detail 再试一次（部分接口不支持 ac=list）
+  const r3 = await getWithRetry(withAc("ac=detail&pg=1"), { ua: "Mozilla/5.0", timeoutMs: opts.timeoutMs || 8000, maxBytes: 768 * 1024, retries: 1 });
+  if (r3.ok) {
+    const third = parseCmsPayload(r3.body.toString("utf8"), 0);
+    if (third.items.length) return cmsAlive(r1, third, third.items.length, 0, r3);
+  } else if (isUncertain(r3)) {
+    // 兜底请求被判不准（限流 / 403 / 429 / 5xx / 超时）时，它失败不能当作
+    // 「站是空的」的证据 —— 否则一次瞬时故障就会删掉一个本来能用的源。
+    return {
+      alive: true,
+      uncertain: true,
+      grade: "slow",
+      ttfb: r1.ttfb,
+      ms: r1.ms,
+      reason: `ac=list 无分类，兜底 ac=detail 限流/拒绝 HTTP ${r3.status}（判不准，保留）`,
+    };
+  }
+  if (looksCms) {
+    return {
+      alive: false,
+      grade: "dead",
+      reason: "接口有响应，但既没有分类也没有任何条目（空壳站）",
+      ttfb: r1.ttfb,
+    };
+  }
   return {
-    alive: hasVod,
-    reason: hasVod ? "ok" : r2.error || `ac=detail HTTP ${r2.status}`,
-    grade: hasVod ? "ok" : "dead",
+    alive: false,
+    grade: "dead",
+    reason: `接口返回的不是 CMS 数据（${String(body1).replace(/\s+/g, " ").trim().slice(0, 60) || "空"}）`,
+    ttfb: r1.ttfb,
+  };
+}
+
+/** 采集站「活着」的统一返回：顺手把条目数 / 样本标题 / 分类名带出去 */
+function cmsAlive(r1, parsed, items, classes, r2 = null) {
+  const totalMs = r1.ms + (r2?.ms || 0);
+  const totalBytes = r1.body.length + (r2?.body.length || 0);
+  return {
+    alive: true,
+    reason: "ok",
+    grade: "ok",
     ttfb: r1.ttfb,
     ms: totalMs,
-    // 真实吞吐：两次请求的字节数 / 总耗时
     bytes: totalBytes,
+    // 真实吞吐：两次请求的字节数 / 总耗时（仅供参考，不参与判定）
     kbps: totalMs > 0 ? Math.round((totalBytes / 1024) * (1000 / totalMs)) : 0,
-    sampleTitle: title,
-    classes: (/"type_name"\s*:\s*"([^"]+)"/.exec(body1) || [])[1] || "",
+    sampleTitle: parsed.items[0]?.name || "",
+    classes: parsed.classes.map((c) => c.name).join(","),
+    deepItems: items,
   };
 }
 
@@ -329,24 +401,46 @@ export async function probeJar(url, opts = {}) {
 
 const TVBOX_UA_FALLBACK = "okhttp/3.15";
 
-/** 从 ext 里抽出可能的目标站点地址（用于判断 spider 是否真能用） */
+/**
+ * 从 ext 里抽出可能的目标站点地址（用于判断 spider 是否真能用）。
+ *
+ * 2026-11-22 改：旧版只看 ext 顶层的 7 个固定字段，而且只要「第一个」域名活着就
+ * 视为可用 —— 规则型爬虫（XBPQ / XYQHiker）的 ext 往往是一个规则文件地址或
+ * 嵌套很深的规则对象，旧写法根本抽不到目标站，于是整类站点等于没体检。
+ * 现在递归扫描所有层级的规则字段，并把「规则文件地址本身」也返回，
+ * 由 deepcheck 拉下来继续解析。
+ */
 export function extractExtTargets(site) {
   const out = new Set();
+  const HOST_KEYS = [
+    "分类url", "分类URL", "主页url", "主页URL", "host", "homeUrl", "home_url",
+    "siteUrl", "site_url", "baseUrl", "base_url", "url", "网址", "域名",
+  ];
   const push = (v) => {
-    if (typeof v === "string" && /^https?:\/\//i.test(v.trim())) out.add(v.trim().split(";")[0]);
+    if (typeof v !== "string") return;
+    const t = v.trim().split(";")[0].trim();
+    if (!/^https?:\/\//i.test(t)) return;
+    // "分类url": "https://x.com/vodshow/{cateId}..." 这类模板，只取 origin 部分
+    const m = /^(https?:\/\/[^/{]+)/i.exec(t);
+    if (m) out.add(m[1]);
   };
-  const e = site.ext;
-  if (typeof e === "string") push(e);
-  else if (e && typeof e === "object") {
-    for (const k of ["分类url", "分类URL", "主页url", "主页URL", "url", "homeUrl", "api", "分类"]) {
-      const v = e[k];
-      if (typeof v === "string") {
-        // "分类url": "https://x.com/vodshow/{cateId}..." 这类模板，只取域名部分
-        const m = /^(https?:\/\/[^/{}]+)/i.exec(v.trim());
-        if (m) out.add(m[1]);
-      }
+  const walk = (node, depth) => {
+    if (!node || depth > 4) return;
+    if (typeof node === "string") {
+      push(node);
+      return;
     }
-  }
+    if (Array.isArray(node)) {
+      for (const v of node) walk(v, depth + 1);
+      return;
+    }
+    if (typeof node !== "object") return;
+    for (const [k, v] of Object.entries(node)) {
+      if (typeof v === "string" && (HOST_KEYS.includes(k) || /url|host|网址|域名/i.test(k))) push(v);
+      else if (v && typeof v === "object") walk(v, depth + 1);
+    }
+  };
+  walk(site.ext, 0);
   return [...out];
 }
 

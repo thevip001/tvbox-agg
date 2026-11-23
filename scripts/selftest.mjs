@@ -8,6 +8,7 @@ import assert from "node:assert";
 import { existsSync, readFileSync } from "node:fs";
 import { mkdtemp, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
+import { deflateRawSync } from "node:zlib";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
@@ -23,6 +24,18 @@ import {
   writeOutputs,
 } from "./pipeline.mjs";
 import { mergePool } from "./collect.mjs";
+import {
+  HEALTH,
+  extractRuleTargets,
+  inspectDexEntries,
+  isProbeableTarget,
+  jarHasClass,
+  parseCmsPayload,
+  readZipEntries,
+  runDeepCheck,
+  spiderClassOf,
+  toOrigin,
+} from "./deepcheck.mjs";
 import {
   normUrl,
   normExt,
@@ -57,6 +70,67 @@ const ta = async (name, fn) => {
     console.log(`  ❌ ${name}\n     ${e.message}`);
   }
 };
+
+/** 在内存里拼一个最小可用的 ZIP（只做自检用：stored / deflate 两种都支持） */
+function makeZip(files) {
+  const locals = [];
+  const centrals = [];
+  let offset = 0;
+  for (const f of files) {
+    const name = Buffer.from(f.name, "utf8");
+    const raw = Buffer.isBuffer(f.data) ? f.data : Buffer.from(f.data);
+    const comp = f.deflate ? deflateRawSync(raw) : raw;
+    const method = f.deflate ? 8 : 0;
+    const crc = zlibCrc32(raw);
+    const local = Buffer.alloc(30);
+    local.writeUInt32LE(0x04034b50, 0);
+    local.writeUInt16LE(20, 4);
+    local.writeUInt16LE(0, 6);
+    local.writeUInt16LE(method, 8);
+    local.writeUInt32LE(crc, 14);
+    local.writeUInt32LE(comp.length, 18);
+    local.writeUInt32LE(raw.length, 22);
+    local.writeUInt16LE(name.length, 26);
+    local.writeUInt16LE(0, 28);
+    const central = Buffer.alloc(46);
+    central.writeUInt32LE(0x02014b50, 0);
+    central.writeUInt16LE(20, 4);
+    central.writeUInt16LE(20, 6);
+    central.writeUInt16LE(method, 10);
+    central.writeUInt32LE(crc, 16);
+    central.writeUInt32LE(comp.length, 20);
+    central.writeUInt32LE(raw.length, 24);
+    central.writeUInt16LE(name.length, 28);
+    central.writeUInt32LE(offset, 42);
+    locals.push(local, name, comp);
+    centrals.push(central, name);
+    offset += local.length + name.length + comp.length;
+  }
+  const cd = Buffer.concat(centrals);
+  const end = Buffer.alloc(22);
+  end.writeUInt32LE(0x06054b50, 0);
+  end.writeUInt16LE(files.length, 8);
+  end.writeUInt16LE(files.length, 10);
+  end.writeUInt32LE(cd.length, 12);
+  end.writeUInt32LE(offset, 16);
+  return Buffer.concat([...locals, cd, end]);
+}
+
+/** CRC32（ZIP 需要，node 没内置，这里给自检凑一个） */
+function zlibCrc32(buf) {
+  let c;
+  const table = zlibCrc32.table || ((c = []), (zlibCrc32.table = c));
+  if (!table.length) {
+    for (let n = 0; n < 256; n++) {
+      let v = n;
+      for (let k = 0; k < 8; k++) v = v & 1 ? 0xedb88320 ^ (v >>> 1) : v >>> 1;
+      table[n] = v >>> 0;
+    }
+  }
+  let crc = 0xffffffff;
+  for (const b of buf) crc = table[(crc ^ b) & 0xff] ^ (crc >>> 8);
+  return (crc ^ 0xffffffff) >>> 0;
+}
 
 console.log("\n【1】URL 归一（去重的前提）");
 t("协议 / www / 末尾斜杠 视为同一地址", () => {
@@ -471,6 +545,323 @@ t("频道失败分类：跑测环境限制=测不准，HTTP/超时/空内容=确
   assert.strictEqual(classifyChannelFailure("连接超时"), "dead");
   assert.strictEqual(classifyChannelFailure("connect ECONNREFUSED 1.2.3.4:443"), "dead");
   assert.strictEqual(classifyChannelFailure("空内容"), "dead");
+});
+
+console.log("\n【12】深度体检（探活通过 ≠ 点开能用）");
+t("采集站空壳 code:0 + 空 list 解析出 0 条目 0 分类（旧版会当活站）", () => {
+  const p = parseCmsPayload(JSON.stringify({ code: 0, list: [] }), 1);
+  assert.strictEqual(p.items.length, 0);
+  assert.strictEqual(p.classes.length, 0);
+});
+t("采集站真数据：分类 + 条目都能解析出来", () => {
+  const p = parseCmsPayload(
+    JSON.stringify({ class: [{ type_id: 1, type_name: "动作" }], list: [{ vod_id: 9, vod_name: "片名A" }] }),
+    1,
+  );
+  assert.strictEqual(p.classes.length, 1);
+  assert.strictEqual(p.items[0].name, "片名A");
+});
+t("type 0 的 XML 采集站也能解析", () => {
+  const xml = `<rss><class><ty id="1">动作</ty></class><list><video><id>5</id><name>片名B</name></video></list></rss>`;
+  const p = parseCmsPayload(xml, 0);
+  assert.strictEqual(p.classes[0].name, "动作");
+  assert.strictEqual(p.items[0].name, "片名B");
+});
+t("csp_XXX → 类名；去查询串/分号/md5 后缀", () => {
+  assert.strictEqual(spiderClassOf("csp_XBPQ"), "XBPQ");
+  assert.strictEqual(spiderClassOf("csp_XYQHiker?v=2"), "XYQHiker");
+  assert.strictEqual(spiderClassOf("csp_AppV7Amns;md5;abc"), "AppV7Amns");
+  assert.strictEqual(spiderClassOf("com.github.catvod.spider.Foo"), "Foo");
+});
+t("规则目标站：XBPQ 的「主页url/分类url」和 drpy 的 host 都能抽到", () => {
+  const xbpq = extractRuleTargets(
+    JSON.stringify({ 主页url: "https://a.example.com/vodshow/1--------{{pg}}.html", 分类url: "https://b.example.com/vodtype/{cateId}" }),
+  );
+  assert.ok(xbpq.some((u) => u.includes("a.example.com")), xbpq.join(","));
+  assert.ok(xbpq.some((u) => u.includes("b.example.com")), xbpq.join(","));
+  const drpy = extractRuleTargets("var rule = { title:'x', host:'https://d.example.com', url:'/vod' };");
+  assert.deepStrictEqual(drpy, ["https://d.example.com"]);
+});
+t("规则目标站：\"host\": [\"a\", \"b\"] 这种数组备选也要能抽到", () => {
+  const arr = extractRuleTargets(JSON.stringify({ host: ["https://a.example.com", "https://b.example.com"] }));
+  assert.ok(arr.some((u) => u.includes("a.example.com")), arr.join(","));
+  assert.ok(arr.some((u) => u.includes("b.example.com")), arr.join(","));
+  // 嵌套数组也要透传 key
+  const nested = extractRuleTargets(JSON.stringify({ site: { host: ["https://c.example.com"] } }));
+  assert.ok(nested.some((u) => u.includes("c.example.com")), nested.join(","));
+});
+t("目标站归一：百分号域名 / // 开头 / 模板串都能取到 origin", () => {
+  assert.strictEqual(toOrigin("https://www.%79%6f%75%6b%75.com/x"), "https://www.youku.com");
+  assert.strictEqual(toOrigin("//a.b.com/p?q=1"), "https://a.b.com");
+  assert.strictEqual(toOrigin("https://x.com{template}"), "https://x.com");
+});
+t("GitHub/CDN/图床 不算「目标站」，不该拿去判死", () => {
+  assert.strictEqual(isProbeableTarget(toOrigin("https://raw.githubusercontent.com/a/b/main/x.js")), false);
+  assert.strictEqual(isProbeableTarget(toOrigin("https://cdn.jsdelivr.net/gh/a/b@main/x.js")), false);
+  assert.strictEqual(isProbeableTarget(toOrigin("https://sc1080.top")), true);
+});
+t("深度体检选项默认值：开启、深检 cj/js/spider、类名校验开", () => {
+  const o = readOptions({});
+  assert.strictEqual(o.deepCheck, true);
+  assert.ok(o.deepCheckCategories.has("cj") && o.deepCheckCategories.has("js") && o.deepCheckCategories.has("spider"));
+  assert.strictEqual(o.deepCheckCategories.has("py"), false, "Py 站默认不深检（文件本身已验过）");
+  assert.strictEqual(o.deepJarClass, true);
+  assert.strictEqual(readOptions({ DEEP_CHECK: "0" }).deepCheck, false);
+  assert.strictEqual(readOptions({ DEEP_CHECK_CATEGORIES: "cj" }).deepCheckCategories.has("js"), false);
+  assert.strictEqual(readOptions({ STRICTNESS: "loose" }).deepStrict, false, "loose 只剔硬证据");
+  assert.strictEqual(readOptions({ STRICTNESS: "strict" }).deepStrict, true);
+});
+await ta("真 ZIP：readZipEntries 能解出 stored 与 deflate 两种条目", async () => {
+  const zip = makeZip([
+    { name: "classes.dex", data: Buffer.from("com/github/catvod/spider/XBPQ\ncom/github/catvod/spider/XYQHiker"), deflate: true },
+    { name: "META-INF/MANIFEST.MF", data: Buffer.from("Manifest-Version: 1.0"), deflate: false },
+  ]);
+  const entries = readZipEntries(zip);
+  assert.strictEqual(entries.size, 2);
+  assert.ok(entries.get("classes.dex").toString().includes("XBPQ"));
+  assert.strictEqual(entries.get("META-INF/MANIFEST.MF").toString(), "Manifest-Version: 1.0");
+});
+t("dex 扫描：按 L..; 描述符抽类名，相邻字符串不会粘连", () => {
+  const dex = Buffer.from("...Lcom/github/catvod/spider/XBPQ;Lcom/github/catvod/spider/Xyq;...com/whl/quickjs/Context");
+  const info = inspectDexEntries([dex]);
+  assert.deepStrictEqual([...info.classes].sort(), ["XBPQ", "Xyq"], [...info.classes].join(","));
+  assert.strictEqual(info.classes.has("PanSou"), false, "包里没有的类不能被认成有");
+  assert.strictEqual(info.hasQuickJs, true);
+});
+t("类名匹配：同名 / 忽略大小写 / 类名+后缀 家族都算命中，真的没有才算没有", () => {
+  const classes = new Set(["XBPQ", "WoggFishGuard", "Bili$1", "Init"]);
+  assert.strictEqual(jarHasClass(classes, "XBPQ"), true);
+  assert.strictEqual(jarHasClass(classes, "xbpq"), true);
+  assert.strictEqual(jarHasClass(classes, "Wogg"), true, "WoggFishGuard 就是 csp_Wogg 的实现");
+  assert.strictEqual(jarHasClass(classes, "Bili"), true, "Bili$1 是 Bili 的内部类");
+  assert.strictEqual(jarHasClass(classes, "PanSou"), false);
+  assert.strictEqual(jarHasClass(classes, "Init2"), false);
+});
+await ta("端到端深检：空壳采集站被剔，有内容的留下，jar 缺类的被剔", async () => {
+  const srvBody = () => {};
+  void srvBody;
+  const port = 0; // 占位，避免未使用告警
+  void port;
+  // 起一个假服务器：一个空壳采集站、一个真采集站、一个规则文件、一个 jar
+  const zip = makeZip([
+    { name: "classes.dex", data: Buffer.from("Lcom/github/catvod/spider/XBPQ;Lcom/github/catvod/spider/OnlyThisClass;"), deflate: true },
+  ]);
+  const server2 = createServer((req, res) => {
+    const u = new URL(req.url, "http://x");
+    const send = (b, t = "text/plain; charset=utf-8") => res.writeHead(200, { "Content-Type": t }).end(b);
+    if (u.pathname === "/shell.php") return send(JSON.stringify({ code: 0, list: [] }), "application/json");
+    if (u.pathname === "/real.php") {
+      if (u.searchParams.get("ac") === "list") {
+        return send(JSON.stringify({ class: [{ type_id: 1, type_name: "动作" }] }), "application/json");
+      }
+      return send(JSON.stringify({ list: [{ vod_id: 1, vod_name: "真片名" }] }), "application/json");
+    }
+    if (u.pathname === "/real2.php") {
+      if (u.searchParams.get("ac") === "list") {
+        return send(JSON.stringify({ class: [{ type_id: 1, type_name: "动作" }] }), "application/json");
+      }
+      return send(JSON.stringify({ list: [] }), "application/json");
+    }
+    if (u.pathname === "/x.jar") return send(zip, "application/java-archive");
+    if (u.pathname === "/rule.json") return send(JSON.stringify({ 主页url: `http://127.0.0.1:${server2.address().port}/site/` }));
+    if (u.pathname === "/site/" || u.pathname === "/site") return send("<html><body>" + "x".repeat(400) + "</body></html>", "text/html");
+    if (u.pathname === "/deadpage") return res.writeHead(404).end("nope");
+    res.writeHead(404).end();
+  });
+  await new Promise((r) => server2.listen(0, "127.0.0.1", r));
+  const base = `http://127.0.0.1:${server2.address().port}`;
+  try {
+    const o = {
+      ...readOptions({}),
+      deepCheckCategories: new Set(["cj", "spider"]),
+      budgetDeepCheck: 60,
+      deepTargetTimeout: 5000,
+    };
+    const stats = { dropped: {}, removed: [] };
+    const entries = [
+      { category: "cj", grade: "fast", site: { name: "空壳站", type: 1, api: `${base}/shell.php` }, probe: { ttfb: 100 } },
+      { category: "cj", grade: "fast", site: { name: "真采集站", type: 1, api: `${base}/real.php` }, probe: { ttfb: 100 } },
+      { category: "cj", grade: "fast", site: { name: "有分类无内容", type: 1, api: `${base}/real2.php` }, probe: { ttfb: 100 } },
+      { category: "spider", grade: "fast", site: { name: "缺类的jar站", type: 3, api: "csp_PanSou", jar: `${base}/x.jar`, ext: `${base}/rule.json` }, probe: { ttfb: 100 } },
+      { category: "spider", grade: "fast", site: { name: "类在包里的站", type: 3, api: "csp_XBPQ", jar: `${base}/x.jar`, ext: `${base}/rule.json` }, probe: { ttfb: 100 } },
+      { category: "spider", grade: "fast", site: { name: "缺ext的规则站", type: 3, api: "csp_XBPQ", jar: `${base}/x.jar` }, probe: { ttfb: 100 } },
+      { category: "spider", grade: "fast", site: { name: "类不在包里的规则站", type: 3, api: "csp_XYQHiker", jar: `${base}/x.jar` }, probe: { ttfb: 100 } },
+    ];
+    const ds = await runDeepCheck(entries, o, {
+      stats,
+      effectiveJar: (site) => site.jar || "",
+      jarCache: new Map(),
+      hostCache: new Map(),
+      textCache: new Map(),
+    });
+    const byName = Object.fromEntries(entries.map((e) => [e.site.name, e]));
+    assert.strictEqual(byName["空壳站"].grade, "dead", "空壳采集站必须剔除");
+    assert.ok(/空壳/.test(byName["空壳站"].healthReason), byName["空壳站"].healthReason);
+    assert.notStrictEqual(byName["真采集站"].grade, "dead", "有内容的采集站必须保留");
+    assert.strictEqual(byName["有分类无内容"].grade, "dead", "有分类但取不到内容 = 空壳");
+    assert.strictEqual(byName["缺类的jar站"].grade, "dead", "jar 里没有该类必须剔除");
+    assert.ok(/没有 PanSou/.test(byName["缺类的jar站"].healthReason), byName["缺类的jar站"].healthReason);
+    assert.notStrictEqual(byName["类在包里的站"].grade, "dead", "类在包里 + 目标站活着 → 保留");
+    assert.strictEqual(byName["缺ext的规则站"].grade, "dead", "XBPQ/XYQHiker 缺 ext 无法工作");
+    assert.strictEqual(byName["缺ext的规则站"].health, "needs-ext");
+    assert.strictEqual(byName["类不在包里的规则站"].grade, "dead", "类不在包里 → 补 ext 也没用，必须剔除");
+    assert.strictEqual(byName["类不在包里的规则站"].health, "no-class");
+    assert.strictEqual(stats.dropped.deep, 5, `剔除 5 个，实际 ${stats.dropped.deep}`);
+    assert.ok(ds.removed >= 4);
+  } finally {
+    await new Promise((r) => server2.close(r));
+  }
+});
+
+await ta("采集站：ac=list 无分类 + 兜底 ac=detail 被判不准 → 保留（不判死）", async () => {
+  // ac=list 返回 CMS 结构但没分类；兜底 ac=detail 返回 429（限流）
+  const server4 = createServer((req, res) => {
+    const u = new URL(req.url, "http://x");
+    const ac = u.searchParams.get("ac");
+    if (ac === "list") {
+      return res.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify({ code: 1, class: [] }));
+    }
+    return res.writeHead(429, { "Content-Type": "application/json" }).end(JSON.stringify({ code: 0, msg: "too many requests" }));
+  });
+  await new Promise((r) => server4.listen(0, "127.0.0.1", r));
+  const base = `http://127.0.0.1:${server4.address().port}`;
+  try {
+    const { probeCmsSite } = await import("./tvbox.mjs");
+    const r = await probeCmsSite(`${base}/api.php/provide/vod/`, { timeoutMs: 5000 });
+    assert.notStrictEqual(r.grade, "dead", `限流不该判死，实际 ${r.grade} / ${r.reason}`);
+    assert.strictEqual(r.alive, true);
+    assert.strictEqual(r.uncertain, true, "应标成判不准");
+  } finally {
+    await new Promise((r) => server4.close(r));
+  }
+});
+
+await ta("深度体检也认「限流」：兜底请求 429 不判空壳（与探活口径一致）", async () => {
+  // ac=list 给了一个没有任何分类的 CMS 壳，兜底 ac=detail 返回 429。
+  // 探活（probeCmsSite）会标 uncertain 保留；深度体检不能再把它判成 empty 删掉。
+  const server6 = createServer((req, res) => {
+    const u = new URL(req.url, "http://x");
+    if (u.searchParams.get("ac") === "list") {
+      return res.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify({ code: 1, class: [] }));
+    }
+    return res.writeHead(429, { "Content-Type": "application/json" }).end(JSON.stringify({ code: 0 }));
+  });
+  await new Promise((r) => server6.listen(0, "127.0.0.1", r));
+  const base = `http://127.0.0.1:${server6.address().port}`;
+  try {
+    const { deepCheckCms } = await import("./deepcheck.mjs");
+    const r = await deepCheckCms({ type: 1, api: `${base}/rate.php` }, { timeoutMs: 5000 });
+    assert.strictEqual(r.status, "uncertain", `429 应判不准，实际 ${r.status}: ${r.reason}`);
+
+    // 真·空壳（200 + 空列表 + 兜底也是空列表）仍然要判 empty 剔除
+    const server7 = createServer((req, res) => {
+      res.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify({ code: 0, list: [] }));
+    });
+    await new Promise((r2) => server7.listen(0, "127.0.0.1", r2));
+    const base7 = `http://127.0.0.1:${server7.address().port}`;
+    try {
+      const r7 = await deepCheckCms({ type: 1, api: `${base7}/shell.php` }, { timeoutMs: 5000 });
+      assert.strictEqual(r7.status, "empty", `真空壳应判 empty，实际 ${r7.status}: ${r7.reason}`);
+    } finally {
+      await new Promise((r2) => server7.close(r2));
+    }
+  } finally {
+    await new Promise((r) => server6.close(r));
+  }
+});
+
+await ta("ext 规则文件 404 → 判 no-rule（不再当 ok-unknown 永远留着）；5xx → 判不准", async () => {
+  const zipOk = makeZip([
+    { name: "classes.dex", data: Buffer.from("Lcom/github/catvod/spider/XBPQ;" + "q".repeat(1024)), deflate: true },
+  ]);
+  const server5 = createServer((req, res) => {
+    const u = new URL(req.url, "http://x");
+    const send = (b, t = "text/plain") => res.writeHead(200, { "Content-Type": t }).end(b);
+    if (u.pathname === "/ok.jar") return send(zipOk, "application/java-archive");
+    if (u.pathname === "/gone.json") return res.writeHead(404).end("not found");
+    if (u.pathname === "/err.json") return res.writeHead(503).end("busy");
+    res.writeHead(404).end();
+  });
+  await new Promise((r) => server5.listen(0, "127.0.0.1", r));
+  const base = `http://127.0.0.1:${server5.address().port}`;
+  try {
+    const o = { ...readOptions({}), budgetDeepCheck: 60, deepTargetTimeout: 4000 };
+    const mk = (name, ext) => ({ category: "spider", grade: "fast", site: { name, type: 3, api: "csp_XBPQ", jar: `${base}/ok.jar`, ext }, probe: { ttfb: 100 } });
+    const gone = mk("规则文件没了", `${base}/gone.json`);
+    const err = mk("规则文件503", `${base}/err.json`);
+    const stats = { dropped: {}, removed: [] };
+    const ds = await runDeepCheck([gone, err], o, {
+      stats,
+      effectiveJar: (st) => st.jar,
+      jarCache: new Map(),
+      hostCache: new Map(),
+      textCache: new Map(),
+    });
+    assert.strictEqual(gone.grade, "dead", "ext 规则文件 404 必须判死");
+    assert.strictEqual(gone.health, "no-rule");
+    assert.ok(/ext 规则文件已失效/.test(gone.healthReason), gone.healthReason);
+    assert.notStrictEqual(err.grade, "dead", "5xx 是判不准，不能删");
+    assert.strictEqual(err.health, "uncertain");
+    assert.strictEqual(stats.dropped.deep, 1);
+    assert.strictEqual(ds.removed, 1);
+  } finally {
+    await new Promise((r) => server5.close(r));
+  }
+});
+
+await ta("jar 缺类但同配置别的 jar 有 → 只换 jar 不删站", async () => {
+  // 两个 jar：A 里有 XBPQ，B 里没有；站点写的是 csp_XBPQ 却指向 B
+  const zipA = makeZip([{ name: "classes.dex", data: Buffer.from("Lcom/github/catvod/spider/XBPQ;" + "a".repeat(1024)), deflate: true }]);
+  const zipB = makeZip([{ name: "classes.dex", data: Buffer.from("Lcom/github/catvod/spider/SomethingElse;" + "b".repeat(1024)), deflate: true }]);
+  const server3 = createServer((req, res) => {
+    const u = new URL(req.url, "http://x");
+    const send = (b, t = "text/plain") => res.writeHead(200, { "Content-Type": t }).end(b);
+    const base = `http://127.0.0.1:${server3.address().port}`;
+    if (u.pathname === "/a.jar") return send(zipA, "application/java-archive");
+    if (u.pathname === "/b.jar") return send(zipB, "application/java-archive");
+    if (u.pathname === "/rule.json") return send(JSON.stringify({ 主页url: `${base}/site/` }));
+    if (u.pathname === "/site/") return send("<html>" + "x".repeat(400) + "</html>", "text/html");
+    res.writeHead(404).end();
+  });
+  await new Promise((r) => server3.listen(0, "127.0.0.1", r));
+  const base = `http://127.0.0.1:${server3.address().port}`;
+  try {
+    const o = { ...readOptions({}), budgetDeepCheck: 60, deepTargetTimeout: 5000 };
+    const jarCache = new Map();
+    const index = new Map();
+    const { httpGet } = await import("./core.mjs");
+    for (const jar of [`${base}/a.jar`, `${base}/b.jar`]) {
+      const r = await httpGet(jar, { timeoutMs: 8000 });
+      const dex = [...readZipEntries(r.body).entries()].filter(([n]) => /\.dex$/i.test(n)).map(([, b]) => b);
+      const info = inspectDexEntries(dex);
+      jarCache.set(normUrl(jar), { ok: true, ...info });
+      for (const c of info.classes) if (!index.has(c)) index.set(c, jar);
+    }
+    const findJarWithClass = (cls) => index.get(cls) || "";
+    const site = { name: "写错jar的站", type: 3, api: "csp_XBPQ", jar: `${base}/b.jar`, ext: `${base}/rule.json` };
+    const e = { category: "spider", grade: "fast", site, probe: { ttfb: 100 } };
+    const stats = { dropped: {}, removed: [] };
+    const ds = await runDeepCheck([e], o, {
+      stats,
+      effectiveJar: (st) => st.jar,
+      jarCache,
+      hostCache: new Map(),
+      textCache: new Map(),
+      findJarWithClass,
+      repairJar: (st) => {
+        const jar = findJarWithClass(spiderClassOf(st.api));
+        if (!jar) return "";
+        st.jar = jar;
+        return jar;
+      },
+    });
+    assert.strictEqual(e.grade, "fast", "能修好的站不该被剔");
+    assert.strictEqual(e.jarRepaired, `${base}/a.jar`, `应换成带 XBPQ 的 jar，实际 ${e.jarRepaired}`);
+    assert.strictEqual(ds.repaired, 1);
+    assert.strictEqual(stats.jarRepaired, 1);
+  } finally {
+    await new Promise((r) => server3.close(r));
+  }
 });
 
 console.log(`\n${"=".repeat(50)}\n通过 ${pass} 项，失败 ${fail} 项\n`);

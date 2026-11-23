@@ -212,7 +212,17 @@ async function main() {
   log(`  点播合集 ${c.all} 站（采集站 ${c.cj} / Py ${c.py} / JS ${c.js} / Jar ${c.spider} / 其它 ${c.other}）`);
   const g = s.grades || {};
   log(`  速度分档：精选 ${g.fast || 0} / 普通 ${g.ok || 0} / 偏慢 ${g.slow || 0} / 失效 ${g.dead || 0}（测不准 ${g.uncertain || 0}、未测到 ${g.unsure || 0}，均保留）`);
-  log(`  剔除：失效 ${s.dropped.dead}、太慢 ${s.dropped.slow}、重复 ${s.dropped.dup}、本机引用 ${s.dropped.local}、屏蔽域名 ${s.dropped.blocked || 0}、非快站 ${s.dropped.notFast || 0}`);
+  log(`  剔除：失效 ${s.dropped.dead}、太慢 ${s.dropped.slow}、重复 ${s.dropped.dup}、本机引用 ${s.dropped.local}、屏蔽域名 ${s.dropped.blocked || 0}、深度体检 ${s.dropped.deep || 0}、非快站 ${s.dropped.notFast || 0}`);
+  if (s.deep) {
+    const byStatus = Object.entries(s.deep.byStatus || {})
+      .sort((a, b) => b[1] - a[1])
+      .map(([k, v]) => `${k}:${v}`)
+      .join(" ");
+    log(
+      `  深度体检：检查 ${s.deep.checked}（判不准保留 ${s.deep.uncertain}、预算跳过 ${s.deep.skippedBudget}），` +
+        `剔除 ${s.deep.removed}${s.jarRepaired ? `，换 jar 修好 ${s.jarRepaired}` : ""}｜${byStatus || "无结果"}`,
+    );
+  }
   if (s.probeSkipped) log(`  ⚠️ 本轮有 ${s.probeSkipped} 个站因预算用尽没测到，已保留待下轮补测（不算慢站）`);
   log(
     `  直播：${c.liveSources} 个源（清单种子 ${s.liveSeeds || 0} 条 → 存活 ${s.liveSeedsKept || 0} 条）；` +
@@ -233,6 +243,8 @@ async function main() {
       `| 原始站点 → 去重后 → 输出 | ${s.rawSites} → ${s.afterDedupSites} → ${c.all} |`,
       `| 剔除·失效 | ${s.dropped.dead} |`,
       `| 剔除·太慢 | ${s.dropped.slow} |`,
+      `| 剔除·深度体检（点开不能用） | ${s.dropped.deep || 0} |`,
+      `| 深度体检·换 jar 修好 | ${s.jarRepaired || 0} |`,
       `| 剔除·重复 | ${s.dropped.dup} |`,
       `| 剔除·本机引用 | ${s.dropped.local} |`,
       `| 直播源 | ${c.liveSources}（清单种子 ${s.liveSeeds || 0} → 存活 ${s.liveSeedsKept || 0}） |`,

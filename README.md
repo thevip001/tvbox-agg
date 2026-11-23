@@ -8,19 +8,19 @@
 
 | 文件 | 内容 | **站点数量** | 地址 |
 | --- | --- | ---: | --- |
-| 点播合集.json | 全部点播站点合并去重（采集站、Py、JS、Jar 及其它类型） | <!--NUM:all-->2297 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播合集.json |
-| 点播-采集站.json | 点播 · 采集站（只保留检测可用的） | <!--NUM:cj-->39 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-采集站.json |
-| 点播-Py站.json | 点播 · Py 站 | <!--NUM:py-->407 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Py站.json |
-| 点播-JS站.json | 点播 · JS 站 | <!--NUM:js-->402 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-JS站.json |
-| 点播-Jar爬虫站.json | 点播 · Jar 爬虫站 | <!--NUM:spider-->1449 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Jar爬虫站.json |
-| live.json | 直播聚合接口（TVBox 配置格式） | <!--NUM:liveSources-->70 个源 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/live.json |
+| 点播合集.json | 全部点播站点合并去重（采集站、Py、JS、Jar 及其它类型） | <!--NUM:all-->1880 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播合集.json |
+| 点播-采集站.json | 点播 · 采集站（只保留检测可用的） | <!--NUM:cj-->60 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-采集站.json |
+| 点播-Py站.json | 点播 · Py 站 | <!--NUM:py-->400 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Py站.json |
+| 点播-JS站.json | 点播 · JS 站 | <!--NUM:js-->177 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-JS站.json |
+| 点播-Jar爬虫站.json | 点播 · Jar 爬虫站 | <!--NUM:spider-->1243 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Jar爬虫站.json |
+| live.json | 直播聚合接口（TVBox 配置格式） | <!--NUM:liveSources-->65 个源 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/live.json |
 
 > 上表的数量由每日聚合任务自动回写（见下方的「最新数量」块），和产物永远一致。
 > 四个分类文件相加 = 点播合集（极少数条目会因内容指纹去重略有出入）。
 > `聚合接口/README.md` 里有更详细的分档和过滤明细。
 
 <!-- 站点数量:start（由每日聚合自动生成，勿手改） -->
-> **最新数量**（2026-11-23 08:46 更新）：点播合集 **2297**（采集 39 · Py 407 · JS 402 · Jar 1449 · 其它 0，只含快站）｜直播源 **70**（抽查存活）
+> **最新数量**（2026-11-23 14:23 更新）：点播合集 **1880**（采集 60 · Py 400 · JS 177 · Jar 1243 · 其它 0，只含快站）｜直播源 **65**（抽查存活）
 <!-- 站点数量:end -->
 
 ## 更新时间

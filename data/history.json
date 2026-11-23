@@ -428,5 +428,39 @@
   "fetched": 145,
   "candidates": 224,
   "elapsed": 1552
+ },
+ {
+  "when": "2026-11-24 01:12",
+  "counts": {
+   "all": 1833,
+   "cj": 44,
+   "py": 329,
+   "js": 165,
+   "spider": 1295,
+   "other": 0,
+   "liveSources": 68
+  },
+  "grades": {
+   "fast": 2631,
+   "ok": 940,
+   "uncertain": 281,
+   "unsure": 0,
+   "slow": 71,
+   "dead": 663
+  },
+  "uncertain": null,
+  "dropped": {
+   "dead": 663,
+   "slow": 71,
+   "local": 321,
+   "dup": 11487,
+   "blocked": 14,
+   "notFast": 1322,
+   "liveProbe": 26,
+   "deep": 657
+  },
+  "fetched": 145,
+  "candidates": 249,
+  "elapsed": 1290
  }
 ]

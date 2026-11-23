@@ -956,7 +956,22 @@ export async function runDeepCheck(entries, opts, ctx = {}) {
 
   await pool(entries, num(opts.concurrencyDeep, 16), async (e) => {
     if (Date.now() - phaseStart > budgetMs) {
+      // 预算用尽没测到：与「测不准」同口径，按无效剔除并单列记账。
+      // 历届线上该值恒为 0，正常不会误伤；真触发时报告里能一眼看出来。
       stats.skippedBudget++;
+      e.grade = "dead";
+      e.health = HEALTH.UNCERTAIN;
+      e.healthReason = "本轮深度体检预算用尽，未测到";
+      e.probe = { ...(e.probe || {}), alive: false, grade: "dead", reason: "深检预算用尽未测（判为无效）" };
+      stats.uncertainRemoved++;
+      ctx.stats?.uncertainRemoved?.push({
+        kind: "site-unprobed",
+        name: e.site.name,
+        api: e.site.api,
+        category: e.category,
+        reason: "深度体检预算用尽未测（判为无效）",
+      });
+      if (ctx.stats) ctx.stats.dropped.uncertain = (ctx.stats.dropped.uncertain || 0) + 1;
       return;
     }
     let res;
@@ -986,10 +1001,27 @@ export async function runDeepCheck(entries, opts, ctx = {}) {
     e.healthReason = res.reason || "";
 
     if (status === HEALTH.UNCERTAIN) {
+      // 判不准按无效剔除（用户口径），但与「真死」分开记账、报告单列。
       stats.uncertain++;
+      stats.uncertainRemoved = (stats.uncertainRemoved || 0) + 1;
       e.uncertainDeep = true;
-      // 判不准：降级为 uncertain 档（不进精选，但保留），绝不剔 death
-      if (e.grade === "fast") e.grade = "uncertain";
+      e.grade = "dead";
+      e.probe = {
+        ...(e.probe || {}),
+        alive: false,
+        grade: "dead",
+        uncertainDead: true,
+        reason: `深度检测·判不准（按无效剔除）：${res.reason}`,
+      };
+      ctx.stats?.uncertainRemoved?.push({
+        kind: "site-uncertain",
+        name: e.site.name,
+        api: e.site.api,
+        category: e.category,
+        health: status,
+        reason: `深度检测·判不准（按无效剔除）：${res.reason}`,
+      });
+      if (ctx.stats) ctx.stats.dropped.uncertain = (ctx.stats.dropped.uncertain || 0) + 1;
       return;
     }
     if (DEAD_HEALTH.has(status)) {

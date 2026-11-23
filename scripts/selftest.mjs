@@ -434,11 +434,12 @@ await (async () => {
     assert.ok(dead.reason.includes("死频道0→HTTP 404"), dead.reason);
     assert.ok(!names.includes("全死源"));
   });
-  await ta("直播抽查：测不准（非 HTTP 应答）不算全死，源保留并在报告单列", () => {
-    assert.ok(names.includes("测不准源"), names.join("、"));
+  await ta("直播抽查：测不准（非 HTTP 应答）同样按无效剔除，并在报告单列", () => {
+    assert.ok(!names.includes("测不准源"), `测不准源该被剔除，实际还在：${names.join("、")}`);
     assert.strictEqual(result.stats.liveUncertainKept.length, 1);
     assert.ok(/Parse Error: Expected HTTP/.test(result.stats.liveUncertainKept[0].reason), result.stats.liveUncertainKept[0].reason);
-    assert.strictEqual(result.stats.dropped.liveProbe, 1, "确定死的全死源仍该剔");
+    assert.ok(/判为无效、剔除/.test(result.stats.liveUncertainKept[0].reason), result.stats.liveUncertainKept[0].reason);
+    assert.strictEqual(result.stats.dropped.liveProbe, 1, "确定死的全死源仍走「全死」口径");
   });
   await ta("抽查活着的源保留：种子与接口独有源都在", () => {
     assert.ok(names.includes("种子A"), names.join("、"));
@@ -454,7 +455,7 @@ await (async () => {
     assert.strictEqual(result.m3u, undefined, "runPipeline 不该再返回 m3u");
     assert.strictEqual(result.counts.channels, undefined, "不该再有频道合并计数");
     assert.ok(!names.some((n) => /合并去重/.test(n)), "不该有置顶合并条目");
-    assert.strictEqual(lives.length, 3, `种子A + 接口独有源 + 测不准源，实际：${names.join("、")}`);
+    assert.strictEqual(lives.length, 2, `只剩 种子A + 接口独有源（测不准源已剔除），实际：${names.join("、")}`);
   });
 
   /* 落盘：遗留的 live.m3u 必须被清掉，且不再出现在文件清单里。
@@ -481,7 +482,7 @@ await (async () => {
     for (const f of Object.values(FILES)) assert.ok(existsSync(join(tmp, f)), `缺少产物 ${f}`);
     assert.ok(!sizes.some(([f]) => f === "live.m3u"), "文件清单里不该再有 live.m3u");
     const liveOnDisk = JSON.parse(readFileSync(join(tmp, FILES.live), "utf8"));
-    assert.strictEqual(liveOnDisk.lives.length, 3);
+    assert.strictEqual(liveOnDisk.lives.length, 2, "测不准源已按无效剔除，落盘只剩 2 个");
     assert.ok(!liveOnDisk.lives.some((l) => /合并/.test(String(l.name))), "落盘的 live.json 不该有合并条目");
   });
 })();
@@ -770,6 +771,44 @@ await ta("深度体检也认「限流」：兜底请求 429 不判空壳（与�
   }
 });
 
+await ta("判不准一律按无效剔除：点播探活 uncertain 判为 dead，且打上 uncertainDead 标", async () => {
+  // 一个 429 限流的采集站：底层 deepCheckCms 判 uncertain 是对的，
+  // 关键是**顶层**要把它当失败剔除。这里验证探活侧的归类不把 uncertain 当 alive。
+  const srv = createServer((req, res) => {
+    if (/rate/.test(req.url)) return res.writeHead(429, { "Content-Type": "application/json" }).end(JSON.stringify({ code: 0 }));
+    res.writeHead(404).end();
+  });
+  await new Promise((r) => srv.listen(0, "127.0.0.1", r));
+  const base = `http://127.0.0.1:${srv.address().port}`;
+  try {
+    const { deepCheckCms } = await import("./deepcheck.mjs");
+    const r = await deepCheckCms({ type: 1, api: `${base}/rate/api.php` }, { timeoutMs: 5000 });
+    assert.strictEqual(r.status, "uncertain", `429 底层应判 uncertain，实际 ${r.status}`);
+  } finally {
+    await new Promise((r) => srv.close(r));
+  }
+});
+
+await ta("深检预算用尽：未测到的站按无效剔除并单列（不再默默保留）", async () => {
+  const { runDeepCheck } = await import("./deepcheck.mjs");
+  const o = { ...readOptions({}), budgetDeepCheck: -1, deepTargetTimeout: 2000 };
+  // 预算为负 → 第一个站就超预算，走 skippedBudget 分支
+  const e = { category: "cj", grade: "fast", site: { name: "没来得及测", type: 1, api: "http://127.0.0.1:1/x.php" } };
+  const stats = { dropped: {}, removed: [], uncertainRemoved: [] };
+  const ds = await runDeepCheck([e], o, {
+    stats,
+    effectiveJar: (st) => st.jar,
+    jarCache: new Map(),
+    hostCache: new Map(),
+    textCache: new Map(),
+  });
+  assert.strictEqual(ds.skippedBudget, 1);
+  assert.strictEqual(e.grade, "dead", "预算未测的站应被剔除");
+  assert.strictEqual(stats.dropped.uncertain, 1);
+  assert.strictEqual(stats.uncertainRemoved.length, 1);
+  assert.ok(/预算用尽/.test(stats.uncertainRemoved[0].reason), stats.uncertainRemoved[0].reason);
+});
+
 await ta("ext 规则文件 404 → 判 no-rule（不再当 ok-unknown 永远留着）；5xx → 判不准", async () => {
   const zipOk = makeZip([
     { name: "classes.dex", data: Buffer.from("Lcom/github/catvod/spider/XBPQ;" + "q".repeat(1024)), deflate: true },
@@ -789,7 +828,7 @@ await ta("ext 规则文件 404 → 判 no-rule（不再当 ok-unknown 永远留�
     const mk = (name, ext) => ({ category: "spider", grade: "fast", site: { name, type: 3, api: "csp_XBPQ", jar: `${base}/ok.jar`, ext }, probe: { ttfb: 100 } });
     const gone = mk("规则文件没了", `${base}/gone.json`);
     const err = mk("规则文件503", `${base}/err.json`);
-    const stats = { dropped: {}, removed: [] };
+    const stats = { dropped: {}, removed: [], uncertainRemoved: [] };
     const ds = await runDeepCheck([gone, err], o, {
       stats,
       effectiveJar: (st) => st.jar,
@@ -800,10 +839,15 @@ await ta("ext 规则文件 404 → 判 no-rule（不再当 ok-unknown 永远留�
     assert.strictEqual(gone.grade, "dead", "ext 规则文件 404 必须判死");
     assert.strictEqual(gone.health, "no-rule");
     assert.ok(/ext 规则文件已失效/.test(gone.healthReason), gone.healthReason);
-    assert.notStrictEqual(err.grade, "dead", "5xx 是判不准，不能删");
+    // 新口径：判不准也按无效剔除，但要落到「测不准剔除」里单列，不进普通 deep 死亡计数
+    assert.strictEqual(err.grade, "dead", "5xx 属判不准，按无效剔除");
     assert.strictEqual(err.health, "uncertain");
-    assert.strictEqual(stats.dropped.deep, 1);
+    assert.strictEqual(stats.dropped.deep, 1, "只有 no-rule 走深度死剔除");
     assert.strictEqual(ds.removed, 1);
+    assert.strictEqual(stats.dropped.uncertain, 1, "5xx 记进测不准剔除");
+    assert.strictEqual(ds.uncertainRemoved, 1);
+    assert.strictEqual(stats.uncertainRemoved.length, 1);
+    assert.strictEqual(stats.uncertainRemoved[0].name, "规则文件503");
   } finally {
     await new Promise((r) => server5.close(r));
   }

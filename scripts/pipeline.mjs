@@ -261,11 +261,12 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
     rawParses: 0,
     afterDedupSites: 0,
     afterDedupLives: 0,
-    dropped: { dead: 0, slow: 0, local: 0, dup: 0, blocked: 0, notFast: 0, liveProbe: 0, deep: 0 },
+    dropped: { dead: 0, slow: 0, local: 0, dup: 0, blocked: 0, notFast: 0, liveProbe: 0, deep: 0, uncertain: 0 },
     fetchFail: [],
     subSources: [],
-    removed: [], // 剔除报告
-    liveUncertainKept: [], // 直播抽查全失败但属「测不准」（跑测环境限制），不算死、保留
+    removed: [], // 剔除报告（确定死的）
+    uncertainRemoved: [], // 剔除报告（判不准 / 未测到，按无效剔除，单列记账）
+    liveUncertainKept: [], // 直播抽查全失败且属「测不准」的源（按无效剔除，单列记账）
     skippedByBudget: 0,
     probeSkipped: 0,
     liveSkipped: 0,
@@ -455,10 +456,10 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
 
 
 
-    // 抗误杀：限流/403 属于"服务器活着但拒绝我"。
-    // 单独一个档位 uncertain —— 不能被 strict 当成慢站删掉，报告里也要说清原因。
+    // 限流/403/超时这类「判不准」按失败处理（用户口径：测不准即无效）。
+    // 仍然保留 uncertain 这个档位打标，好让报告单列统计、也方便日后回看是否删太狠。
     if (res.uncertain) {
-      res = { ...res, alive: true, grade: "uncertain" };
+      res = { ...res, alive: false, grade: "dead", uncertainDead: true };
       probeCache.set(ck, res);
       return res;
     }
@@ -525,20 +526,35 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
   for (const e of entries) {
     const g = e.grade || "dead";
     if (g === "dead") {
-      stats.dropped.dead++;
-      const uncertain = e.probe?.uncertain ? "（测不准，下轮重试）" : "";
-      stats.removed.push({
+      // 判不准一律按失败剔除（用户口径），但要和「真死」分开记账，
+      // 报告里单列，方便日后回查是不是删太狠了。
+      const whyUncertain = e.probe?.uncertain || e.probe?.uncertainDead;
+      const entry = {
         kind: "site",
         name: e.site.name,
         api: e.site.api,
         category: e.category,
-        reason: (e.probe?.reason || "不可用") + uncertain,
-      });
+        reason: e.probe?.reason || "不可用",
+      };
+      if (whyUncertain) {
+        stats.dropped.uncertain = (stats.dropped.uncertain || 0) + 1;
+        stats.uncertainRemoved.push({ ...entry, kind: "site-uncertain", reason: `测不准（判为无效）：${entry.reason}` });
+      } else {
+        stats.dropped.dead++;
+        stats.removed.push(entry);
+      }
       continue;
     }
-    // 测不准（限流/403/预算用尽没测到）：永远保留，strict 也不删，但要排后面
+    // 测不准 / 预算用尽没测到：同样按无效剔除，单列记账
     if (g === "uncertain" || g === "unsure") {
-      kept.push(e);
+      stats.dropped.uncertain = (stats.dropped.uncertain || 0) + 1;
+      stats.uncertainRemoved.push({
+        kind: g === "unsure" ? "site-unprobed" : "site-uncertain",
+        name: e.site.name,
+        api: e.site.api,
+        category: e.category,
+        reason: g === "unsure" ? "预算用尽未测（判为无效）" : `测不准（判为无效）：${e.probe?.reason || "限流/拒绝/超时"}`,
+      });
       continue;
     }
     if (g === "slow" && opts.strictness === "strict") {
@@ -846,14 +862,20 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
     const p = probeInfo.get(v.live.url);
     const tag = v.seed ? "（直播源清单种子）" : "";
     if (p?.skipped) {
-      // 预算用尽 ≠ 频道全死：保留，下轮再抽
-      liveFinal.push(v);
+      // 预算用尽没抽到：同一口径，按无效剔除（历届线上该值恒为 0，不会误伤）
+      stats.dropped.uncertain = (stats.dropped.uncertain || 0) + 1;
+      stats.liveUncertainKept.push({
+        kind: "live-unprobed",
+        name: v.live.name,
+        api: v.live.url,
+        reason: `本轮预算用尽未抽查到（判为无效、剔除）${tag}`,
+      });
       continue;
     }
     if (p && p.ok === 0 && p.sample.length) {
       const detail = p.sample.map((ch, i) => `${ch.name}→${p.results[i].reason}`).join("；");
-      // 测不准不算失败：抽样频道全部「确定死」才剔除；
-      // 只要有一条是「测不准」（无 IPv6 / RTSP / AggregateError 等跑测限制），源保留、报告单列
+      // 抽查的频道全失败就剔除整个源（用户口径：测不准同样按无效处理）。
+      // 仍然区分「确定死」和「测不准」两种原因，好在报告里单列、方便日后回查。
       if (p.results.every((r) => r.certain)) {
         stats.dropped.liveProbe++;
         stats.removed.push({
@@ -864,12 +886,14 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
         });
         continue;
       }
+      stats.dropped.uncertain = (stats.dropped.uncertain || 0) + 1;
       stats.liveUncertainKept.push({
         kind: "live-uncertain",
         name: v.live.name,
         api: v.live.url,
-        reason: `抽查 ${p.sample.length} 个频道全失败但属测不准（跑测环境限制，不算死、保留）：${detail}${tag}`,
+        reason: `抽查 ${p.sample.length} 个频道全失败，含测不准项（判为无效、剔除）：${detail}${tag}`,
       });
+      continue;
     }
     if (v.seed) stats.liveSeedsKept++;
     stats.liveProbed = (stats.liveProbed || 0) + 1;
@@ -878,7 +902,7 @@ export async function runPipeline({ candidates, liveSeedSources = [], opts, onPr
   liveFinal.sort((a, b) => (a.info.ttfb ?? 9e9) - (b.info.ttfb ?? 9e9));
   onProgress?.(
     `  频道抽查：${liveKept.length} 个源各抽 ≤${sampleSize} 频道（实测 ${stats.liveProbed || 0} 源${stats.liveProbeSkipped ? `，预算跳过 ${stats.liveProbeSkipped} 源` : ""}），` +
-      `全死剔除 ${stats.dropped.liveProbe} 个，测不准保留 ${stats.liveUncertainKept.length} 个，剩 ${liveFinal.length} 个源`,
+      `全死剔除 ${stats.dropped.liveProbe} 个，测不准/未测剔除 ${stats.liveUncertainKept.length} 个，剩 ${liveFinal.length} 个源`,
   );
 
   /* ---------- 6. 组装输出 ---------- */
@@ -1163,16 +1187,20 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
     更新时间: when,
     统计: result.stats.dropped,
     剔除列表: result.stats.removed.slice(0, 5000),
-    测不准但保留: (result.stats.liveUncertainKept || []).slice(0, 500),
+    // 判不准 / 未测到 → 按无效剔除，单列便于日后回查是否删太狠
+    测不准剔除: [
+      ...(result.stats.uncertainRemoved || []),
+      ...(result.stats.liveUncertainKept || []),
+    ].slice(0, 2000),
     // 深度体检（2026-11-22 新增）：探活通过但「点开不能用」的站点在这里说清原因
     ...(deep
       ? {
           深度体检: {
             说明:
               "对探活通过的采集站 / JS / Jar 站按类型实跑一次：采集站解析结构化数据（有分类必须能刷出条目）、" +
-              "Jar 站解包看 csp_XXX 对应的类在不在包里、规则站把规则里的目标站逐个探活。判不准的一律保留。",
+              "Jar 站解包看 csp_XXX 对应的类在不在包里、规则站把规则里的目标站逐个探活。判不准的一律按无效剔除，单列在「测不准剔除」。",
             检查数: deep.checked,
-            判不准保留: deep.uncertain,
+            判不准剔除: deep.uncertain,
             预算跳过: deep.skippedBudget,
             剔除数: deep.removed,
             各状态: deep.byStatus,
@@ -1209,7 +1237,7 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
     `| **直播源** | **${c.liveSources}**${s.liveSeedsKept ? `（含清单种子 ${s.liveSeedsKept}）` : ""} | [${FILES.live}](${rawUrl(FILES.live)}) |`,
     "",
     `> 以上 ${c.all} 个点播站点${opts.vodFastOnly ? `全部是实测阈值内的快站（普通 TTFB≤${opts.fastTtfb}ms、采集站≤${opts.fastTtfbCj}ms，本轮只收录快站）` : "全部通过存活检测"}，按实测速度排序，快的在前。`,
-    `> 直播源均通过「随机抽查 ${opts.liveProbeChannels} 个频道、全失败即剔除」；全失败但属测不准（跑测机无 IPv6 / RTSP 流等环境限制）不算死、保留；不再产出频道合并列表，live.json 里只有源本身。`,
+    `> 直播源均通过「随机抽查 ${opts.liveProbeChannels} 个频道、全失败即剔除」；含测不准（跑测机无 IPv6 / RTSP 流等环境限制）同样按无效剔除，并在「测不准剔除」里单列；不再产出频道合并列表，live.json 里只有源本身。`,
     "",
     "## 🔍 本轮过滤明细",
     "",
@@ -1219,7 +1247,8 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
     `| 接口抓取成功 | ${result.stats.fetched} | 含多仓递归 |`,
     `| 原始站点 | ${result.stats.rawSites} | 抓到的全部条目 |`,
     `| 去重后 | ${result.stats.afterDedupSites} | 去掉 ${d.dup || 0} 条重复 |`,
-    `| 　├ 剔除·失效 | ${d.dead || 0} | 连不上/内容异常 |`,
+    `| 　├ 剔除·失效 | ${d.dead || 0} | 连不上/内容异常（确定死） |`,
+    `| 　├ 剔除·测不准/未测 | ${d.uncertain || 0} | 限流 / 403 / 5xx / 超时 / 预算未测 → 按无效剔除，明细见「测不准剔除」 |`,
     `| 　├ 剔除·太慢 | ${d.slow || 0} | 首字节超阈值（已实测） |`,
     `| 　├ 剔除·本机引用 | ${d.local || 0} | 127.0.0.1 等 |`,
     `| 　├ 剔除·屏蔽域名 | ${d.blocked || 0} | config/blocked-hosts.txt 一票否决（jar/api/ext/直播/解析） |`,
@@ -1227,14 +1256,14 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
     `| 　├ 剔除·深度体检 | ${d.deep || 0} | 探活过了但点开不能用（空壳 / jar 缺类 / 目标站全挂 / 缺 ext），明细见下 |`,
     ...(s.deep
       ? [
-          `| 　├ 深度体检·判不准保留 | ${s.deep.uncertain || 0} | 403 / 429 / 超时等，判不准就不删 |`,
-          `| 　├ 深度体检·预算跳过 | ${s.deep.skippedBudget || 0} | 到点收工，按原档位保留 |`,
+          `| 　├ 深度体检·判不准剔除 | ${s.deep.uncertain || 0} | 403 / 429 / 超时等判不准 → 按无效剔除（已计入上面的「测不准/未测」） |`,
+          `| 　├ 深度体检·预算跳过 | ${s.deep.skippedBudget || 0} | 到点收工未测 → 按无效剔除（历届线上恒为 0） |`,
           `| 　├ 深度体检·jar 已修好 | ${s.jarRepaired || 0} | 类不在原 jar 里，但同配置别的 jar 有 → 只换 jar 不删站 |`,
         ]
       : []),
     `| 　└ 剔除·直播抽查全死 | ${d.liveProbe || 0} | 每源随机抽 ${opts.liveProbeChannels} 个频道全部失败且均确定死（实测 ${s.liveProbed || 0} 源${s.liveProbeSkipped ? `，预算跳过 ${s.liveProbeSkipped} 源` : ""}） |`,
     ...(s.liveUncertainKept?.length
-      ? [`| 　├ 测不准保留·直播 | ${s.liveUncertainKept.length} | 抽查全失败但属跑测环境限制（无 IPv6 / RTSP / AggregateError），不算死、保留 |`]
+      ? [`| 　├ 测不准剔除·直播 | ${s.liveUncertainKept.length} | 抽查全失败且含测不准项（无 IPv6 / RTSP / AggregateError）→ 按无效剔除 |`]
       : []),
     `| 直播源清单种子 | ${s.liveSeeds || 0} | config/liveupstreams.txt：新增 ${s.liveSeedsNew || 0}、点播接口里已有并升级 ${s.liveSeedsPromoted || 0}、存活保留 ${s.liveSeedsKept || 0} |`,
     `| **最终输出** | **${c.all}** | |`,
@@ -1246,8 +1275,8 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
     `| 🟢 精选（普通≤${opts.fastTtfb}ms / 采集站≤${opts.fastTtfbCj}ms） | ${g.fast || 0} | ${opts.vodFastOnly ? "**唯一收录档**，排最前" : "保留，排最前"} |`,
     `| 🔵 正常（${opts.fastTtfb}<TTFB≤${opts.slowTtfb}ms） | ${g.ok || 0} | ${opts.vodFastOnly ? "不收录（下轮重测）" : "保留"} |`,
     `| 🟡 偏慢（TTFB>${opts.slowTtfb}ms） | ${g.slow || 0} | ${opts.vodFastOnly ? "不收录" : opts.strictness === "strict" ? "**已剔除**" : "保留在文末"} |`,
-    `| 🟠 测不准（限流/403） | ${g.uncertain || 0} | ${opts.vodFastOnly ? "不收录（下轮重测）" : "保留（下轮重测）"} |`,
-    `| ⚪ 未测到（本轮预算用尽） | ${g.unsure || 0} | ${opts.vodFastOnly ? "不收录（下轮补测）" : "保留（下轮补测）"} |`,
+    `| 🟠 测不准（限流/403） | ${g.uncertain || 0} | **按无效剔除** |`,
+    `| ⚪ 未测到（本轮预算用尽） | ${g.unsure || 0} | **按无效剔除** |`,
     `| 🔴 失效 | ${g.dead || 0} | 已剔除 |`,
     "",
     `> 判定阈值（只看首字节，故意不看吞吐）：普通站 TTFB>${opts.slowTtfb}ms 判慢，内置爬虫站（csp_*）放宽到 ${opts.crawlerSlowTtfb}ms —— 内置站测的是目标站首页，HTML 更重；采集站（type 0/1）精选阈值放宽到 ${opts.fastTtfbCj}ms —— cms 后端首字节天然比静态资源慢。`,
@@ -1263,7 +1292,7 @@ export async function writeOutputs({ result, opts, rawUrl, when }) {
     "| Jar 爬虫站（csp_*） | 解包 jar 的 classes.dex，看有没有 `com.github.catvod.spider.类名` | 类不在包里（TVBox 一加载就 ClassNotFoundException）；能换 jar 修的只换 jar 不删站 |",
     "| 规则型爬虫 / JS 站 | 把 ext 规则拉下来，抽出规则里的目标站逐个探活 | 规则无效 / 目标站**全部**不可达 |",
     "",
-    "**判不准的一律保留**：403 / 429 / 5xx / 超时 / 跑测机网络受限，都只降档不删除，下轮重测。",
+    "**判不准一律按无效剔除**：403 / 429 / 5xx / 超时 / 跑测机网络受限，都视为不可用；为了可追溯，全部在剔除报告的「测不准剔除」里单列。",
     ...(s.deep
       ? [
           "",

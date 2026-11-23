@@ -76,18 +76,18 @@ jobs:
           FAST_TTFB_MS: "300"         # 低于 0.3 秒算精选
           FAST_TTFB_CJ_MS: "800"      # 采集站（type 0/1）精选阈值放宽到 0.8 秒（cms 后端首字节天然慢）
           CRAWLER_SLOW_TTFB_MS: "3000"  # 内置爬虫站测的是网站首页，放宽到 3 秒
-          KEEP_UNPROBED: "1"          # 预算用尽没测到的站先保留，下轮补测
+          KEEP_UNPROBED: "0"          # 预算用尽没测到的站按无效剔除（标 unsure 后统一剔除）
           MAX_FAILS: "3"              # 连续失败 3 轮才永久剔除
           # ---- 深度体检：探活通过 ≠ 点开能用（学 MisaTV 的源体检）----
           #  采集站：解析结构化数据，有分类必须能刷出条目（旧版会放过 {"code":0,"list":[]} 空壳）
           #  Jar 站：解包 jar 看 dex 里有没有 csp_XXX 对应的类（否则 TVBox 一加载就 ClassNotFoundException）
           #  规则站：把 ext 规则拉下来，规则里的目标站要有一个活着才算可用
-          # 判不准（403/429/超时/跑测机网络受限）一律保留，下轮重测。
+          # 判不准（403/429/超时/跑测机网络受限）一律按无效剔除，单列在「测不准剔除」。
           DEEP_CHECK: "1"
           DEEP_CHECK_CATEGORIES: "cj,js,spider"
           DEEP_JAR_CLASS: "1"         # 校验「jar 里有没有这个爬虫类」
           DEEP_CHECK_WORKERS: "16"
-          BUDGET_DEEP_CHECK: "600"     # 深度体检预算（秒）；到点收工，没测到的按原档位保留
+          BUDGET_DEEP_CHECK: "600"     # 深度体检预算（秒）；到点收工，没测到的同样按无效剔除并单列
           DEEP_TARGET_TIMEOUT_MS: "8000"
           DEEP_MAX_TARGETS: "3"
           # ---- 点播：只收录快站 ----
@@ -96,7 +96,7 @@ jobs:
           LIVE_PROBE_CHANNELS: "3"    # 每个直播源随机抽查几个频道，全失败剔除整个源
           LIVE_PROBE_TIMEOUT_MS: "6000"
           LIVE_PROBE_WORKERS: "12"
-          BUDGET_LIVE_PROBE: "300"    # 抽查阶段预算（秒）；预算用尽没抽到的源保留，下轮再抽
+          BUDGET_LIVE_PROBE: "300"    # 抽查阶段预算（秒）；预算用尽没抽到的源按无效剔除并单列
           # ---- 保留策略：产物/统计只留最近 30 天 ----
           # 产物是每天覆盖重写的（聚合接口/ 永远只有最新一份）；
           # 这里控制的是会累积的东西：历史统计、候选池。
@@ -107,7 +107,7 @@ jobs:
           KEEP_SOURCE_SUFFIX: "0"     # 名字不再加「｜来源」
           MAX_CANDIDATES: ${{ github.event.inputs.max_candidates || '600' }}
           # ---- 分阶段预算（秒）：到点收工，绝不把任务拖超时 ----
-          # 预算用尽的站不会被删（标 unsure 下轮补测），但会排到后面；
+          # 预算用尽没测到的站按无效剔除（见 KEEP_UNPROBED）；历届线上 budget 跳过恒为 0，
           # 探活是最慢的一步（每个站要测 2 轮），给足 26 分钟。
           BUDGET_FETCH: "900"
           # 探活 1560 + 深度体检 600 = 36 分钟，仍在 60 分钟作业上限内（抓取/直播另有预算）

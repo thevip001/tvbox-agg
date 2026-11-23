@@ -285,6 +285,17 @@ export async function probeCmsSite(api, opts = {}) {
   if (r3.ok) {
     const third = parseCmsPayload(r3.body.toString("utf8"), 0);
     if (third.items.length) return cmsAlive(r1, third, third.items.length, 0, r3);
+  } else if (isUncertain(r3)) {
+    // 兜底请求被判不准（限流 / 403 / 429 / 5xx / 超时）时，它失败不能当作
+    // 「站是空的」的证据 —— 否则一次瞬时故障就会删掉一个本来能用的源。
+    return {
+      alive: true,
+      uncertain: true,
+      grade: "slow",
+      ttfb: r1.ttfb,
+      ms: r1.ms,
+      reason: `ac=list 无分类，兜底 ac=detail 限流/拒绝 HTTP ${r3.status}（判不准，保留）`,
+    };
   }
   if (looksCms) {
     return {

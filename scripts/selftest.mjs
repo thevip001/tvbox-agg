@@ -582,6 +582,14 @@ t("规则目标站：XBPQ 的「主页url/分类url」和 drpy 的 host 都能�
   const drpy = extractRuleTargets("var rule = { title:'x', host:'https://d.example.com', url:'/vod' };");
   assert.deepStrictEqual(drpy, ["https://d.example.com"]);
 });
+t("规则目标站：\"host\": [\"a\", \"b\"] 这种数组备选也要能抽到", () => {
+  const arr = extractRuleTargets(JSON.stringify({ host: ["https://a.example.com", "https://b.example.com"] }));
+  assert.ok(arr.some((u) => u.includes("a.example.com")), arr.join(","));
+  assert.ok(arr.some((u) => u.includes("b.example.com")), arr.join(","));
+  // 嵌套数组也要透传 key
+  const nested = extractRuleTargets(JSON.stringify({ site: { host: ["https://c.example.com"] } }));
+  assert.ok(nested.some((u) => u.includes("c.example.com")), nested.join(","));
+});
 t("目标站归一：百分号域名 / // 开头 / 模板串都能取到 origin", () => {
   assert.strictEqual(toOrigin("https://www.%79%6f%75%6b%75.com/x"), "https://www.youku.com");
   assert.strictEqual(toOrigin("//a.b.com/p?q=1"), "https://a.b.com");
@@ -702,6 +710,102 @@ await ta("端到端深检：空壳采集站被剔，有内容的留下，jar 缺
     assert.ok(ds.removed >= 4);
   } finally {
     await new Promise((r) => server2.close(r));
+  }
+});
+
+await ta("采集站：ac=list 无分类 + 兜底 ac=detail 被判不准 → 保留（不判死）", async () => {
+  // ac=list 返回 CMS 结构但没分类；兜底 ac=detail 返回 429（限流）
+  const server4 = createServer((req, res) => {
+    const u = new URL(req.url, "http://x");
+    const ac = u.searchParams.get("ac");
+    if (ac === "list") {
+      return res.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify({ code: 1, class: [] }));
+    }
+    return res.writeHead(429, { "Content-Type": "application/json" }).end(JSON.stringify({ code: 0, msg: "too many requests" }));
+  });
+  await new Promise((r) => server4.listen(0, "127.0.0.1", r));
+  const base = `http://127.0.0.1:${server4.address().port}`;
+  try {
+    const { probeCmsSite } = await import("./tvbox.mjs");
+    const r = await probeCmsSite(`${base}/api.php/provide/vod/`, { timeoutMs: 5000 });
+    assert.notStrictEqual(r.grade, "dead", `限流不该判死，实际 ${r.grade} / ${r.reason}`);
+    assert.strictEqual(r.alive, true);
+    assert.strictEqual(r.uncertain, true, "应标成判不准");
+  } finally {
+    await new Promise((r) => server4.close(r));
+  }
+});
+
+await ta("深度体检也认「限流」：兜底请求 429 不判空壳（与探活口径一致）", async () => {
+  // ac=list 给了一个没有任何分类的 CMS 壳，兜底 ac=detail 返回 429。
+  // 探活（probeCmsSite）会标 uncertain 保留；深度体检不能再把它判成 empty 删掉。
+  const server6 = createServer((req, res) => {
+    const u = new URL(req.url, "http://x");
+    if (u.searchParams.get("ac") === "list") {
+      return res.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify({ code: 1, class: [] }));
+    }
+    return res.writeHead(429, { "Content-Type": "application/json" }).end(JSON.stringify({ code: 0 }));
+  });
+  await new Promise((r) => server6.listen(0, "127.0.0.1", r));
+  const base = `http://127.0.0.1:${server6.address().port}`;
+  try {
+    const { deepCheckCms } = await import("./deepcheck.mjs");
+    const r = await deepCheckCms({ type: 1, api: `${base}/rate.php` }, { timeoutMs: 5000 });
+    assert.strictEqual(r.status, "uncertain", `429 应判不准，实际 ${r.status}: ${r.reason}`);
+
+    // 真·空壳（200 + 空列表 + 兜底也是空列表）仍然要判 empty 剔除
+    const server7 = createServer((req, res) => {
+      res.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify({ code: 0, list: [] }));
+    });
+    await new Promise((r2) => server7.listen(0, "127.0.0.1", r2));
+    const base7 = `http://127.0.0.1:${server7.address().port}`;
+    try {
+      const r7 = await deepCheckCms({ type: 1, api: `${base7}/shell.php` }, { timeoutMs: 5000 });
+      assert.strictEqual(r7.status, "empty", `真空壳应判 empty，实际 ${r7.status}: ${r7.reason}`);
+    } finally {
+      await new Promise((r2) => server7.close(r2));
+    }
+  } finally {
+    await new Promise((r) => server6.close(r));
+  }
+});
+
+await ta("ext 规则文件 404 → 判 no-rule（不再当 ok-unknown 永远留着）；5xx → 判不准", async () => {
+  const zipOk = makeZip([
+    { name: "classes.dex", data: Buffer.from("Lcom/github/catvod/spider/XBPQ;" + "q".repeat(1024)), deflate: true },
+  ]);
+  const server5 = createServer((req, res) => {
+    const u = new URL(req.url, "http://x");
+    const send = (b, t = "text/plain") => res.writeHead(200, { "Content-Type": t }).end(b);
+    if (u.pathname === "/ok.jar") return send(zipOk, "application/java-archive");
+    if (u.pathname === "/gone.json") return res.writeHead(404).end("not found");
+    if (u.pathname === "/err.json") return res.writeHead(503).end("busy");
+    res.writeHead(404).end();
+  });
+  await new Promise((r) => server5.listen(0, "127.0.0.1", r));
+  const base = `http://127.0.0.1:${server5.address().port}`;
+  try {
+    const o = { ...readOptions({}), budgetDeepCheck: 60, deepTargetTimeout: 4000 };
+    const mk = (name, ext) => ({ category: "spider", grade: "fast", site: { name, type: 3, api: "csp_XBPQ", jar: `${base}/ok.jar`, ext }, probe: { ttfb: 100 } });
+    const gone = mk("规则文件没了", `${base}/gone.json`);
+    const err = mk("规则文件503", `${base}/err.json`);
+    const stats = { dropped: {}, removed: [] };
+    const ds = await runDeepCheck([gone, err], o, {
+      stats,
+      effectiveJar: (st) => st.jar,
+      jarCache: new Map(),
+      hostCache: new Map(),
+      textCache: new Map(),
+    });
+    assert.strictEqual(gone.grade, "dead", "ext 规则文件 404 必须判死");
+    assert.strictEqual(gone.health, "no-rule");
+    assert.ok(/ext 规则文件已失效/.test(gone.healthReason), gone.healthReason);
+    assert.notStrictEqual(err.grade, "dead", "5xx 是判不准，不能删");
+    assert.strictEqual(err.health, "uncertain");
+    assert.strictEqual(stats.dropped.deep, 1);
+    assert.strictEqual(ds.removed, 1);
+  } finally {
+    await new Promise((r) => server5.close(r));
   }
 });
 

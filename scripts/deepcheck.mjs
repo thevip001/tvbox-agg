@@ -472,18 +472,26 @@ export function extractRuleTargets(text) {
     json = null;
   }
   if (json && typeof json === "object") {
-    const walk = (node, depth) => {
+    // keyInTargets：当前节点是不是「目标站字段」的值（含数组里的元素）。
+    // 规则里备选站常写成 `"host": ["https://a", "https://b"]`，
+    // 数组分支直接往下递归会把 key 丢掉，导致备选地址一个都抽不出来。
+    const walk = (node, depth, keyInTargets = false) => {
       if (!node || depth > 5) return;
+      if (typeof node === "string") {
+        if (keyInTargets) out.push(node);
+        return;
+      }
       if (Array.isArray(node)) {
-        for (const v of node) walk(v, depth + 1);
+        for (const v of node) walk(v, depth + 1, keyInTargets);
         return;
       }
       if (typeof node !== "object") return;
       for (const [k, v] of Object.entries(node)) {
+        const isTargetKey = TARGET_KEYS.includes(k);
         if (typeof v === "string") {
-          if (TARGET_KEYS.includes(k)) out.push(v);
+          if (isTargetKey) out.push(v);
         } else if (v && typeof v === "object") {
-          walk(v, depth + 1);
+          walk(v, depth + 1, isTargetKey);
         }
       }
     };
@@ -559,21 +567,30 @@ export async function deepCheckCms(site, opts = {}) {
   };
 
   const acForDetail = type === 0 ? "videolist" : "detail";
+  /**
+   * 请求并返回 { r, text, failed }：
+   *   failed=true 表示「请求失败」（text 为空的原因不是内容为空）——
+   *   调用方必须按 failed 区分「判不准 / 报错」，绝不能当成「站是空的」。
+   *   只看 text 是否为空会混淆这两种情况（5xx/429 响应体被丢弃后就看不见了）。
+   */
   const getJson = async (url) => {
     const r = await httpGet(url, { timeoutMs, maxBytes: 1024 * 1024, ua: "Mozilla/5.0" });
     // 5xx / 429 的响应体往往是网关错误页，拿去解析只会被误判成「空壳站」→ 误杀。
-    // 这类统一交回调用方按「判不准」处理。
-    if (!r.ok && (isUncertainStatus(r) || !r.body.length)) return { r, text: "" };
-    return { r, text: r.body.toString("utf8") };
+    if (!r.ok) return { r, text: "", failed: true };
+    return { r, text: r.body.toString("utf8"), failed: false };
   };
 
   // ① 拿分类（ac=list 对新版苹果CMS / 海洋CMS 都有效）
   const first = await getJson(withParams({ ac: "list" }));
-  if (!first.text) {
+  if (first.failed) {
     if (isUncertainStatus(first.r)) {
       return { status: HEALTH.UNCERTAIN, reason: `ac=list ${first.r.error || `HTTP ${first.r.status}`}（判不准，保留）`, ttfb: first.r.ttfb };
     }
     return { status: HEALTH.ERROR, reason: `ac=list HTTP ${first.r.status}`, ttfb: first.r.ttfb };
+  }
+  if (!first.text.trim()) {
+    // 200 但响应体是空的：接口在，但什么都没给
+    return { status: HEALTH.EMPTY, reason: "ac=list 返回空内容（空壳站）", ttfb: first.r.ttfb };
   }
   let parsed = parseCmsPayload(first.text, type);
   const ttfb = first.r.ttfb;
@@ -598,7 +615,7 @@ export async function deepCheckCms(site, opts = {}) {
       return { status: HEALTH.EMPTY, reason: `有 ${parsed.classes.length} 个分类但都没有 id，无法取内容`, ttfb };
     }
     const second = await getJson(withParams({ ac: acForDetail, t: tid, pg: 1 }));
-    if (!second.text) {
+    if (second.failed || !second.text.trim()) {
       if (isUncertainStatus(second.r)) {
         return {
           status: HEALTH.OK_CLASSES,
@@ -631,6 +648,22 @@ export async function deepCheckCms(site, opts = {}) {
 
   // ③ 连分类都没有：直接按分类协议再试一次，排除「ac=list 不支持」的接口
   const third = await getJson(withParams({ ac: acForDetail, pg: 1 }));
+  if (third.failed) {
+    // 兜底请求失败 ≠ 站是空的。限流 / 403 / 5xx / 超时一律判不准、保留；
+    // 只有明确的 4xx（接口路径不对）才按「接口无效」剔除。
+    if (isUncertainStatus(third.r)) {
+      return {
+        status: HEALTH.UNCERTAIN,
+        reason: `ac=list 无分类，兜底 ac=${acForDetail} ${third.r.error || `HTTP ${third.r.status}`}（判不准，保留）`,
+        ttfb,
+      };
+    }
+    return {
+      status: HEALTH.ERROR,
+      reason: `ac=list 无分类，兜底 ac=${acForDetail} HTTP ${third.r.status}`,
+      ttfb,
+    };
+  }
   if (third.text) {
     const p3 = parseCmsPayload(third.text, type);
     if (p3.items.length) {
@@ -820,15 +853,28 @@ export async function deepCheckSpider(site, opts = {}, ctx = {}, caches = {}) {
     const url = cleanResourceUrl(site.ext);
     ruleText = caches.text?.get(url) || "";
     if (!ruleText) {
+      let r = null;
       try {
-        const r = await httpGet(url, { timeoutMs: num(opts.timeoutMs, 9000), maxBytes: 512 * 1024 });
-        if (r.ok) {
-          ruleText = r.body.toString("utf8");
-          caches.text?.set(url, ruleText);
-        }
+        r = await httpGet(url, { timeoutMs: num(opts.timeoutMs, 9000), maxBytes: 512 * 1024 });
       } catch {
-        /* 规则文件拉不到，退回 ext 对象路径 */
+        r = null;
       }
+      if (r?.ok) {
+        ruleText = r.body.toString("utf8");
+        if (ruleText) caches.text?.set(url, ruleText);
+      } else if (r && isUncertainStatus(r)) {
+        // 限流 / 403 / 429 / 5xx / 超时：判不准，保留
+        return { status: HEALTH.UNCERTAIN, reason: `ext 规则文件取不到（${r.error || `HTTP ${r.status}`}），判不准、保留` };
+      } else if (r) {
+        // 明确的 4xx / 空内容：规则文件已经不存在了，这个站必然点开报错。
+        // 以前这里会退回「抽不到目标站 → ok-unknown」把它留下，等于永远剔不掉。
+        return {
+          status: HEALTH.NO_RULE,
+          reason: `ext 规则文件已失效（${r.error || `HTTP ${r.status}`}）：${url}`,
+        };
+      }
+      // r === null（连接层异常且没拿到任何响应）：无法区分是跑测机的问题还是站点问题，判不准
+      if (!r) return { status: HEALTH.UNCERTAIN, reason: "ext 规则文件请求异常（未拿到响应），判不准、保留" };
     }
   } else if (typeof site.ext === "object") {
     ruleText = JSON.stringify(site.ext);

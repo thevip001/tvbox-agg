@@ -400,7 +400,10 @@ export async function probeTarget(target, opts = {}) {
   if (r.status >= 400) return { alive: false, certain: true, reason: `HTTP ${r.status}`, status: r.status };
   const text = r.body.toString("utf8");
   if (PARKED_RE.test(text.slice(0, 4096))) return { alive: false, certain: true, reason: "停站/域名出售页", status: r.status };
-  if (r.body.length < 120) return { alive: false, certain: true, reason: "页面为空（疑似空壳）", status: r.status };
+  // 空页面不足以判死：不少采集站/规则站对根路径返回空 body 或极短的跳转壳，
+  // 但 /index.php/vod/... 这些真实入口是好的；也可能是反爬。
+  // 只有「明确的 4xx + 停站文案 + 域名不存在」才算硬证据。
+  if (r.body.length < 120) return { alive: false, uncertain: true, reason: "根路径页面为空（不足以判死）", status: r.status };
   return { alive: true, status: r.status, reason: "ok" };
 }
 
@@ -448,8 +451,11 @@ export async function judgeTargets(targets, cache, opts = {}) {
   const detail = results
     .map((x) => `${x.origin.replace(/^https?:\/\//, "")}→${x.reason}`)
     .join("；");
+  // 全都不活时，只有「全都是确定死」才能判死。
+  // 混合证据（一个镜像域名没了、另一个只是超时）必须判不准 ——
+  // 超时的那个镜像很可能仍然能用，只是跑测机这一刻连不上。
   if (alive.length) return { verdict: "alive", alive, dead, uncertain, detail };
-  if (dead.length) return { verdict: "dead", alive, dead, uncertain, detail };
+  if (dead.length && !uncertain.length) return { verdict: "dead", alive, dead, uncertain, detail };
   return { verdict: "uncertain", alive, dead, uncertain, detail };
 }
 

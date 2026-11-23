@@ -713,6 +713,49 @@ await ta("端到端深检：空壳采集站被剔，有内容的留下，jar 缺
   }
 });
 
+await ta("目标站混合证据：一个域名没了 + 一个超时 → 判不准保留（不能判死）", async () => {
+  // 线上真实形态：bzhanys.com 已 NXDOMAIN，bzhanyy.com 只是 ECONNRESET。
+  // 超时的镜像很可能仍然能用，只是跑测机这一刻连不上。
+  const alive2 = createServer((req, res) => res.writeHead(200).end("x".repeat(400)));
+  await new Promise((r) => alive2.listen(0, "127.0.0.1", r));
+  const okPort = alive2.address().port;
+  try {
+    const { judgeTargets } = await import("./deepcheck.mjs");
+    // 死域用 .invalid（RFC 2606 保证 NXDOMAIN），活站用本地端口
+    const r = await judgeTargets(
+      [`http://127.0.0.1:${okPort}/`, "https://definitely-not-a-real-host-xyz.invalid/"],
+      new Map(),
+      { deepTargetTimeout: 4000, deepMaxTargets: 3 },
+    );
+    assert.strictEqual(r.verdict, "alive", `有一个活着就该判 alive，实际 ${r.verdict}`);
+
+    // 全是「确定死」（都是 NXDOMAIN）→ dead
+    const allDead = await judgeTargets(
+      ["https://no-such-host-a.invalid/", "https://no-such-host-b.invalid/"],
+      new Map(),
+      { deepTargetTimeout: 4000, deepMaxTargets: 3 },
+    );
+    assert.strictEqual(allDead.verdict, "dead", `全 NXDOMAIN 应判 dead，实际 ${allDead.verdict}`);
+  } finally {
+    await new Promise((r) => alive2.close(r));
+  }
+});
+
+await ta("目标站探活：根路径空页面只是判不准，不算确定死", async () => {
+  const srv = createServer((req, res) => res.writeHead(200).end(""));
+  await new Promise((r) => srv.listen(0, "127.0.0.1", r));
+  const base = `http://127.0.0.1:${srv.address().port}`;
+  try {
+    const { probeTarget } = await import("./deepcheck.mjs");
+    const r = await probeTarget(`${base}/`, { deepTargetTimeout: 4000 });
+    assert.strictEqual(r.alive, false);
+    assert.notStrictEqual(r.certain, true, "空页面不该被当成确定死");
+    assert.ok(/不足以判死/.test(r.reason), r.reason);
+  } finally {
+    await new Promise((r) => srv.close(r));
+  }
+});
+
 await ta("采集站：ac=list 无分类 + 兜底 ac=detail 被判不准 → 保留（不判死）", async () => {
   // ac=list 返回 CMS 结构但没分类；兜底 ac=detail 返回 429（限流）
   const server4 = createServer((req, res) => {

@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-22 14:59",
+ "updated": "2026-11-23 08:46",
  "entries": [
   {
    "url": "http://肥猫.net/tv",
@@ -50,10 +50,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "http://www.饭太硬.cc/tv",
@@ -67,10 +67,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "http://www.饭太硬.xyz/tv",
@@ -94,10 +94,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://9280.kstore.vip/newwex.json",
@@ -112,10 +112,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "http://new.王二小放牛娃.top",
@@ -127,10 +127,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://raw.liucn.cc/box/m.json",
@@ -144,10 +144,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://szyyds.cn/tv/x.json",
@@ -164,10 +164,10 @@
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
    "lastErr": "AggregateError",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "http://tv.nxog.top/m/",
@@ -205,10 +205,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://raw.githubusercontent.com/dxyc0922/Tvbox4.x_api/refs/heads/main/接口.json",
@@ -220,10 +220,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://raw.githubusercontent.com/dxyc0922/Tvbox4.x_api/refs/heads/main/接口-remote.json",
@@ -235,10 +235,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://github.com/youhunwl/TVAPP/raw/refs/heads/main/TVBox",
@@ -273,11 +273,11 @@
    "weight": 3,
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
-   "fails": 1,
-   "lastOk": "2026-11-22T05:26:25.340Z",
+   "fails": 0,
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 522"
   },
   {
@@ -291,10 +291,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "http://tvbox.王二小放牛娃.top",
@@ -309,10 +309,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.yingm.cc/dm/dm.json",
@@ -326,10 +326,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "http://home.jundie.top:81/top98.json",
@@ -344,10 +344,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://cdn.gitmirror.com/bb/xduo/libs/master/index.json",
@@ -372,10 +372,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://tv.菜妮丝.top",
@@ -387,10 +387,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 522"
   },
   {
@@ -405,10 +405,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://dxawi.github.io/0/0.json",
@@ -420,10 +420,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://raw.githubusercontent.com/xyq254245/xyqonlinerule/main/XYQTVBox.json",
@@ -436,10 +436,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://raw.githubusercontent.com/guot55/YGBH/main/vip2.json",
@@ -451,10 +451,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.252035.xyz/z/FongMi.json",
@@ -467,10 +467,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://raw.githubusercontent.com/maoystv/6/main/000.json",
@@ -482,10 +482,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "http://box.ufuzi.com/tv/qq/短剧频道/api.json",
@@ -509,10 +509,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://9763.kstore.vip/aowu.json",
@@ -525,10 +525,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://android.lushunming.qzz.io/json/index.json",
@@ -540,10 +540,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://pastebin.com/raw/gtbKvnE1",
@@ -555,10 +555,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.iyouhun.com/tv/dc",
@@ -570,10 +570,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.iyouhun.com/tv/yh",
@@ -585,10 +585,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://9877.kstore.space/AnotherDS/api.json",
@@ -991,10 +991,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "http://fty.333232.xyz/tv",
@@ -1007,10 +1007,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://jijietvbox.lol/jieluntan-fty.json",
@@ -1033,10 +1033,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://0.12yue.de5.net/tvbox/摸鱼.json",
@@ -1048,10 +1048,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://6800.kstore.vip/fish.json",
@@ -1064,10 +1064,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "http://tvbox.xn--4kq62z5rby2qupq9ub.top",
@@ -1079,10 +1079,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://0.12yue.de5.net/tvbox/王二小.json",
@@ -1094,10 +1094,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "http://tv.999888987.xyz/",
@@ -1109,10 +1109,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "http://tv.999888123.xyz/",
@@ -1124,10 +1124,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://jijietvbox.lol/jieluntan-wxe.json",
@@ -1150,10 +1150,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://jijietvbox.lol/jieluntan-n2.json",
@@ -1176,10 +1176,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://9280.kstore.space/aiwex.json",
@@ -1192,10 +1192,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "http://ai.xn--4kq62z5rby2qupq9ub.top/",
@@ -1207,11 +1207,11 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
    "lastErr": "AggregateError",
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "http://new.xn--4kq62z5rby2qupq9ub.top",
@@ -1223,10 +1223,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "http://new.999888123.xyz/",
@@ -1238,10 +1238,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "http://new.999888987.xyz/",
@@ -1253,10 +1253,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "http://124.71.19.220/c/1",
@@ -1268,10 +1268,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://700sjro44343.vicp.fun/240731/one/",
@@ -1283,10 +1283,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://0.12yue.de5.net/tvbox/挺好.json",
@@ -1298,10 +1298,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "http://ztha.top/TVBox/thdjk.json",
@@ -1315,10 +1315,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "http://boluo.live",
@@ -1353,10 +1353,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://700sjro44343.vicp.fun/vip/2505/qiezi/duo.txt",
@@ -1368,10 +1368,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://cnb.cool/fish2035/xs/-/git/raw/main/api.json",
@@ -1383,10 +1383,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://0.12yue.de5.net/tvbox/潇洒.json",
@@ -1398,10 +1398,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://jijietvbox.lol/xiaosha.json",
@@ -1425,10 +1425,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://0.12yue.de5.net/tvbox/小马.json",
@@ -1440,10 +1440,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://jijietvbox.lol/jieluntan-xiaoma.json",
@@ -1466,10 +1466,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://tv.203511.xyz/0821.json",
@@ -1481,10 +1481,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://0.12yue.de5.net/tvbox/集多.json",
@@ -1507,10 +1507,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://jijietvbox.lol/jieluntan-aowu.json",
@@ -1533,10 +1533,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://0.12yue.de5.net/tvbox/周J.json",
@@ -1548,10 +1548,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://0.12yue.de5.net/tvbox/小米.json",
@@ -1563,10 +1563,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://0.12yue.de5.net/tvbox/菜妮丝.json",
@@ -1578,10 +1578,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://jijietvbox.lol/jieluntan-cns.json",
@@ -1593,10 +1593,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://0.12yue.de5.net/tvbox/东篱.json",
@@ -1608,10 +1608,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://0.12yue.de5.net/tvbox/聚玩.json",
@@ -1623,10 +1623,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "http://47.96.82.41:5188/api.json",
@@ -1638,10 +1638,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://qist.wyfc.qzz.io/jsm.json",
@@ -1653,10 +1653,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.iyouhun.com/tv/wex",
@@ -1669,10 +1669,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://jijietvbox.lol/jieluntan-jinyu.json",
@@ -1684,10 +1684,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://gh-proxy.com/https://raw.githubusercontent.com/wxrjck/-YSC-/refs/heads/main/wx.json",
@@ -1695,15 +1695,10 @@
    "sources": [
     "轩源接口清单"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-21T07:22:56.709Z",
-   "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 3,
-   "lastOk": "2026-11-22T00:13:31.201Z",
-   "sites": 0,
-   "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 403"
+   "lastSeen": "2026-11-21T08:15:16.992Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://yqx.imgos.cn/yqx/tv/duo.json",
@@ -16076,8 +16071,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16091,8 +16086,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16106,8 +16101,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16132,8 +16127,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16147,8 +16142,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16162,8 +16157,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16189,10 +16184,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 522"
   },
   {
@@ -16204,8 +16199,8 @@
    "weight": 1,
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
-   "fails": 1,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 2,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastOk": "2026-11-22T05:26:25.340Z",
    "sites": 0,
    "lives": 0,
@@ -16221,8 +16216,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16237,10 +16232,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "连接超时"
   },
   {
@@ -16253,8 +16248,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16323,8 +16318,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16339,10 +16334,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://9877.kstore.space/sun.json",
@@ -16354,8 +16349,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16439,8 +16434,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16463,15 +16458,10 @@
    "sources": [
     "周J"
    ],
-   "weight": 1,
-   "firstSeen": "2026-11-21T07:22:56.709Z",
-   "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T00:13:31.201Z",
-   "sites": 0,
-   "lives": 0,
-   "lastErr": "HTTP 403"
+   "lastSeen": "2026-11-21T08:15:16.987Z",
+   "weight": 1,
+   "blocked": true
   },
   {
    "url": "https://gh-proxy.org/raw.githubusercontent.com/ggrrttyyiii/CatVodSpider/refs/heads/main/json/demo.json",
@@ -16483,8 +16473,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16499,8 +16489,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16510,15 +16500,10 @@
    "sources": [
     "心魔"
    ],
-   "weight": 1,
-   "firstSeen": "2026-11-21T07:22:56.709Z",
-   "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T00:13:31.201Z",
-   "sites": 0,
-   "lives": 0,
-   "lastErr": "HTTP 403"
+   "lastSeen": "2026-11-21T08:15:16.987Z",
+   "weight": 1,
+   "blocked": true
   },
   {
    "url": "http://hucongrong.web3v.work/风水/fxz/fxz.json",
@@ -16531,10 +16516,10 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "http://tjf1100.serv00.net",
@@ -16546,8 +16531,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16561,8 +16546,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16577,8 +16562,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16592,8 +16577,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16618,8 +16603,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16633,8 +16618,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16648,8 +16633,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16663,8 +16648,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16701,8 +16686,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16716,8 +16701,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16753,8 +16738,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16768,8 +16753,8 @@
    "firstSeen": "2026-11-21T07:22:56.709Z",
    "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -16780,15 +16765,10 @@
     "FongMI线路",
     "Supprise0901·仓库"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-21T07:22:56.709Z",
-   "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T00:13:31.201Z",
-   "sites": 0,
-   "lives": 0,
-   "lastErr": "HTTP 403"
+   "lastSeen": "2026-11-21T08:15:16.987Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "http://pandown.pro/tvbox/tvbox.json",
@@ -16808,15 +16788,10 @@
     "高天流云js",
     "多仓递归"
    ],
-   "weight": 3,
-   "firstSeen": "2026-11-21T07:22:56.709Z",
-   "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 3,
-   "lastOk": "2026-11-22T00:13:31.201Z",
-   "sites": 0,
-   "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 403"
+   "lastSeen": "2026-11-21T08:15:16.992Z",
+   "weight": 3,
+   "blocked": true
   },
   {
    "url": "https://gh-proxy.com/raw.githubusercontent.com/gaotianliuyun/gao/master/XYQ.json",
@@ -16824,15 +16799,10 @@
    "sources": [
     "高天流云 XYQ"
    ],
-   "weight": 1,
-   "firstSeen": "2026-11-21T07:22:56.709Z",
-   "lastSeen": "2026-11-21T08:15:16.987Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T00:13:31.201Z",
-   "sites": 0,
-   "lives": 0,
-   "lastErr": "HTTP 403"
+   "lastSeen": "2026-11-21T08:15:16.987Z",
+   "weight": 1,
+   "blocked": true
   },
   {
    "url": "http://www.lyyytv.cn/yt/yt.json",
@@ -16932,10 +16902,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://hb.xyyh.online/tvbox",
@@ -17105,10 +17075,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.iyouhun.com/tv/fm",
@@ -17120,10 +17090,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.iyouhun.com/tv/pg",
@@ -17135,10 +17105,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.iyouhun.com/tv/duo",
@@ -17150,10 +17120,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.iyouhun.com/tv/dongli",
@@ -17161,15 +17131,10 @@
    "sources": [
     "多仓递归"
    ],
-   "weight": 3,
-   "firstSeen": "2026-11-21T07:41:40.099Z",
-   "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 3,
-   "lastOk": "2026-11-22T00:13:31.201Z",
-   "sites": 0,
-   "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "JSON 解析失败"
+   "lastSeen": "2026-11-21T08:15:16.992Z",
+   "weight": 3,
+   "blocked": true
   },
   {
    "url": "https://www.iyouhun.com/tv/nf",
@@ -17177,15 +17142,10 @@
    "sources": [
     "多仓递归"
    ],
-   "weight": 3,
-   "firstSeen": "2026-11-21T07:41:40.099Z",
-   "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 3,
-   "lastOk": "2026-11-22T00:13:31.201Z",
-   "sites": 0,
-   "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "JSON 解析失败"
+   "lastSeen": "2026-11-21T08:15:16.992Z",
+   "weight": 3,
+   "blocked": true
   },
   {
    "url": "https://www.iyouhun.com/tv/xiaomi",
@@ -17197,10 +17157,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.iyouhun.com/tv/zx",
@@ -17212,10 +17172,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.iyouhun.com/tv/my",
@@ -17227,10 +17187,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.iyouhun.com/tv/newwex",
@@ -17242,10 +17202,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.iyouhun.com/tv/hjm",
@@ -17257,10 +17217,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.iyouhun.com/tv/xhb",
@@ -17283,10 +17243,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.iyouhun.com/tv/aowu",
@@ -17298,10 +17258,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.iyouhun.com/tv/fuma",
@@ -17313,10 +17273,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.iyouhun.com/tv/dl",
@@ -17339,10 +17299,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.iyouhun.com/tv/nb",
@@ -17354,10 +17314,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.iyouhun.com/tv/dmc",
@@ -17369,10 +17329,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.iyouhun.com/tv/gtly",
@@ -17380,15 +17340,10 @@
    "sources": [
     "多仓递归"
    ],
-   "weight": 3,
-   "firstSeen": "2026-11-21T07:41:40.099Z",
-   "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 3,
-   "lastOk": "2026-11-22T00:13:31.201Z",
-   "sites": 0,
-   "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "JSON 解析失败"
+   "lastSeen": "2026-11-21T08:15:16.992Z",
+   "weight": 3,
+   "blocked": true
   },
   {
    "url": "https://www.iyouhun.com/tv/et",
@@ -17400,10 +17355,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.iyouhun.com/tv/sepd",
@@ -17426,10 +17381,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://xn--s6wu47g.v.nxog.top/apia.php?id=1",
@@ -17496,10 +17451,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://www.iyouhun.com/tv/xs",
@@ -17507,15 +17462,10 @@
    "sources": [
     "多仓递归"
    ],
-   "weight": 3,
-   "firstSeen": "2026-11-21T07:41:40.099Z",
-   "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 3,
-   "lastOk": "2026-11-22T00:13:31.201Z",
-   "sites": 0,
-   "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "JSON 解析失败"
+   "lastSeen": "2026-11-21T08:15:16.992Z",
+   "weight": 3,
+   "blocked": true
   },
   {
    "url": "https://www.iyouhun.com/tv/xyq",
@@ -17523,15 +17473,10 @@
    "sources": [
     "多仓递归"
    ],
-   "weight": 3,
-   "firstSeen": "2026-11-21T07:41:40.099Z",
-   "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 3,
-   "lastOk": "2026-11-22T00:13:31.201Z",
-   "sites": 0,
-   "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "JSON 解析失败"
+   "lastSeen": "2026-11-21T08:15:16.992Z",
+   "weight": 3,
+   "blocked": true
   },
   {
    "url": "https://www.iyouhun.com/tv/jd",
@@ -17550,15 +17495,10 @@
    "sources": [
     "多仓递归"
    ],
-   "weight": 3,
-   "firstSeen": "2026-11-21T07:41:40.099Z",
-   "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 3,
-   "lastOk": "2026-11-22T00:13:31.201Z",
-   "sites": 0,
-   "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 403"
+   "lastSeen": "2026-11-21T08:15:16.992Z",
+   "weight": 3,
+   "blocked": true
   },
   {
    "url": "https://gh-proxy.com/https://raw.githubusercontent.com/wxrjck/-YSC-/main/jh.txt",
@@ -17566,15 +17506,10 @@
    "sources": [
     "多仓递归"
    ],
-   "weight": 3,
-   "firstSeen": "2026-11-21T07:41:40.099Z",
-   "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 3,
-   "lastOk": "2026-11-22T00:13:31.201Z",
-   "sites": 0,
-   "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 403"
+   "lastSeen": "2026-11-21T08:15:16.992Z",
+   "weight": 3,
+   "blocked": true
   },
   {
    "url": "http://我不是.摸鱼儿.cc",
@@ -17586,10 +17521,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://jihulab.com/ymz1231/xymz/-/raw/main/ymshaoer",
@@ -17602,10 +17537,10 @@
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
    "fails": 0,
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://ghproxy.net/https://raw.githubusercontent.com/maoystv/6/main/001.json",
@@ -17617,12 +17552,12 @@
    "weight": 3,
    "firstSeen": "2026-11-21T07:41:40.099Z",
    "lastSeen": "2026-11-21T08:15:16.992Z",
-   "fails": 2,
-   "lastOk": "2026-11-22T04:11:14.263Z",
+   "fails": 0,
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0,
    "lastErr": "HTTP 500",
-   "lastTried": "2026-11-22T06:59:23.111Z"
+   "lastTried": "2026-11-23T00:46:00.997Z"
   },
   {
    "url": "https://raw.githubusercontent.com/TheFactoryX/screen-tests/main/apilinks.txt",
@@ -19328,8 +19263,8 @@
    "firstSeen": "2026-11-21T12:22:16.873Z",
    "lastSeen": "2026-11-21T12:22:16.873Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -20406,12 +20341,10 @@
    "sources": [
     "存活验证仓"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "未找到 sites / lives / urls 字段"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://jx.zui.cm/?url=",
@@ -20419,12 +20352,10 @@
    "sources": [
     "存活验证仓"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "getaddrinfo ENOTFOUND jx.zui.cm"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://jx.playerjy.com/?url=",
@@ -20432,12 +20363,10 @@
    "sources": [
     "存活验证仓"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "连接超时"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://vip.bljiex.com/?v=",
@@ -20445,12 +20374,10 @@
    "sources": [
     "存活验证仓"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "JSON 解析失败"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "http://www.pangujiexi.cc/jiexi.php?url=",
@@ -20458,12 +20385,10 @@
    "sources": [
     "存活验证仓"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "socket hang up"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://api.jiexi.la/?url=",
@@ -20471,12 +20396,10 @@
    "sources": [
     "存活验证仓"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "getaddrinfo ENOTFOUND api.jiexi.la"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "http://jiexi.lyyytv.cn/json.php?url=",
@@ -20484,12 +20407,10 @@
    "sources": [
     "存活验证仓"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 403"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://player.77lehuo.com/aliplayer/?url=",
@@ -20497,12 +20418,10 @@
    "sources": [
     "存活验证仓"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "连接超时"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://play.dadiapi.com/watch?url=",
@@ -20510,12 +20429,10 @@
    "sources": [
     "存活验证仓"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "JSON 解析失败"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://jiexi.ttbfp1.com/m3u8/?url=",
@@ -20523,12 +20440,10 @@
    "sources": [
     "存活验证仓"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "JSON 解析失败"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://vip.zykbf.com/?url=",
@@ -20536,12 +20451,10 @@
    "sources": [
     "存活验证仓"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 403"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://aa.m3u8zy.fun/nk/?url=",
@@ -20549,12 +20462,10 @@
    "sources": [
     "存活验证仓"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "getaddrinfo ENOTFOUND aa.m3u8zy.fun"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://live.fanmingming.com/player/?vurl=",
@@ -20562,12 +20473,10 @@
    "sources": [
     "存活验证仓"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "未找到 sites / lives / urls 字段"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://cac.opple.com/yc-media/getFile?id=b0aa3bb25ebd4b25b69d68a7f7989abd#.png;md5;1fee4ded56ae7777b28d8e9fa26d1f78",
@@ -20576,12 +20485,10 @@
     "聚合去重仓·精选",
     "聚合去重仓·全量"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "JSON 解析失败"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://www.hdmoli.me",
@@ -20590,12 +20497,10 @@
     "聚合去重仓·精选",
     "聚合去重仓·全量"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 403"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://www.hdmoli.org",
@@ -20604,12 +20509,10 @@
     "聚合去重仓·精选",
     "聚合去重仓·全量"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 403"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://seedog.cc",
@@ -20618,12 +20521,10 @@
     "聚合去重仓·精选",
     "聚合去重仓·全量"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 403"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/liu666666667/yingshi/main/apilinks.txt",
@@ -20631,12 +20532,10 @@
    "sources": [
     "GitHub·liu666666667/yingshi"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/liu666666667/yingshi/main/api_list.json",
@@ -20644,12 +20543,10 @@
    "sources": [
     "GitHub·liu666666667/yingshi"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/liu666666667/yingshi/main/tvboxapilinks.txt",
@@ -20657,12 +20554,10 @@
    "sources": [
     "GitHub·liu666666667/yingshi"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/liu666666667/yingshi/main/apilinks.json",
@@ -20670,12 +20565,10 @@
    "sources": [
     "GitHub·liu666666667/yingshi"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/liu666666667/yingshi/main/config.json",
@@ -20683,12 +20576,10 @@
    "sources": [
     "GitHub·liu666666667/yingshi"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/liu666666667/yingshi/main/api.json",
@@ -20696,12 +20587,10 @@
    "sources": [
     "GitHub·liu666666667/yingshi"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/amygoTV/MediaShell-DevLog/main/apilinks.txt",
@@ -20709,12 +20598,10 @@
    "sources": [
     "GitHub·amygoTV/MediaShell-DevLog"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/amygoTV/MediaShell-DevLog/main/api_list.json",
@@ -20722,12 +20609,10 @@
    "sources": [
     "GitHub·amygoTV/MediaShell-DevLog"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/amygoTV/MediaShell-DevLog/main/tvboxapilinks.txt",
@@ -20735,12 +20620,10 @@
    "sources": [
     "GitHub·amygoTV/MediaShell-DevLog"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/amygoTV/MediaShell-DevLog/main/apilinks.json",
@@ -20748,12 +20631,10 @@
    "sources": [
     "GitHub·amygoTV/MediaShell-DevLog"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/amygoTV/MediaShell-DevLog/main/config.json",
@@ -20761,12 +20642,10 @@
    "sources": [
     "GitHub·amygoTV/MediaShell-DevLog"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/amygoTV/MediaShell-DevLog/main/api.json",
@@ -20774,12 +20653,10 @@
    "sources": [
     "GitHub·amygoTV/MediaShell-DevLog"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/nt2026xp/tv/main/apilinks.txt",
@@ -20787,12 +20664,10 @@
    "sources": [
     "GitHub·nt2026xp/tv"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/nt2026xp/tv/main/api_list.json",
@@ -20800,12 +20675,10 @@
    "sources": [
     "GitHub·nt2026xp/tv"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/nt2026xp/tv/main/tvboxapilinks.txt",
@@ -20813,12 +20686,10 @@
    "sources": [
     "GitHub·nt2026xp/tv"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/nt2026xp/tv/main/apilinks.json",
@@ -20826,12 +20697,10 @@
    "sources": [
     "GitHub·nt2026xp/tv"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/nt2026xp/tv/main/config.json",
@@ -20839,12 +20708,10 @@
    "sources": [
     "GitHub·nt2026xp/tv"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/nt2026xp/tv/main/api.json",
@@ -20852,12 +20719,10 @@
    "sources": [
     "GitHub·nt2026xp/tv"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/igugyj/ShiningStars/main/apilinks.txt",
@@ -20865,12 +20730,10 @@
    "sources": [
     "GitHub·igugyj/ShiningStars"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/igugyj/ShiningStars/main/api_list.json",
@@ -20878,12 +20741,10 @@
    "sources": [
     "GitHub·igugyj/ShiningStars"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/igugyj/ShiningStars/main/tvboxapilinks.txt",
@@ -20891,12 +20752,10 @@
    "sources": [
     "GitHub·igugyj/ShiningStars"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/igugyj/ShiningStars/main/apilinks.json",
@@ -20904,12 +20763,10 @@
    "sources": [
     "GitHub·igugyj/ShiningStars"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/igugyj/ShiningStars/main/config.json",
@@ -20917,12 +20774,10 @@
    "sources": [
     "GitHub·igugyj/ShiningStars"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/igugyj/ShiningStars/main/api.json",
@@ -20930,12 +20785,10 @@
    "sources": [
     "GitHub·igugyj/ShiningStars"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/danqilin710/tvbox-config/main/apilinks.txt",
@@ -20943,12 +20796,10 @@
    "sources": [
     "GitHub·danqilin710/tvbox-config"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/danqilin710/tvbox-config/main/api_list.json",
@@ -20956,12 +20807,10 @@
    "sources": [
     "GitHub·danqilin710/tvbox-config"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/danqilin710/tvbox-config/main/tvboxapilinks.txt",
@@ -20969,12 +20818,10 @@
    "sources": [
     "GitHub·danqilin710/tvbox-config"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/danqilin710/tvbox-config/main/apilinks.json",
@@ -20982,12 +20829,10 @@
    "sources": [
     "GitHub·danqilin710/tvbox-config"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/danqilin710/tvbox-config/main/config.json",
@@ -20995,12 +20840,10 @@
    "sources": [
     "GitHub·danqilin710/tvbox-config"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/danqilin710/tvbox-config/main/api.json",
@@ -21008,12 +20851,10 @@
    "sources": [
     "GitHub·danqilin710/tvbox-config"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/spudhero/NetVplayer/main/apilinks.txt",
@@ -21021,12 +20862,10 @@
    "sources": [
     "GitHub·spudhero/NetVplayer"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/spudhero/NetVplayer/main/api_list.json",
@@ -21034,12 +20873,10 @@
    "sources": [
     "GitHub·spudhero/NetVplayer"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/spudhero/NetVplayer/main/tvboxapilinks.txt",
@@ -21047,12 +20884,10 @@
    "sources": [
     "GitHub·spudhero/NetVplayer"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/spudhero/NetVplayer/main/apilinks.json",
@@ -21060,12 +20895,10 @@
    "sources": [
     "GitHub·spudhero/NetVplayer"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/spudhero/NetVplayer/main/config.json",
@@ -21073,12 +20906,10 @@
    "sources": [
     "GitHub·spudhero/NetVplayer"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/spudhero/NetVplayer/main/api.json",
@@ -21086,12 +20917,10 @@
    "sources": [
     "GitHub·spudhero/NetVplayer"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/advote/sanhaotv/main/apilinks.txt",
@@ -21099,12 +20928,10 @@
    "sources": [
     "GitHub·advote/sanhaotv"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/advote/sanhaotv/main/api_list.json",
@@ -21112,12 +20939,10 @@
    "sources": [
     "GitHub·advote/sanhaotv"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/advote/sanhaotv/main/tvboxapilinks.txt",
@@ -21125,12 +20950,10 @@
    "sources": [
     "GitHub·advote/sanhaotv"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/advote/sanhaotv/main/apilinks.json",
@@ -21138,12 +20961,10 @@
    "sources": [
     "GitHub·advote/sanhaotv"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/advote/sanhaotv/main/config.json",
@@ -21151,12 +20972,10 @@
    "sources": [
     "GitHub·advote/sanhaotv"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://raw.githubusercontent.com/advote/sanhaotv/main/api.json",
@@ -21164,12 +20983,10 @@
    "sources": [
     "GitHub·advote/sanhaotv"
    ],
-   "weight": 2,
-   "firstSeen": "2026-11-22T03:57:23.710Z",
-   "lastSeen": "2026-11-22T03:57:23.710Z",
    "fails": 3,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastErr": "HTTP 404"
+   "lastSeen": "2026-11-22T03:57:23.710Z",
+   "weight": 2,
+   "blocked": true
   },
   {
    "url": "https://gh-proxy.org/https://github.com/Supprise0901/api/blob/main/tiantian.json",
@@ -21181,8 +20998,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21196,8 +21013,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21211,8 +21028,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21225,8 +21042,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "getaddrinfo ENOTFOUND cdn.qiaoji8.com"
   },
   {
@@ -21239,8 +21056,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21254,8 +21071,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21269,8 +21086,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21284,8 +21101,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21299,8 +21116,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21314,8 +21131,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21329,8 +21146,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21344,8 +21161,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21359,8 +21176,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21373,8 +21190,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 500"
   },
   {
@@ -21387,8 +21204,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21402,8 +21219,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21416,8 +21233,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "getaddrinfo ENOTFOUND 9xi4o.tk"
   },
   {
@@ -21430,8 +21247,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21445,8 +21262,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21459,8 +21276,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 403"
   },
   {
@@ -21472,8 +21289,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 403"
   },
   {
@@ -21485,8 +21302,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 403"
   },
   {
@@ -21498,8 +21315,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 403"
   },
   {
@@ -21512,8 +21329,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21526,8 +21343,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "getaddrinfo ENOTFOUND mzjk.top"
   },
   {
@@ -21540,8 +21357,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21554,8 +21371,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "getaddrinfo EAI_AGAIN meowtv.cn"
   },
   {
@@ -21567,8 +21384,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21581,8 +21398,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21595,8 +21412,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "JSON 解析失败"
   },
   {
@@ -21608,8 +21425,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21621,8 +21438,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21634,8 +21451,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 403"
   },
   {
@@ -21647,8 +21464,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21660,8 +21477,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "JSON 解析失败"
   },
   {
@@ -21674,8 +21491,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21689,8 +21506,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21703,8 +21520,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 502"
   },
   {
@@ -21717,8 +21534,8 @@
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -21731,8 +21548,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21744,8 +21561,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21757,8 +21574,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21770,8 +21587,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21783,8 +21600,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21796,8 +21613,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21809,8 +21626,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21822,8 +21639,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21835,8 +21652,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21848,8 +21665,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21861,8 +21678,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21874,8 +21691,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21887,8 +21704,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21900,8 +21717,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21913,8 +21730,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21926,8 +21743,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21939,8 +21756,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21952,8 +21769,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T05:11:04.859Z",
    "lastSeen": "2026-11-22T05:11:04.859Z",
-   "fails": 2,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 3,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21965,8 +21782,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T06:43:28.414Z",
    "lastSeen": "2026-11-22T06:43:28.414Z",
-   "fails": 1,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 2,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21978,8 +21795,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T06:43:28.414Z",
    "lastSeen": "2026-11-22T06:43:28.414Z",
-   "fails": 1,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 2,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -21991,8 +21808,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T06:43:28.414Z",
    "lastSeen": "2026-11-22T06:43:28.414Z",
-   "fails": 1,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 2,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -22004,8 +21821,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T06:43:28.414Z",
    "lastSeen": "2026-11-22T06:43:28.414Z",
-   "fails": 1,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 2,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -22017,8 +21834,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T06:43:28.414Z",
    "lastSeen": "2026-11-22T06:43:28.414Z",
-   "fails": 1,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 2,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -22030,8 +21847,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T06:43:28.414Z",
    "lastSeen": "2026-11-22T06:43:28.414Z",
-   "fails": 1,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 2,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -22043,8 +21860,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T06:43:28.414Z",
    "lastSeen": "2026-11-22T06:43:28.414Z",
-   "fails": 1,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 2,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -22056,8 +21873,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T06:43:28.414Z",
    "lastSeen": "2026-11-22T06:43:28.414Z",
-   "fails": 1,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 2,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -22069,8 +21886,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T06:43:28.414Z",
    "lastSeen": "2026-11-22T06:43:28.414Z",
-   "fails": 1,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 2,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -22082,8 +21899,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T06:43:28.414Z",
    "lastSeen": "2026-11-22T06:43:28.414Z",
-   "fails": 1,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 2,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -22096,8 +21913,8 @@
    "firstSeen": "2026-11-22T06:43:28.414Z",
    "lastSeen": "2026-11-22T06:43:28.414Z",
    "fails": 0,
-   "lastTried": "2026-11-22T06:59:23.111Z",
-   "lastOk": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastOk": "2026-11-23T00:46:00.997Z",
    "sites": 0,
    "lives": 0
   },
@@ -22110,8 +21927,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T06:43:28.414Z",
    "lastSeen": "2026-11-22T06:43:28.414Z",
-   "fails": 1,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 2,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -22123,8 +21940,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T06:43:28.414Z",
    "lastSeen": "2026-11-22T06:43:28.414Z",
-   "fails": 1,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 2,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -22136,8 +21953,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T06:43:28.414Z",
    "lastSeen": "2026-11-22T06:43:28.414Z",
-   "fails": 1,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 2,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -22149,8 +21966,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T06:43:28.414Z",
    "lastSeen": "2026-11-22T06:43:28.414Z",
-   "fails": 1,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 2,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -22162,8 +21979,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T06:43:28.414Z",
    "lastSeen": "2026-11-22T06:43:28.414Z",
-   "fails": 1,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 2,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -22175,8 +21992,8 @@
    "weight": 2,
    "firstSeen": "2026-11-22T06:43:28.414Z",
    "lastSeen": "2026-11-22T06:43:28.414Z",
-   "fails": 1,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "fails": 2,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   },
   {
@@ -22188,8 +22005,242 @@
    "weight": 2,
    "firstSeen": "2026-11-22T06:43:28.414Z",
    "lastSeen": "2026-11-22T06:43:28.414Z",
+   "fails": 2,
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastErr": "HTTP 404"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/leop017/iptv/main/apilinks.txt",
+   "key": "g/leop017/iptv/main/apilinks.txt",
+   "sources": [
+    "GitHub·leop017/iptv"
+   ],
+   "weight": 2,
+   "firstSeen": "2026-11-23T00:30:48.196Z",
+   "lastSeen": "2026-11-23T00:30:48.196Z",
    "fails": 1,
-   "lastTried": "2026-11-22T06:59:23.111Z",
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastErr": "HTTP 404"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/leop017/iptv/main/api_list.json",
+   "key": "g/leop017/iptv/main/api_list.json",
+   "sources": [
+    "GitHub·leop017/iptv"
+   ],
+   "weight": 2,
+   "firstSeen": "2026-11-23T00:30:48.196Z",
+   "lastSeen": "2026-11-23T00:30:48.196Z",
+   "fails": 1,
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastErr": "HTTP 404"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/leop017/iptv/main/tvboxapilinks.txt",
+   "key": "g/leop017/iptv/main/tvboxapilinks.txt",
+   "sources": [
+    "GitHub·leop017/iptv"
+   ],
+   "weight": 2,
+   "firstSeen": "2026-11-23T00:30:48.196Z",
+   "lastSeen": "2026-11-23T00:30:48.196Z",
+   "fails": 1,
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastErr": "HTTP 404"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/leop017/iptv/main/apilinks.json",
+   "key": "g/leop017/iptv/main/apilinks.json",
+   "sources": [
+    "GitHub·leop017/iptv"
+   ],
+   "weight": 2,
+   "firstSeen": "2026-11-23T00:30:48.196Z",
+   "lastSeen": "2026-11-23T00:30:48.196Z",
+   "fails": 1,
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastErr": "HTTP 404"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/leop017/iptv/main/config.json",
+   "key": "g/leop017/iptv/main/config.json",
+   "sources": [
+    "GitHub·leop017/iptv"
+   ],
+   "weight": 2,
+   "firstSeen": "2026-11-23T00:30:48.196Z",
+   "lastSeen": "2026-11-23T00:30:48.196Z",
+   "fails": 1,
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastErr": "HTTP 404"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/leop017/iptv/main/api.json",
+   "key": "g/leop017/iptv/main/api.json",
+   "sources": [
+    "GitHub·leop017/iptv"
+   ],
+   "weight": 2,
+   "firstSeen": "2026-11-23T00:30:48.196Z",
+   "lastSeen": "2026-11-23T00:30:48.196Z",
+   "fails": 1,
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastErr": "HTTP 404"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/SuperMa-AI/Mtools/main/apilinks.txt",
+   "key": "g/SuperMa-AI/Mtools/main/apilinks.txt",
+   "sources": [
+    "GitHub·SuperMa-AI/Mtools"
+   ],
+   "weight": 2,
+   "firstSeen": "2026-11-23T00:30:48.196Z",
+   "lastSeen": "2026-11-23T00:30:48.196Z",
+   "fails": 1,
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastErr": "HTTP 404"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/SuperMa-AI/Mtools/main/api_list.json",
+   "key": "g/SuperMa-AI/Mtools/main/api_list.json",
+   "sources": [
+    "GitHub·SuperMa-AI/Mtools"
+   ],
+   "weight": 2,
+   "firstSeen": "2026-11-23T00:30:48.196Z",
+   "lastSeen": "2026-11-23T00:30:48.196Z",
+   "fails": 1,
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastErr": "HTTP 404"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/SuperMa-AI/Mtools/main/tvboxapilinks.txt",
+   "key": "g/SuperMa-AI/Mtools/main/tvboxapilinks.txt",
+   "sources": [
+    "GitHub·SuperMa-AI/Mtools"
+   ],
+   "weight": 2,
+   "firstSeen": "2026-11-23T00:30:48.196Z",
+   "lastSeen": "2026-11-23T00:30:48.196Z",
+   "fails": 1,
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastErr": "HTTP 404"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/SuperMa-AI/Mtools/main/apilinks.json",
+   "key": "g/SuperMa-AI/Mtools/main/apilinks.json",
+   "sources": [
+    "GitHub·SuperMa-AI/Mtools"
+   ],
+   "weight": 2,
+   "firstSeen": "2026-11-23T00:30:48.196Z",
+   "lastSeen": "2026-11-23T00:30:48.196Z",
+   "fails": 1,
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastErr": "HTTP 404"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/SuperMa-AI/Mtools/main/config.json",
+   "key": "g/SuperMa-AI/Mtools/main/config.json",
+   "sources": [
+    "GitHub·SuperMa-AI/Mtools"
+   ],
+   "weight": 2,
+   "firstSeen": "2026-11-23T00:30:48.196Z",
+   "lastSeen": "2026-11-23T00:30:48.196Z",
+   "fails": 1,
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastErr": "HTTP 404"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/SuperMa-AI/Mtools/main/api.json",
+   "key": "g/SuperMa-AI/Mtools/main/api.json",
+   "sources": [
+    "GitHub·SuperMa-AI/Mtools"
+   ],
+   "weight": 2,
+   "firstSeen": "2026-11-23T00:30:48.196Z",
+   "lastSeen": "2026-11-23T00:30:48.196Z",
+   "fails": 1,
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastErr": "HTTP 404"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/zzz333444/guagetv/main/apilinks.txt",
+   "key": "g/zzz333444/guagetv/main/apilinks.txt",
+   "sources": [
+    "GitHub·zzz333444/guagetv"
+   ],
+   "weight": 2,
+   "firstSeen": "2026-11-23T00:30:48.196Z",
+   "lastSeen": "2026-11-23T00:30:48.196Z",
+   "fails": 1,
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastErr": "HTTP 404"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/zzz333444/guagetv/main/api_list.json",
+   "key": "g/zzz333444/guagetv/main/api_list.json",
+   "sources": [
+    "GitHub·zzz333444/guagetv"
+   ],
+   "weight": 2,
+   "firstSeen": "2026-11-23T00:30:48.196Z",
+   "lastSeen": "2026-11-23T00:30:48.196Z",
+   "fails": 1,
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastErr": "HTTP 404"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/zzz333444/guagetv/main/tvboxapilinks.txt",
+   "key": "g/zzz333444/guagetv/main/tvboxapilinks.txt",
+   "sources": [
+    "GitHub·zzz333444/guagetv"
+   ],
+   "weight": 2,
+   "firstSeen": "2026-11-23T00:30:48.196Z",
+   "lastSeen": "2026-11-23T00:30:48.196Z",
+   "fails": 1,
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastErr": "HTTP 404"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/zzz333444/guagetv/main/apilinks.json",
+   "key": "g/zzz333444/guagetv/main/apilinks.json",
+   "sources": [
+    "GitHub·zzz333444/guagetv"
+   ],
+   "weight": 2,
+   "firstSeen": "2026-11-23T00:30:48.196Z",
+   "lastSeen": "2026-11-23T00:30:48.196Z",
+   "fails": 1,
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastErr": "HTTP 404"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/zzz333444/guagetv/main/config.json",
+   "key": "g/zzz333444/guagetv/main/config.json",
+   "sources": [
+    "GitHub·zzz333444/guagetv"
+   ],
+   "weight": 2,
+   "firstSeen": "2026-11-23T00:30:48.196Z",
+   "lastSeen": "2026-11-23T00:30:48.196Z",
+   "fails": 1,
+   "lastTried": "2026-11-23T00:46:00.997Z",
+   "lastErr": "HTTP 404"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/zzz333444/guagetv/main/api.json",
+   "key": "g/zzz333444/guagetv/main/api.json",
+   "sources": [
+    "GitHub·zzz333444/guagetv"
+   ],
+   "weight": 2,
+   "firstSeen": "2026-11-23T00:30:48.196Z",
+   "lastSeen": "2026-11-23T00:30:48.196Z",
+   "fails": 1,
+   "lastTried": "2026-11-23T00:46:00.997Z",
    "lastErr": "HTTP 404"
   }
  ]

@@ -56,7 +56,17 @@ JVM runner 使用固定 MisaTV commit 的 `spider-host.jar`、`stubs.jar` 和 sh
 `runtime-home` 表示在隔离环境中真实执行首页方法并返回非空结构；使用受控网关时可以实际请求公网 API，但仍不等于所有站点都已被完整验证。网关拒绝的目标或连接失败应按网络不确定处理。timeout、network-blocked、unsupported 和 uncertain 均不得作为删源信号。每日任务在正式聚合文件写出后，按 Py/JS/JAR 每类最多 2 个站点执行一次抽样运行时体检，默认预算 8 分钟。报告记录每条源的状态、错误原因、耗时及域名白名单；未提供可安全确认的源文件/域名时标为 `runtime-uncertain`。脚本只写 `聚合接口/运行时体检.json`，不修改源列表、不改变精选档位，也不触碰每日删源决策。报告会随每日产物一起提交，便于观察真实站点兼容率。
 
 
-## 每日真实站点运行时抽样审计\n\n每日聚合工作流会构建三个隔离运行时镜像，然后运行：\n\n```sh\nnode scripts/runtime-audit.mjs\n```\n\n默认每类抽样 2 个站点，单站超时 20 秒，整轮预算 8 分钟。可通过 `RUNTIME_AUDIT_MAX_PER_TYPE`、`RUNTIME_AUDIT_TIMEOUT_MS` 和 `RUNTIME_AUDIT_BUDGET_MS` 调整。输出 `聚合接口/运行时体检.json`，含 `runtime-home`、`runtime-empty`、`runtime-error`、`runtime-unsupported`、`runtime-uncertain` 等状态。源文件下载使用 DNS 校验和固定 IP 连接；脚本从规则/配置中提取本次执行的域名白名单。报告仅用于观察，不是自动删除依据。\n\n## 受控联网网关
+## 每日真实站点运行时抽样审计
+
+每日聚合工作流会构建三个隔离运行时镜像，然后运行：
+
+```sh
+node scripts/runtime-audit.mjs
+```
+
+默认每类抽样 2 个站点，单站超时 20 秒，整轮预算 8 分钟。可通过 `RUNTIME_AUDIT_MAX_PER_TYPE`、`RUNTIME_AUDIT_TIMEOUT_MS` 和 `RUNTIME_AUDIT_BUDGET_MS` 调整。输出 `聚合接口/运行时体检.json`，含 `runtime-home`、`runtime-empty`、`runtime-error`、`runtime-unsupported`、`runtime-uncertain` 等状态。源文件下载使用 DNS 校验和固定 IP 连接；脚本从规则/配置中提取本次执行的域名白名单。报告仅用于观察，不是自动删除依据。
+
+## 受控联网网关
 
 ```sh
 node scripts/runtime-check.mjs --kind py --source ./site.py --allow-hosts api.example.com,cdn.example.com

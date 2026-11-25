@@ -770,7 +770,7 @@ await ta("深度体检也认「限流」：兜底请求 429 不判空壳（与�
   }
 });
 
-await ta("ext 规则文件 404 → 判 no-rule（不再当 ok-unknown 永远留着）；5xx → 判不准", async () => {
+await ta("ext 规则文件 404 → 判 no-rule；5xx → 判不准（严格模式剔、宽松模式留）", async () => {
   const zipOk = makeZip([
     { name: "classes.dex", data: Buffer.from("Lcom/github/catvod/spider/XBPQ;" + "q".repeat(1024)), deflate: true },
   ]);
@@ -800,10 +800,26 @@ await ta("ext 规则文件 404 → 判 no-rule（不再当 ok-unknown 永远留�
     assert.strictEqual(gone.grade, "dead", "ext 规则文件 404 必须判死");
     assert.strictEqual(gone.health, "no-rule");
     assert.ok(/ext 规则文件已失效/.test(gone.healthReason), gone.healthReason);
-    assert.notStrictEqual(err.grade, "dead", "5xx 是判不准，不能删");
+    // 用户策略「宁可误杀」：严格模式下 5xx/超时等判不准也剔
+    assert.strictEqual(err.grade, "dead", "严格模式下判不准也要剔除");
     assert.strictEqual(err.health, "uncertain");
-    assert.strictEqual(stats.dropped.deep, 1);
-    assert.strictEqual(ds.removed, 1);
+    assert.ok(/严格剔除/.test(err.probe?.reason || ""), err.probe?.reason || "");
+    assert.strictEqual(stats.dropped.deep, 2);
+    assert.strictEqual(ds.removed, 2);
+
+    // 显式关掉 DEEP_KILL_UNCERTAIN 时，判不准应保留（宽松口径）
+    const loose = { ...readOptions({ DEEP_KILL_UNCERTAIN: "0" }), budgetDeepCheck: 60, deepTargetTimeout: 4000 };
+    const err2 = mk("规则文件503-宽松", `${base}/err.json`);
+    const stats2 = { dropped: {}, removed: [] };
+    await runDeepCheck([err2], loose, {
+      stats: stats2,
+      effectiveJar: (st) => st.jar,
+      jarCache: new Map(),
+      hostCache: new Map(),
+      textCache: new Map(),
+    });
+    assert.notStrictEqual(err2.grade, "dead", "DEEP_KILL_UNCERTAIN=0 时判不准不能删");
+    assert.strictEqual(err2.health, "uncertain");
   } finally {
     await new Promise((r) => server5.close(r));
   }

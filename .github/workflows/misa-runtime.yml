@@ -13,6 +13,7 @@ on:
   push:
     branches: [feat/misatv-runtime-validation]
     paths:
+      - "runtime/egress-proxy/**"
       - "runtime/misa-py/**"
       - "runtime/misa-js/**"
       - "runtime/fixtures/js/**"
@@ -33,7 +34,7 @@ jobs:
           python-version: "3.11"
       - name: Build isolated MisaTV Py runtime
         run: docker build -t tvbox-agg/misa-py:3.11 runtime/misa-py
-      - name: Execute Python source fixture in no-network sandbox
+      - name: Execute Python source fixture through isolated filtered egress gateway
         run: |
           node scripts/runtime-check.mjs --kind py --source runtime/fixtures/py/home.py > /tmp/py-result.json
           node -e "const r=require('/tmp/py-result.json'); if(r.status!=='runtime-home') { console.error(r); process.exit(1) }"

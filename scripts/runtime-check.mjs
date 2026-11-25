@@ -57,17 +57,17 @@ let gateway = null;
 try {
   const code = source ? await readFile(source) : Buffer.alloc(0);
   if ((kind === "py" && !args.archive || kind === "js") && code.length > 2 * 1024 * 1024) {
-    result("runtime-unsupported", { errorType: "source-too-large", error: "Script source exceeds 2 MiB safety limit" }); process.exit(0);
+    result("runtime-unsupported", { errorType: "source-too-large", error: "Script source exceeds 2 MiB safety limit" }); process.exitCode = 0; throw new Error('__MISA_STOP__');
   }
   if (kind === "py" && args.archive && code.length > 10 * 1024 * 1024) {
-    result("runtime-unsupported", { errorType: "archive-too-large", error: "Py spider ZIP exceeds 10 MiB safety limit" }); process.exit(0);
+    result("runtime-unsupported", { errorType: "archive-too-large", error: "Py spider ZIP exceeds 10 MiB safety limit" }); process.exitCode = 0; throw new Error('__MISA_STOP__');
   }
   if (kind === "jar" && code.length > 32 * 1024 * 1024) {
-    result("runtime-unsupported", { errorType: "source-too-large", error: "JAR exceeds 32 MiB safety limit" }); process.exit(0);
+    result("runtime-unsupported", { errorType: "source-too-large", error: "JAR exceeds 32 MiB safety limit" }); process.exitCode = 0; throw new Error('__MISA_STOP__');
   }
   const ext = String(args.ext || "");
   if (Buffer.byteLength(ext, "utf8") > 128 * 1024) {
-    result("runtime-unsupported", { errorType: "ext-too-large", error: "ext exceeds 128 KiB safety limit" }); process.exit(0);
+    result("runtime-unsupported", { errorType: "ext-too-large", error: "ext exceeds 128 KiB safety limit" }); process.exitCode = 0; throw new Error('__MISA_STOP__');
   }
   const site = join(temp, kind === "jar" ? "site.jar" : kind === "js" ? "site.js" : "site.py");
   if (source) await writeFile(site, code, { mode: 0o444 });
@@ -113,7 +113,7 @@ try {
   if (out.timedOut) {
     result("runtime-uncertain", { runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : kind === "js" ? "QuickJS / MisaTV bootstrap" : "CPython 3.11", errorType: "timeout",
       error: `${kind.toUpperCase()} spider exceeded ${timeoutMs}ms sandbox limit`, durationMs });
-    process.exit(0);
+    process.exitCode = 0; throw new Error('__MISA_STOP__');
   }
   if (out.code !== 0) {
     const error = (out.stderr || out.stdout || `docker exited ${out.code}`).slice(-4000);
@@ -123,7 +123,7 @@ try {
       errorType: networkBlocked ? "egress-proxy-or-upstream-failed" : "spider-execution-failed",
       error, durationMs, network: { mode: "filtered-proxy", requests: "attempted" }
     });
-    process.exit(0);
+    process.exitCode = 0; throw new Error('__MISA_STOP__');
   }
   const raw = out.stdout.trim();
   let data;
@@ -131,12 +131,12 @@ try {
   catch {
     result("runtime-error", { runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : "CPython 3.11", errorType: "invalid-spider-output",
       error: "MisaTV runner returned non-JSON output", output: raw.slice(0, 1000), durationMs });
-    process.exit(0);
+    process.exitCode = 0; throw new Error('__MISA_STOP__');
   }
   if (kind === "js" && data && typeof data.status === "string") {
     const { status, ...details } = data;
     result(status, { runtimeVersion: details.runtimeVersion || "QuickJS / MisaTV bootstrap", ...details, durationMs });
-    process.exit(0);
+    process.exitCode = 0; throw new Error('__MISA_STOP__');
   }
   if (kind === "jar" && typeof data === "string") {
     try { data = JSON.parse(data); } catch {}
@@ -152,7 +152,9 @@ try {
     network: { mode: "filtered-proxy", policy: "public HTTP/HTTPS only; non-global IPs and non-80/443 ports blocked" }
   });
 } catch (error) {
-  result("runtime-error", { errorType: "runner-error", error: String(error?.stack || error) });
+  if (error?.message !== "__MISA_STOP__") {
+    result("runtime-error", { errorType: "runner-error", error: String(error?.stack || error) });
+  }
 } finally {
   if (gateway) await run("docker", ["rm", "-f", gateway], 10000);
   if (network) await run("docker", ["network", "rm", network], 10000);

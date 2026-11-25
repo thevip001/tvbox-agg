@@ -558,194 +558,83 @@ export async function deepCheckCms(site, opts = {}) {
   const raw = cleanResourceUrl(site?.api);
   if (!/^https?:\/\//i.test(raw)) return { status: HEALTH.ERROR, reason: "api 不是有效地址" };
 
-  // 保留原有查询串里除 ac 之外的参数（不少站点用 ?key=xxx 鉴权）
-  const [base, query = ""] = raw.split(/\?(.*)/s);
-  const keep = query
-    .split("&")
-    .filter((kv) => kv && !/^ac=/i.test(kv) && !/^(pg|p|t|wd|ids|ac)=/i.test(kv))
-    .join("&");
-  const withParams = (params) => {
-    const q = [keep, new URLSearchParams(params).toString()].filter(Boolean).join("&");
-    return `${base}${q ? (base.includes("?") ? "&" : "?") + q : ""}`;
-  };
-
-  const acForDetail = type === 0 ? "videolist" : "detail";
-  /**
-   * 请求并返回 { r, text, failed }：
-   *   failed=true 表示「请求失败」（text 为空的原因不是内容为空）——
-   *   调用方必须按 failed 区分「判不准 / 报错」，绝不能当成「站是空的」。
-   */
-  const getJson = async (url) => {
+  // 严格复刻 MisaTV CmsSource.home：
+  // 1) 原样请求 site.api（不擅自附加 ac=list）；
+  // 2) 解析主页的分类与内容；
+  // 3) 首页无内容但有分类时，按首个分类请求一页；
+  // 4) 若分类仍无内容，仍按 ok-classes 保留，因为分类可浏览入口存在。
+  const get = async (url) => {
     const r = await httpGet(url, { timeoutMs, maxBytes: 1024 * 1024, ua: "Mozilla/5.0" });
-    if (!r.ok) return { r, text: "", failed: true };
-    return { r, text: r.body.toString("utf8"), failed: false };
+    if (!r.ok) return { r, failed: true, text: "" };
+    return { r, failed: false, text: r.body.toString("utf8") };
   };
+  const home = await get(raw);
+  if (home.failed) {
+    return isUncertainStatus(home.r)
+      ? { status: HEALTH.UNCERTAIN, reason: `主页请求判不准：${home.r.error || `HTTP ${home.r.status}`}`, ttfb: home.r.ttfb }
+      : { status: HEALTH.ERROR, reason: `主页请求失败：HTTP ${home.r.status}`, ttfb: home.r.ttfb };
+  }
+  if (!home.text.trim()) {
+    return { status: HEALTH.EMPTY, reason: "主页请求成功但返回空内容（MisaTV home 判定 empty）", ttfb: home.r.ttfb };
+  }
 
-  // ① 拿分类 / 推荐（ac=list）
-  const first = await getJson(withParams({ ac: "list" }));
-  if (first.failed) {
-    if (isUncertainStatus(first.r)) {
-      return { status: HEALTH.UNCERTAIN, reason: `ac=list ${first.r.error || `HTTP ${first.r.status}`}（判不准）`, ttfb: first.r.ttfb };
-    }
-    return { status: HEALTH.ERROR, reason: `ac=list HTTP ${first.r.status}`, ttfb: first.r.ttfb };
-  }
-  if (!first.text.trim()) {
-    return { status: HEALTH.EMPTY, reason: "ac=list 返回空内容（空壳站）", ttfb: first.r.ttfb };
-  }
-  let parsed = parseCmsPayload(first.text, type);
-  const ttfb = first.r.ttfb;
-  let contentItems = parsed.items.length;
+  const parsed = parseCmsPayload(home.text, type);
+  const classCount = parsed.classes.length;
+  const classNames = parsed.classes.map((c) => c.name).filter(Boolean).join(",");
+  let items = parsed.items.length;
   let sampleTitle = parsed.items[0]?.name || "";
-  let classNames = parsed.classes.map((c) => c.name).join(",");
-  let classCount = parsed.classes.length;
+  let fallbackNote = "";
 
-  // ② 主页无条目时，用首个分类刷一页
-  if (!contentItems && parsed.classes.length) {
-    const tid = parsed.classes.find((c) => c.id)?.id;
-    if (!tid) {
-      return { status: HEALTH.EMPTY, reason: `有 ${parsed.classes.length} 个分类但都没有 id，无法取内容`, ttfb };
-    }
-    const second = await getJson(withParams({ ac: acForDetail, t: tid, pg: 1 }));
-    if (second.failed) {
-      if (isUncertainStatus(second.r)) {
-        return { status: HEALTH.UNCERTAIN, reason: `分类 ${tid} ${second.r.error || `HTTP ${second.r.status}`}（判不准）`, ttfb };
-      }
-      return { status: HEALTH.EMPTY, reason: `有 ${parsed.classes.length} 个分类，但首个分类 HTTP ${second.r.status}`, classes: parsed.classes.length, ttfb };
-    }
-    parsed = parseCmsPayload(second.text, type);
-    contentItems = parsed.items.length;
-    sampleTitle = parsed.items[0]?.name || sampleTitle;
-    if (!contentItems) {
-      return {
-        status: HEALTH.EMPTY,
-        reason: `有分类但取不到任何内容（ac=${acForDetail} 返回空列表），源站可能已失效`,
-        classes: classCount,
-        ttfb,
-      };
-    }
-  }
-
-  // ③ 连分类都没有：兜底 ac=detail/videolist
-  if (!contentItems) {
-    const third = await getJson(withParams({ ac: acForDetail, pg: 1 }));
-    if (third.failed) {
-      if (isUncertainStatus(third.r)) {
-        return {
-          status: HEALTH.UNCERTAIN,
-          reason: `ac=list 无分类，兜底 ac=${acForDetail} ${third.r.error || `HTTP ${third.r.status}`}（判不准）`,
-          ttfb,
-        };
-      }
-      return {
-        status: HEALTH.ERROR,
-        reason: `ac=list 无分类，兜底 ac=${acForDetail} HTTP ${third.r.status}`,
-        ttfb,
-      };
-    }
-    if (third.text) {
-      const p3 = parseCmsPayload(third.text, type);
-      contentItems = p3.items.length;
-      sampleTitle = p3.items[0]?.name || "";
-    }
-    if (!contentItems) {
-      // 对齐 MisaTV SourceHealth.fromHome：有分类本身就是可浏览能力，
-      // 不要求首页必须有推荐列表，也不要求搜索接口必须返回结果。
-      if (classCount > 0) {
-        return {
-          status: HEALTH.OK_CLASSES,
-          reason: `主页无推荐内容，但检测到 ${classCount} 个分类（与 MisaTV 的 ok-classes 口径一致）`,
-          items: 0,
-          classes: classCount,
-          classNames,
-          ttfb,
-        };
-      }
-      const looksCms = /"(class|list)"\s*:|<rss|<class>/i.test(first.text);
-      return {
-        status: HEALTH.EMPTY,
-        reason: looksCms
-          ? "接口有响应，但既没有分类也没有任何条目（空壳站）"
-          : `接口返回的不是 CMS 数据（${trimmed(first.text, 60) || "空"}）`,
-        ttfb,
-      };
-    }
-  }
-
-  // MisaTV 的源审计只以 home() 的真实返回判断站点基础可用性。
-  // 搜索是独立能力：搜索无结果可能是关键词、站点策略或接口实现差异，
-  // 不应因此把整个源判死。后续可单独输出 search-health，不参与删源。
-  return {
-    status: HEALTH.OK_CONTENT,
-    reason: `主页/首个分类取到内容 ${contentItems} 条（首条：${sampleTitle || "-"}）`,
-    items: contentItems,
-    classes: classCount,
-    sampleTitle,
-    classNames,
-    ttfb,
-  };
-}  // 关键词：优先用样本标题里的 2 个汉字/字母，否则用常见词「战」「电影」
-  const searchWords = [];
-  if (sampleTitle) {
-    const m = sampleTitle.match(/[\u4e00-\u9fff]{2}|[A-Za-z0-9]{3,}/);
-    if (m) searchWords.push(m[0]);
-  }
-  searchWords.push("战", "电影");
-  let searchHit = 0;
-  let searchTried = 0;
-  let searchLastReason = "";
-  for (const wd of searchWords) {
-    if (searchHit > 0) break;
-    searchTried++;
-    const sr = await getJson(withParams({ ac: "search", wd, pg: 1 }));
-    if (sr.failed) {
-      if (isUncertainStatus(sr.r)) {
-        searchLastReason = `ac=search&wd=${wd} ${sr.r.error || `HTTP ${sr.r.status}`}`;
-        // 搜索限流/超时：不直接判死整站，继续试下一个词；全失败再按 uncertain
-        continue;
-      }
-      searchLastReason = `ac=search&wd=${wd} HTTP ${sr.r.status}`;
-      continue;
-    }
-    const sp = parseCmsPayload(sr.text, type);
-    if (sp.items.length) {
-      searchHit = sp.items.length;
-      if (!sampleTitle) sampleTitle = sp.items[0]?.name || "";
-      break;
-    }
-    searchLastReason = `ac=search&wd=${wd} 返回 0 条`;
-  }
-
-  if (searchHit > 0) {
+  if (items > 0) {
     return {
       status: HEALTH.OK_CONTENT,
-      reason: `有内容 ${contentItems} 条 + 搜索命中 ${searchHit} 条（首条：${sampleTitle || "-"}）`,
-      items: contentItems,
-      searchItems: searchHit,
-      classes: classCount,
-      sampleTitle,
-      classNames,
-      ttfb,
+      reason: `主页解析到 ${items} 条内容（${classCount} 个分类）`,
+      items, classes: classCount, sampleTitle, classNames, ttfb: home.r.ttfb,
     };
   }
 
-  // 有内容但搜索全空 / 全失败
-  // 若全部是限流类失败 → uncertain；若明确 0 条 → no-search（死）
-  if (searchTried > 0 && /判不准|HTTP 429|HTTP 403|超时|timeout|ECONN/i.test(searchLastReason)) {
+  if (classCount > 0) {
+    const firstClass = parsed.classes.find((c) => c.id);
+    if (firstClass) {
+      const url = new URL(raw);
+      // 与 MisaTV CmsSource._ac / _buildUri 完全一致。
+      url.searchParams.set("ac", type === 0 ? "videolist" : "detail");
+      url.searchParams.set("t", firstClass.id);
+      url.searchParams.set("pg", "1");
+      const category = await get(url.toString());
+      if (!category.failed) {
+        const page = parseCmsPayload(category.text, type);
+        items = page.items.length;
+        sampleTitle = page.items[0]?.name || "";
+        if (items > 0) {
+          return {
+            status: HEALTH.OK_CONTENT,
+            reason: `首页无推荐，回退首个分类「${firstClass.name || firstClass.id}」取得 ${items} 条内容`,
+            items, classes: classCount, sampleTitle, classNames, ttfb: home.r.ttfb,
+            homeFallback: true,
+          };
+        }
+        fallbackNote = "；首个分类暂未返回条目";
+      } else if (isUncertainStatus(category.r)) {
+        // MisaTV 会吞掉分类回退异常并返回原主页结果（有分类），所以保留 ok-classes。
+        fallbackNote = `；分类回退判不准（${category.r.error || `HTTP ${category.r.status}`})`;
+      } else {
+        fallbackNote = `；分类回退失败（HTTP ${category.r.status}）`;
+      }
+    } else {
+      fallbackNote = "；分类缺少 id，无法自动回退";
+    }
     return {
-      status: HEALTH.UNCERTAIN,
-      reason: `有内容但搜索探活判不准（${searchLastReason}）`,
-      items: contentItems,
-      sampleTitle,
-      ttfb,
+      status: HEALTH.OK_CLASSES,
+      reason: `首页无推荐，但有 ${classCount} 个分类可浏览${fallbackNote}`,
+      items: 0, classes: classCount, classNames, ttfb: home.r.ttfb,
     };
   }
+
   return {
-    status: HEALTH.NO_SEARCH,
-    reason: `有内容 ${contentItems} 条，但搜索无结果（${searchLastReason || "未命中"}）——按策略剔除`,
-    items: contentItems,
-    classes: classCount,
-    sampleTitle,
-    ttfb,
+    status: HEALTH.EMPTY,
+    reason: `主页请求成功，但既没有影视条目也没有分类（MisaTV home 判定 empty）：${trimmed(home.text, 80)}`,
+    items: 0, classes: 0, ttfb: home.r.ttfb,
   };
 }
 

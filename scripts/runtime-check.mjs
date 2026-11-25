@@ -2,8 +2,8 @@
 /**
  * Isolated MisaTV-compatible runtime probe.
  *
- * Py: executes the vendored upstream CPython runner in a no-network Docker sandbox.
- * JS: executes MisaTV bootstrap on QuickJS with sandboxed host channels. JAR: executes MisaTV desktop SpiderHost.
+ * Py: executes the vendored upstream CPython runner in an isolated Docker network with filtered HTTP(S) egress.
+ * JS: executes MisaTV bootstrap on QuickJS with filtered host-network bridge. JAR: executes MisaTV desktop SpiderHost through JVM proxy settings.
  *
  * Usage:
  *   node scripts/runtime-check.mjs --kind py --source /path/to/site.py [--class Spider] [--ext URL_OR_JSON]

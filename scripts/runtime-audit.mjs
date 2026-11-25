@@ -140,6 +140,7 @@ async function runOne(category, site, topSpider, temp) {
       const sourceText=sourceBytes.toString("utf8");
       hostsIn(sourceText).forEach(h=>hosts.add(h));
       extText = site?.ext && typeof site.ext==="object" ? JSON.stringify(site.ext) : String(site?.ext || "");
+      if (/^https?:\\/\\//i.test(extText)) extText=(await pinnedRequest(extText,0,512*1024)).toString("utf8");
       if (extText) hostsIn(extText).forEach(h=>hosts.add(h));
     } else if (category === "js") {
       if (typeof site?.ext === "string" && /^https?:\/\//i.test(site.ext)) {

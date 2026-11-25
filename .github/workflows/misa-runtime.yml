@@ -47,7 +47,7 @@ jobs:
           node -e "const r=require('/tmp/py-zip-result.json'); if(r.status!=='runtime-home') { console.error(r); process.exit(1) }"
       - name: Verify Python HTTPS through egress gateway
         run: |
-          node scripts/runtime-check.mjs --kind py --source runtime/fixtures/py/network.py > /tmp/py-network-result.json
+          node scripts/runtime-check.mjs --kind py --source runtime/fixtures/py/network.py --allow-hosts example.com > /tmp/py-network-result.json
           node -e "const r=require('/tmp/py-network-result.json'); const v=r.data?.list?.[0]; if(r.status!=='runtime-home' || v?.http_status!==200 || v?.example_domain!==true) { console.error(r); process.exit(1) }"
 
       - name: Verify egress proxy SSRF policy
@@ -71,7 +71,7 @@ jobs:
           node -e "const r=require('/tmp/jar-result.json'); if(r.status!=='runtime-home') { console.error(r); process.exit(1) }"
       - name: Verify JVM HTTPS through egress gateway
         run: |
-          node scripts/runtime-check.mjs --kind jar --fixture --class com.github.catvod.spider.NetworkFixture > /tmp/jar-network-result.json
+          node scripts/runtime-check.mjs --kind jar --fixture --class com.github.catvod.spider.NetworkFixture --allow-hosts example.com > /tmp/jar-network-result.json
           node -e "const r=require('/tmp/jar-network-result.json'); const v=r.data?.list?.[0]; if(r.status!=='runtime-home' || v?.http_status!==200 || v?.example_domain!==true) { console.error(r); process.exit(1) }"
   js-fixture:
     runs-on: ubuntu-latest
@@ -92,5 +92,5 @@ jobs:
           node -e "const r=require('/tmp/js-unsupported-result.json'); if(r.status!=='runtime-unsupported' || r.errorType!=='esm-transform-unsupported') { console.error(r); process.exit(1) }"
       - name: Verify QuickJS HTTPS through egress gateway
         run: |
-          node scripts/runtime-check.mjs --kind js --source runtime/fixtures/js/network.js > /tmp/js-network-result.json
+          node scripts/runtime-check.mjs --kind js --source runtime/fixtures/js/network.js --allow-hosts example.com > /tmp/js-network-result.json
           node -e "const r=require('/tmp/js-network-result.json'); const v=r.data?.list?.[0]; if(r.status!=='runtime-home' || v?.http_status!==200 || v?.example_domain!==true) { console.error(r); process.exit(1) }"

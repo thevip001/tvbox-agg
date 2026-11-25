@@ -46,7 +46,7 @@ def main():
     ctx.add_callable("print", lambda *xs: sys.stderr.write(" ".join(map(str,xs))+"\\n"))
     ctx.eval(BOOTSTRAP)
     ctx.eval("if (typeof globalThis.SpiderDebug === 'undefined') { globalThis.SpiderDebug = { log:function(){}, info:function(){}, warn:function(){}, error:function(){} }; }")
-    is_module = bool(__import__("re").search(r"\\bmodule\\.exports\\b|\\bexports\\s*\\.", source))
+    is_module = bool(__import__("re").search(r"\bmodule\.exports\b|\bexports\s*\.", source))
     init = ctx.get("__kniephosInitSpider")
     init_result = json.loads(init(source, api, json.dumps(ext, ensure_ascii=False), is_module))
     if not init_result.get("ok"):

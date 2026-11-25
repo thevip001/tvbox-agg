@@ -54,7 +54,7 @@ const temp = await mkdtemp(join(tmpdir(), "misa-py-"));
 try {
   const code = await readFile(source);
   const site = join(temp, "site.py");
-  await writeFile(site, code, { mode: 0o400 });
+  await writeFile(site, code, { mode: 0o444 });
   // Deliberately no network: arbitrary spider code must not reach LAN, metadata, or secrets.
   // Network-enabled production probes require a separately deployed egress-filtering proxy.
   const argv = [

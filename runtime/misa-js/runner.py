@@ -20,7 +20,6 @@ def main():
     ctx = quickjs.Context()
     ctx.set_memory_limit(96 * 1024 * 1024)
     ctx.set_max_stack_size(512 * 1024)
-    ctx.set_time_limit(8)
     def send_message(name, payload):
         try: data = json.loads(payload or "{}")
         except Exception: data = {}

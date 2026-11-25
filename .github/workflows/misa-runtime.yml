@@ -3,6 +3,8 @@ on:
   pull_request:
     paths:
       - "runtime/misa-py/**"
+      - "runtime/misa-js/**"
+      - "runtime/fixtures/js/**"
       - "runtime/misa-jar/**"
       - "scripts/runtime-check.mjs"
       - "scripts/runtime-selftest.mjs"
@@ -11,6 +13,8 @@ on:
     branches: [feat/misatv-runtime-validation]
     paths:
       - "runtime/misa-py/**"
+      - "runtime/misa-js/**"
+      - "runtime/fixtures/js/**"
       - "runtime/misa-jar/**"
       - "scripts/runtime-check.mjs"
       - "scripts/runtime-selftest.mjs"
@@ -46,3 +50,14 @@ jobs:
         run: |
           node scripts/runtime-check.mjs --kind jar --fixture --class com.github.catvod.spider.RuntimeFixture > /tmp/jar-result.json
           node -e "const r=require('/tmp/jar-result.json'); if(r.status!=='runtime-home') { console.error(r); process.exit(1) }"
+  js-fixture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build isolated QuickJS runtime with MisaTV bootstrap
+        run: docker build -t tvbox-agg/misa-js:quickjs runtime/misa-js
+      - name: Execute fixture through QuickJS and MisaTV bootstrap
+        run: |
+          node scripts/runtime-check.mjs --kind js --source runtime/fixtures/js/home.js > /tmp/js-result.json
+          node -e "const r=require('/tmp/js-result.json'); if(r.status!=='runtime-home') { console.error(r); process.exit(1) }"

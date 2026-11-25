@@ -4,6 +4,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends build-essential
 WORKDIR /opt/misa
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-COPY bootstrap.js runner.py NOTICE.md LICENSE ./
+COPY bootstrap.js runner.py esm_transform.py NOTICE.md LICENSE ./
+COPY libs ./libs
 USER 65532:65532
 ENTRYPOINT ["python", "/opt/misa/runner.py"]

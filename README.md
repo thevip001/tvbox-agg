@@ -8,19 +8,19 @@
 
 | 文件 | 内容 | **站点数量** | 地址 |
 | --- | --- | ---: | --- |
-| 点播合集.json | 全部点播站点合并去重（采集站、Py、JS、Jar 及其它类型） | <!--NUM:all-->1858 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播合集.json |
-| 点播-采集站.json | 点播 · 采集站（只保留检测可用的） | <!--NUM:cj-->48 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-采集站.json |
-| 点播-Py站.json | 点播 · Py 站 | <!--NUM:py-->364 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Py站.json |
-| 点播-JS站.json | 点播 · JS 站 | <!--NUM:js-->173 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-JS站.json |
-| 点播-Jar爬虫站.json | 点播 · Jar 爬虫站 | <!--NUM:spider-->1273 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Jar爬虫站.json |
-| live.json | 直播聚合接口（TVBox 配置格式） | <!--NUM:liveSources-->68 个源 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/live.json |
+| 点播合集.json | 全部点播站点合并去重（采集站、Py、JS、Jar 及其它类型） | <!--NUM:all-->1585 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播合集.json |
+| 点播-采集站.json | 点播 · 采集站（只保留检测可用的） | <!--NUM:cj-->55 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-采集站.json |
+| 点播-Py站.json | 点播 · Py 站 | <!--NUM:py-->153 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Py站.json |
+| 点播-JS站.json | 点播 · JS 站 | <!--NUM:js-->174 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-JS站.json |
+| 点播-Jar爬虫站.json | 点播 · Jar 爬虫站 | <!--NUM:spider-->1203 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/点播-Jar爬虫站.json |
+| live.json | 直播聚合接口（TVBox 配置格式） | <!--NUM:liveSources-->65 个源 | https://raw.githubusercontent.com/thevip001/tvbox-agg/main/聚合接口/live.json |
 
 > 上表的数量由每日聚合任务自动回写（见下方的「最新数量」块），和产物永远一致。
 > 四个分类文件相加 = 点播合集（极少数条目会因内容指纹去重略有出入）。
 > `聚合接口/README.md` 里有更详细的分档和过滤明细。
 
 <!-- 站点数量:start（由每日聚合自动生成，勿手改） -->
-> **最新数量**（2026-11-25 13:29 更新）：点播合集 **1858**（采集 48 · Py 364 · JS 173 · Jar 1273 · 其它 0，只含快站）｜直播源 **68**（抽查存活）
+> **最新数量**（2026-11-25 18:21 更新）：点播合集 **1585**（采集 55 · Py 153 · JS 174 · Jar 1203 · 其它 0，只含快站）｜直播源 **65**（抽查存活）
 <!-- 站点数量:end -->
 
 ## 更新时间
@@ -80,10 +80,6 @@
   直播接口只装「过了抽查的源本身」，按探活速度排序。旧版把各源频道混进一张列表，
   MV/点歌台/轮播库掺在一起又乱又死链多，已废弃。
 
-## 运行时实测报告
-
-每日任务会对已收录的 Py、JS、JAR 站点各抽样运行 2 个，使用隔离容器和域名白名单真正调用首页方法。报告 `聚合接口/运行时体检.json` 会记录成功、空结果、运行错误、暂不支持和网络不确定等状态。抽样报告只用于发现真实兼容性问题，不会自动删源或改变正式接口。
-
 ## 修改接口列表
 
 编辑根目录的 `apilinks.txt`，每行格式为「名称, 地址1, 地址2 ...」。多个地址是镜像，按顺序自动选通。提交后，下次更新生效。
@@ -104,7 +100,6 @@
 - `聚合接口/`：每日生成的聚合文件
 - `scripts/main.mjs`：入口（收集 → 抓取 → 探活测速 → 去重 → 分类输出，无第三方依赖，需 Node.js 18+）
 - `scripts/deepcheck.mjs`：深度体检（按类型实跑：CMS 主页/首分类 / Py、JS 规则 / jar 类名与目标站；零依赖自己读 ZIP+dex）
-- `scripts/runtime-audit.mjs`：每日真实运行时抽样（Py/JS/JAR 每类默认 2 个），输出 `聚合接口/运行时体检.json`；只报告、不参与删源或筛选。
 - `scripts/selftest.mjs`：离线自检 68 项（`node scripts/selftest.mjs`，全程不出网；含快站筛选、频道抽查、测不准分类、严格模式剔除判不准、种子与屏蔽域名、深度体检的端到端用例）
 - `.github/workflows/aggregate-daily.yml`：每日定时任务（也是唯一需要手动 Run workflow 的任务）
 

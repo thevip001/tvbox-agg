@@ -65,4 +65,4 @@ jobs:
       - name: Execute fixture through QuickJS and MisaTV bootstrap
         run: |
           node scripts/runtime-check.mjs --kind js --source runtime/fixtures/js/home.js > /tmp/js-result.json
-          node -e "const r=require('/tmp/js-result.json'); if(r.status!=='runtime-home') { console.error(r); process.exit(1) }"
+          node -e "const r=require('/tmp/js-result.json'); const v=r.data?.list?.[0]; if(r.status!=='runtime-home' || v?.digest!=='5d41402abc4b2a76b9719d911017c592' || v?.local_bridge!=='persisted') { console.error(r); process.exit(1) }"

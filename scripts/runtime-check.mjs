@@ -127,7 +127,7 @@ try {
     "--user=65532:65532", "--tmpfs=/tmp:rw,noexec,nosuid,size=48m",
     ...(source ? ["--mount", `type=bind,src=${site},dst=${kind === "jar" ? "/work/site.jar" : kind === "js" ? "/work/site.js" : args.archive ? "/work/archive.zip" : "/work/site.py"},readonly`] : []),
     image,
-    ...(kind === "jar" ? [String(args.class || "com.github.catvod.spider.RuntimeFixture")] : kind === "js" ? ["/work/site.js", String(args.api || ""), ext] : args.archive ? ["--archive", "/work/archive.zip", String(args.entry || "0.py"), String(args.class || "Spider"), String(args.method || "homeContent"), ext] : ["/work/site.py", String(args.class || "Spider"), "homeContent", ext])
+    ...(kind === "jar" ? [String(args.class || "com.github.catvod.spider.RuntimeFixture"), String(args.ext || "")] : kind === "js" ? ["/work/site.js", String(args.api || ""), ext] : args.archive ? ["--archive", "/work/archive.zip", String(args.entry || "0.py"), String(args.class || "Spider"), String(args.method || "homeContent"), ext] : ["/work/site.py", String(args.class || "Spider"), "homeContent", ext])
   ];
   const started = Date.now();
   const timeoutMs = Math.min(30000, Math.max(1000, Number(args.timeout || 15000)));

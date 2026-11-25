@@ -63,7 +63,7 @@ const image = kind === "jar" ? (process.env.MISA_JAR_IMAGE || "tvbox-agg/misa-ja
 const temp = await mkdtemp(join(tmpdir(), "misa-py-"));
 try {
   const code = await readFile(source);
-  if (code.length > 2 * 1024 * 1024) {
+  if (kind === "py" && code.length > 2 * 1024 * 1024) {
     result("runtime-unsupported", { errorType: "source-too-large", error: "Py source exceeds 2 MiB safety limit" }); process.exit(0);
   }
   if (kind === "jar" && code.length > 32 * 1024 * 1024) {
@@ -92,7 +92,7 @@ try {
   const out = await run("docker", argv, timeoutMs);
   const durationMs = Date.now() - started;
   if (out.timedOut) {
-    result("runtime-uncertain", { runtimeVersion: "CPython 3.11", errorType: "timeout",
+    result("runtime-uncertain", { runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : "CPython 3.11", errorType: "timeout",
       error: `Py spider exceeded ${timeoutMs}ms sandbox limit`, durationMs });
     process.exit(0);
   }
@@ -100,7 +100,7 @@ try {
     const error = (out.stderr || out.stdout || `docker exited ${out.code}`).slice(-4000);
     const networkBlocked = /ConnectionError|ConnectTimeout|ReadTimeout|NameResolutionError|Temporary failure in name resolution|Network is unreachable|No route to host|Max retries exceeded|Connection refused/i.test(error);
     result(networkBlocked ? "runtime-uncertain" : "runtime-error", {
-      runtimeVersion: "CPython 3.11",
+      runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : "CPython 3.11",
       errorType: networkBlocked ? "sandbox-network-disabled" : "spider-execution-failed",
       error, durationMs, network: { mode: "disabled", requests: "blocked" }
     });
@@ -110,7 +110,7 @@ try {
   let data;
   try { data = JSON.parse(raw); }
   catch {
-    result("runtime-error", { runtimeVersion: "CPython 3.11", errorType: "invalid-spider-output",
+    result("runtime-error", { runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : "CPython 3.11", errorType: "invalid-spider-output",
       error: "MisaTV runner returned non-JSON output", output: raw.slice(0, 1000), durationMs });
     process.exit(0);
   }

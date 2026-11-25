@@ -44,5 +44,5 @@ jobs:
         run: docker build -t tvbox-agg/misa-jar:17 runtime/misa-jar
       - name: Execute fixture through MisaTV SpiderHost
         run: |
-          node scripts/runtime-check.mjs --kind jar --source runtime/misa-jar/fixture.jar --class com.github.catvod.spider.RuntimeFixture > /tmp/jar-result.json
+          node scripts/runtime-check.mjs --kind jar --fixture --class com.github.catvod.spider.RuntimeFixture > /tmp/jar-result.json
           node -e "const r=require('/tmp/jar-result.json'); if(r.status!=='runtime-home') { console.error(r); process.exit(1) }"

@@ -32,6 +32,7 @@ import { httpGet, normUrl, parseLooseJson } from "./core.mjs";
 export const HEALTH = {
   OK_CONTENT: "ok-content", // 主页/首个分类能取到内容
   OK_CLASSES: "ok-classes", // 有分类可浏览；与 MisaTV 一样不要求首页必须有推荐内容
+  OK_TARGET: "ok-target", // 规则静态检查通过且至少一个目标站可达（不等于运行时 home 成功）
   OK_UNKNOWN: "ok-unknown", // 没有可验的抓手（内置类且无需 ext），信任保留
   NEEDS_EXT: "needs-ext", // 这类爬虫必须有 ext 才能工作，但 ext 是空的
   EMPTY: "empty", // 请求成功，但没有条目也没有分类（空壳站）
@@ -58,6 +59,7 @@ export const DEAD_HEALTH = new Set([
 export const HEALTH_LABEL = {
   [HEALTH.OK_CONTENT]: "有内容",
   [HEALTH.OK_CLASSES]: "有分类",
+  [HEALTH.OK_TARGET]: "规则目标可达",
   [HEALTH.OK_UNKNOWN]: "无需验",
   [HEALTH.NEEDS_EXT]: "缺 ext",
   [HEALTH.EMPTY]: "空壳",
@@ -703,7 +705,7 @@ export async function deepCheckScript(site, category, opts = {}, caches = {}) {
   const targets = extractRuleTargets(ruleText);
   const judged = await judgeTargets(targets, caches.host, { ...opts, maxTargets: 3 });
   if (judged.verdict === "alive") {
-    return { status: HEALTH.OK_CONTENT, reason: `规则里的目标站可用（${judged.alive[0].origin}）`, targets: judged };
+    return { status: HEALTH.OK_TARGET, reason: `规则结构通过静态检查，目标站可达（${judged.alive[0].origin}）；未执行 JS/Py 运行时`, targets: judged };
   }
   if (judged.verdict === "dead") {
     return { status: HEALTH.NO_TARGET, reason: `规则里的目标站全部不可达：${judged.detail}` };
@@ -868,7 +870,7 @@ export async function deepCheckSpider(site, opts = {}, ctx = {}, caches = {}) {
   const targets = extractRuleTargets([ruleText, ...extra].join("\n"));
   const judged = await judgeTargets(targets, caches.host, { ...opts, maxTargets: 3 });
   if (judged.verdict === "alive") {
-    return { status: HEALTH.OK_CONTENT, reason: `规则目标站可用（${judged.alive[0].origin}）${className ? ` 类 ${className} 在包里` : ""}` };
+    return { status: HEALTH.OK_TARGET, reason: `规则静态检查通过，目标站可达（${judged.alive[0].origin}）${className ? `，类 ${className} 在 jar 中` : ""}；未执行 Android/QuickJS 蜘蛛运行时` };
   }
   if (judged.verdict === "dead") {
     return { status: HEALTH.NO_TARGET, reason: `规则里的目标站全部不可达：${judged.detail}` };
@@ -897,6 +899,7 @@ export async function runDeepCheck(entries, opts, ctx = {}) {
     checked: 0,
     skippedBudget: 0,
     byStatus: {},
+    auditModes: { "runtime-home": 0, "static-rule-target": 0 },
     removed: 0,
     uncertain: 0,
     samples: 0,
@@ -932,7 +935,9 @@ export async function runDeepCheck(entries, opts, ctx = {}) {
     }
 
     const status = res.status || HEALTH.OK_UNKNOWN;
+    const auditMode = e.category === "cj" ? "runtime-home" : "static-rule-target";
     stats.checked++;
+    stats.auditModes[auditMode] = (stats.auditModes[auditMode] || 0) + 1;
     stats.byStatus[status] = (stats.byStatus[status] || 0) + 1;
     e.health = status;
     e.healthReason = res.reason || "";

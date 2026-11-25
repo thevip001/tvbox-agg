@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "runId": "bfb87de8-61f2-485e-beba-32df5f8783c7",
-  "generatedAt": "2026-11-25T10:48:17.491Z",
+  "runId": "487a3068-418b-4651-a237-583dc6988fd0",
+  "generatedAt": "2026-11-25T11:12:04.931Z",
   "policy": "report-only; no source is removed or downgraded by runtime audit",
   "limits": {
     "maxPerType": 2,
@@ -12,15 +12,15 @@
     "selected": 6,
     "byCategory": {
       "py": {
-        "available": 146,
+        "available": 148,
         "selected": 2
       },
       "js": {
-        "available": 187,
+        "available": 181,
         "selected": 2
       },
       "jar": {
-        "available": 1172,
+        "available": 1132,
         "selected": 2
       }
     },
@@ -31,26 +31,26 @@
   "results": [
     {
       "category": "py",
-      "key": "wzxxcz_3f04880b66f0",
-      "name": "分享咕噜",
-      "api": "https://raw.githubusercontent.com/dxyc0922/Tvbox4.x_api/refs/heads/main/脚本/分享咕噜.py",
+      "key": "国外影视",
+      "name": "全球｜APP",
+      "api": "https://jiekou.netlify.app/py/国外剧.py",
       "status": "runtime-uncertain",
       "errorType": "audit-preparation-failed",
       "reason": "Invalid IP address: undefined"
     },
     {
       "category": "py",
-      "key": "wzxxcz_72a53d4741dc",
-      "name": "央视片库",
-      "api": "https://raw.githubusercontent.com/dxyc0922/Tvbox4.x_api/refs/heads/main/脚本/综/央视片库.py",
+      "key": "看球PY",
+      "name": "球球｜看球",
+      "api": "https://jiekou.netlify.app/py/球球.py",
       "status": "runtime-uncertain",
       "errorType": "audit-preparation-failed",
       "reason": "Invalid IP address: undefined"
     },
     {
       "category": "js",
-      "key": "js_大师兄",
-      "name": "🐵┃师兄┃影视",
+      "key": "圣城影视",
+      "name": "🏰┃圣城┃影视",
       "api": "https://raw.liucn.cc/box/libs/js/drpy2.min.js",
       "status": "runtime-uncertain",
       "errorType": "audit-preparation-failed",
@@ -67,22 +67,22 @@
     },
     {
       "category": "jar",
-      "key": "csp_Djuu",
-      "name": "🎧DJ悠悠",
-      "api": "csp_Djuu",
+      "key": "csp_BLSGod",
+      "name": "🧲80S影视",
+      "api": "csp_BLSGod",
       "status": "runtime-uncertain",
       "errorType": "audit-preparation-failed",
       "reason": "Invalid IP address: undefined"
     },
     {
       "category": "jar",
-      "key": "csp_Ying",
-      "name": "💮┃樱花┃动漫",
-      "api": "csp_Ying",
+      "key": "360_spider",
+      "name": "🐞360影视",
+      "api": "csp_SP360",
       "status": "runtime-uncertain",
       "errorType": "audit-preparation-failed",
       "reason": "Invalid IP address: undefined"
     }
   ],
-  "elapsedMs": 37
+  "elapsedMs": 60
 }

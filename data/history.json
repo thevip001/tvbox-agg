@@ -566,37 +566,71 @@
   "elapsed": 1411
  },
  {
-  "when": "2026-11-25 18:47",
+  "when": "2026-11-25 18:21",
   "counts": {
-   "all": 1561,
-   "cj": 56,
-   "py": 146,
-   "js": 187,
-   "spider": 1172,
+   "all": 1585,
+   "cj": 55,
+   "py": 153,
+   "js": 174,
+   "spider": 1203,
    "other": 0,
-   "liveSources": 68
+   "liveSources": 65
   },
   "grades": {
-   "fast": 2509,
-   "ok": 953,
-   "uncertain": 356,
+   "fast": 2521,
+   "ok": 911,
+   "uncertain": 320,
    "unsure": 0,
-   "slow": 108,
-   "dead": 713
+   "slow": 190,
+   "dead": 684
   },
   "uncertain": null,
   "dropped": {
-   "dead": 713,
-   "slow": 108,
+   "dead": 684,
+   "slow": 190,
    "local": 321,
-   "dup": 11583,
+   "dup": 11407,
    "blocked": 14,
-   "notFast": 1550,
+   "notFast": 1458,
    "liveProbe": 26,
-   "deep": 671
+   "deep": 673
+  },
+  "fetched": 144,
+  "candidates": 255,
+  "elapsed": 1449
+ },
+ {
+  "when": "2026-11-25 19:11",
+  "counts": {
+   "all": 1516,
+   "cj": 55,
+   "py": 148,
+   "js": 181,
+   "spider": 1132,
+   "other": 0,
+   "liveSources": 66
+  },
+  "grades": {
+   "fast": 2490,
+   "ok": 820,
+   "uncertain": 300,
+   "unsure": 0,
+   "slow": 194,
+   "dead": 837
+  },
+  "uncertain": null,
+  "dropped": {
+   "dead": 837,
+   "slow": 194,
+   "local": 321,
+   "dup": 11588,
+   "blocked": 14,
+   "notFast": 1400,
+   "liveProbe": 28,
+   "deep": 656
   },
   "fetched": 146,
-  "candidates": 243,
-  "elapsed": 1560
+  "candidates": 252,
+  "elapsed": 1347
  }
 ]

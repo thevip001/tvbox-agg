@@ -10,7 +10,7 @@ SPEC.loader.exec_module(proxy)
 class PublicDestinationPolicyTests(unittest.TestCase):
     def test_rejects_loopback_private_link_local_and_metadata_ranges(self):
         for address in ("127.0.0.1", "10.0.0.1", "172.16.0.1", "192.168.1.1",
-                        "169.254.169.254", "100.64.0.1", "::1", "fc00::1", "fe80::1"):
+                        "169.254.169.254", "100.64.0.1", "192.0.0.9", "198.18.0.1", "::1", "fc00::1", "fe80::1", "64:ff9b::a00:1"):
             with self.subTest(address=address):
                 with self.assertRaises(ValueError):
                     proxy.resolve_public(address, 443)

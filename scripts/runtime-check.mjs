@@ -3,11 +3,11 @@
  * Isolated MisaTV-compatible runtime probe.
  *
  * Py: executes the vendored upstream CPython runner in a no-network Docker sandbox.
- * JS: reports unsupported until the QuickJS host bridge is ported. JAR: executes MisaTV's desktop SpiderHost in an isolated JVM container.
+ * JS: executes MisaTV bootstrap on QuickJS with sandboxed host channels. JAR: executes MisaTV desktop SpiderHost.
  *
  * Usage:
  *   node scripts/runtime-check.mjs --kind py --source /path/to/site.py [--class Spider] [--ext URL_OR_JSON]
- *   node scripts/runtime-check.mjs --kind js|jar
+ *   node scripts/runtime-check.mjs --kind js --source /path/to/site.js [--api URL] [--ext JSON]\n   node scripts/runtime-check.mjs --kind jar --source /path/to/site.jar
  *
  * Output: one JSON object on stdout. Diagnostics go to stderr.
  */
@@ -43,28 +43,19 @@ const run = (cmd, argv, timeoutMs = 15000) => new Promise((resolveRun) => {
 if (!["py", "js", "jar"].includes(kind)) {
   result("runtime-unsupported", { errorType: "invalid-kind", error: "kind must be py, js or jar" }); process.exit(0);
 }
-if (kind === "js") {
-  result("runtime-unsupported", {
-    runtime: kind === "js" ? "quickjs-host-bridge-missing" : "android-art-spider-host-missing",
-    errorType: "host-runtime-unavailable",
-    error: kind === "js"
-      ? "MisaTV JS requires flutter_js QuickJS plus js_bootstrap, native sendMessage bridge, module/cache and sync-network host; Node/V8 is not equivalent."
-      : "MisaTV JAR requires its Android/JVM SpiderHost, Android API bridge and sometimes JNI/native libraries; plain JVM/Dex inspection is not runtime execution."
-  }); process.exit(0);
-}
 if (kind === "jar" && !args.source && args.fixture !== "true") {
   result("runtime-unsupported", { errorType: "missing-source", error: "--source is required for JAR runtime" }); process.exit(0);
 }
-if (kind === "py" && !args.source) {
+if ((kind === "py" || kind === "js") && !args.source) {
   result("runtime-unsupported", { errorType: "missing-source", error: "--source is required for Py runtime" }); process.exit(0);
 }
 const source = args.source ? resolve(args.source) : null;
-const image = kind === "jar" ? (process.env.MISA_JAR_IMAGE || "tvbox-agg/misa-jar:17") : (process.env.MISA_PY_IMAGE || "tvbox-agg/misa-py:3.11");
+const image = kind === "jar" ? (process.env.MISA_JAR_IMAGE || "tvbox-agg/misa-jar:17") : kind === "js" ? (process.env.MISA_JS_IMAGE || "tvbox-agg/misa-js:quickjs") : (process.env.MISA_PY_IMAGE || "tvbox-agg/misa-py:3.11");
 const temp = await mkdtemp(join(tmpdir(), "misa-py-"));
 try {
   const code = source ? await readFile(source) : Buffer.alloc(0);
-  if (kind === "py" && code.length > 2 * 1024 * 1024) {
-    result("runtime-unsupported", { errorType: "source-too-large", error: "Py source exceeds 2 MiB safety limit" }); process.exit(0);
+  if ((kind === "py" || kind === "js") && code.length > 2 * 1024 * 1024) {
+    result("runtime-unsupported", { errorType: "source-too-large", error: "Script source exceeds 2 MiB safety limit" }); process.exit(0);
   }
   if (kind === "jar" && code.length > 32 * 1024 * 1024) {
     result("runtime-unsupported", { errorType: "source-too-large", error: "JAR exceeds 32 MiB safety limit" }); process.exit(0);
@@ -73,7 +64,7 @@ try {
   if (Buffer.byteLength(ext, "utf8") > 128 * 1024) {
     result("runtime-unsupported", { errorType: "ext-too-large", error: "ext exceeds 128 KiB safety limit" }); process.exit(0);
   }
-  const site = join(temp, kind === "jar" ? "site.jar" : "site.py");
+  const site = join(temp, kind === "jar" ? "site.jar" : kind === "js" ? "site.js" : "site.py");
   if (source) await writeFile(site, code, { mode: 0o444 });
   // Deliberately no network: arbitrary spider code must not reach LAN, metadata, or secrets.
   // Network-enabled production probes require a separately deployed egress-filtering proxy.
@@ -83,9 +74,9 @@ try {
     "--ulimit=nofile=64:64", "--ulimit=fsize=10485760:10485760",
     "--cap-drop=ALL", "--security-opt=no-new-privileges",
     "--user=65532:65532", "--tmpfs=/tmp:rw,noexec,nosuid,size=16m",
-    ...(source ? ["--mount", `type=bind,src=${site},dst=${kind === "jar" ? "/work/site.jar" : "/work/site.py"},readonly`] : []),
+    ...(source ? ["--mount", `type=bind,src=${site},dst=${kind === "jar" ? "/work/site.jar" : kind === "js" ? "/work/site.js" : "/work/site.py"},readonly`] : []),
     image,
-    ...(kind === "jar" ? [String(args.class || "com.github.catvod.spider.RuntimeFixture")] : ["/work/site.py", String(args.class || "Spider"), "homeContent", ext])
+    ...(kind === "jar" ? [String(args.class || "com.github.catvod.spider.RuntimeFixture")] : kind === "js" ? ["/work/site.js", String(args.api || ""), ext] : ["/work/site.py", String(args.class || "Spider"), "homeContent", ext])
   ];
   const started = Date.now();
   const timeoutMs = Math.min(30000, Math.max(1000, Number(args.timeout || 15000)));
@@ -114,7 +105,7 @@ try {
       error: "MisaTV runner returned non-JSON output", output: raw.slice(0, 1000), durationMs });
     process.exit(0);
   }
-  if (kind === "jar" && typeof data === "string") {
+  if (kind === "js" && data && typeof data.status === "string") {\n    const { status, ...details } = data;\n    result(status, { runtimeVersion: details.runtimeVersion || "QuickJS / MisaTV bootstrap", ...details, durationMs });\n    process.exit(0);\n  }\n  if (kind === "jar" && typeof data === "string") {
     try { data = JSON.parse(data); } catch {}
   }
   const hasContent = Array.isArray(data?.list) ? data.list.length > 0 :
@@ -123,7 +114,7 @@ try {
     Array.isArray(data?.class) ? data.class.length > 0 :
     Boolean(data && typeof data === "object" && Object.keys(data).length);
   result(hasContent ? "runtime-home" : "runtime-empty", {
-    runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : "CPython 3.11 / MisaTV runner",
+    runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : kind === "js" ? "QuickJS / MisaTV bootstrap" : "CPython 3.11 / MisaTV runner",
     method: "homeContent", data, durationMs,
     network: { mode: "disabled", requests: 0 }
   });

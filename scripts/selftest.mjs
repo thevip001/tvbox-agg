@@ -657,7 +657,7 @@ await ta("端到端深检：空壳采集站被剔，有内容的留下，jar 缺
       if (u.searchParams.get("t") === "1") return send(JSON.stringify({ list: [] }), "application/json");
       return send(JSON.stringify({ class: [{ type_id: 1, type_name: "动作" }], list: [] }), "application/json");
     }
-    if (u.pathname === "/good.py") return send("class Spider:\\n    def homeContent(self, filter):\\n        return {}\\n    def searchContent(self, key, quick):\\n        return []\\nhost = 'http://127.0.0.1:" + server2.address().port + "/site/'", "text/plain");
+    if (u.pathname === "/good.py") return send("class Spider:\n    def homeContent(self, filter):\n        return {}\n    def searchContent(self, key, quick):\n        return []\nhost = 'http://127.0.0.1:" + server2.address().port + "/site/'", "text/plain");
     if (u.pathname === "/x.jar") return send(zip, "application/java-archive");
     if (u.pathname === "/rule.json") return send(JSON.stringify({ 主页url: `http://127.0.0.1:${server2.address().port}/site/` }));
     if (u.pathname === "/site/" || u.pathname === "/site") return send("<html><body>" + "x".repeat(400) + "</body></html>", "text/html");

@@ -16,6 +16,7 @@ import { tmpdir } from "node:os";
 import { join, resolve, basename } from "node:path";
 import { spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
+import { isIP } from "node:net";
 
 const args = Object.fromEntries(process.argv.slice(2).reduce((a, v, i, all) => {
   if (v.startsWith("--")) a.push([v.slice(2), all[i + 1] && !all[i + 1].startsWith("--") ? all[i + 1] : "true"]);
@@ -66,6 +67,21 @@ try {
     result("runtime-unsupported", { errorType: "source-too-large", error: "JAR exceeds 32 MiB safety limit" }); process.exitCode = 0; throw new Error('__MISA_STOP__');
   }
   const ext = String(args.ext || "");
+  const requestedHosts = String(args["allow-hosts"] || "").split(/[\\s,;]+/).filter(Boolean);
+  if (args.api) {
+    try { requestedHosts.push(new URL(String(args.api)).hostname); } catch {}
+  }
+  const allowedHosts = [...new Set(requestedHosts.map(host => host.toLowerCase().replace(/\\.$/, "")))];
+  const validDomain = host => host.length <= 253 &&
+    /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)*[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(host);
+  const invalidHosts = allowedHosts.filter(host => {
+    const value = host.startsWith("*.") ? host.slice(2) : host;
+    return !(isIP(value) || validDomain(value));
+  });
+  if (invalidHosts.length) {
+    result("runtime-unsupported", { errorType: "invalid-allowlist-host", error: "Invalid --allow-hosts entry", hosts: invalidHosts });
+    process.exitCode = 0; throw new Error('__MISA_STOP__');
+  }
   if (Buffer.byteLength(ext, "utf8") > 128 * 1024) {
     result("runtime-unsupported", { errorType: "ext-too-large", error: "ext exceeds 128 KiB safety limit" }); process.exitCode = 0; throw new Error('__MISA_STOP__');
   }
@@ -84,7 +100,7 @@ try {
     "run", "-d", "--name", gateway, "--network", "bridge",
     "--read-only", "--tmpfs=/tmp:rw,noexec,nosuid,size=8m", "--cap-drop=ALL", "--pids-limit=64", "--memory=64m", "--memory-swap=64m", "--cpus=0.5", "--ulimit=nofile=128:128",
     "--security-opt=no-new-privileges", "--user=65532:65532",
-    "--env=PYTHONDONTWRITEBYTECODE=1",
+    "--env=PYTHONDONTWRITEBYTECODE=1", `--env=MISA_ALLOWED_HOSTS=${allowedHosts.join(",")}`,
     "--mount", `type=bind,src=${proxyScript},dst=/proxy.py,readonly`,
     "python:3.11-alpine", "python", "/proxy.py"
   ], 30000);
@@ -130,7 +146,7 @@ try {
     result(networkBlocked ? "runtime-uncertain" : "runtime-error", {
       runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : kind === "js" ? "QuickJS / MisaTV bootstrap" : "CPython 3.11",
       errorType: networkBlocked ? "egress-proxy-or-upstream-failed" : "spider-execution-failed",
-      error, durationMs, network: { mode: "filtered-proxy", requests: "attempted" }
+      error, durationMs, network: { mode: "filtered-proxy", allowlist: allowedHosts, requests: "attempted" }
     });
     process.exitCode = 0; throw new Error('__MISA_STOP__');
   }
@@ -147,7 +163,7 @@ try {
     if ((status === "runtime-empty" || status === "runtime-error") && gatewayIssues) {
       result("runtime-uncertain", { runtimeVersion: details.runtimeVersion || "QuickJS / MisaTV bootstrap",
         errorType: "egress-policy-or-upstream-failure", error: "The egress gateway rejected a destination or could not reach an upstream; empty data is not evidence that the source is dead.",
-        ...details, durationMs, network: { mode: "filtered-proxy", gatewayIssues: true } });
+        ...details, durationMs, network: { mode: "filtered-proxy", allowlist: allowedHosts, gatewayIssues: true } });
     } else {
       result(status, { runtimeVersion: details.runtimeVersion || "QuickJS / MisaTV bootstrap", ...details, durationMs });
     }
@@ -169,7 +185,7 @@ try {
     result(hasContent ? "runtime-home" : "runtime-empty", {
       runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : kind === "js" ? "QuickJS / MisaTV bootstrap" : "CPython 3.11 / MisaTV runner",
       method: "homeContent", data, durationMs,
-      network: { mode: "filtered-proxy", policy: "public HTTP/HTTPS only; non-global IPs and non-80/443 ports blocked" }
+      network: { mode: "filtered-proxy", allowlist: allowedHosts, policy: "allowlisted hosts only; public IPs only; TCP 80/443" }
     });
   }
 } catch (error) {

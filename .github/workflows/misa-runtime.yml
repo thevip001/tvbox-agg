@@ -32,10 +32,15 @@ jobs:
           python-version: "3.11"
       - name: Build isolated MisaTV Py runtime
         run: docker build -t tvbox-agg/misa-py:3.11 runtime/misa-py
-      - name: Execute fixture in no-network sandbox
+      - name: Execute Python source fixture in no-network sandbox
         run: |
           node scripts/runtime-check.mjs --kind py --source runtime/fixtures/py/home.py > /tmp/py-result.json
           node -e "const r=require('/tmp/py-result.json'); if(r.status!=='runtime-home') { console.error(r); process.exit(1) }"
+      - name: Execute bundled Python ZIP fixture
+        run: |
+          python -c "import zipfile; z=zipfile.ZipFile('/tmp/spider.zip','w'); z.write('runtime/fixtures/py/home.py','home.py'); z.close()"
+          node scripts/runtime-check.mjs --kind py --archive /tmp/spider.zip --entry home.py > /tmp/py-zip-result.json
+          node -e "const r=require('/tmp/py-zip-result.json'); if(r.status!=='runtime-home') { console.error(r); process.exit(1) }"
 
       - name: Verify JS adapter remains explicitly unsupported
         run: node scripts/runtime-selftest.mjs

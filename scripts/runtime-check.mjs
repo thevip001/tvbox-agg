@@ -81,7 +81,7 @@ try {
   const networkCreate = await run("docker", ["network", "create", "--internal", network], 15000);
   if (networkCreate.code !== 0) throw new Error(`cannot create isolated Docker network: ${networkCreate.stderr}`);
   const proxyStart = await run("docker", [
-    "run", "-d", "--name", gateway, "--network", network, "--network-alias", "egress-proxy",
+    "run", "-d", "--name", gateway, "--network", "bridge",
     "--read-only", "--tmpfs=/tmp:rw,noexec,nosuid,size=8m", "--cap-drop=ALL",
     "--security-opt=no-new-privileges", "--user=65532:65532",
     "--env=PYTHONDONTWRITEBYTECODE=1",
@@ -89,8 +89,8 @@ try {
     "python:3.11-alpine", "python", "/proxy.py"
   ], 30000);
   if (proxyStart.code !== 0) throw new Error(`cannot start egress gateway: ${proxyStart.stderr}`);
-  const externalAttach = await run("docker", ["network", "connect", "bridge", gateway], 15000);
-  if (externalAttach.code !== 0) throw new Error(`cannot attach egress gateway to outbound bridge: ${externalAttach.stderr}`);
+  const internalAttach = await run("docker", ["network", "connect", "--alias", "egress-proxy", network, gateway], 15000);
+  if (internalAttach.code !== 0) throw new Error(`cannot attach egress gateway to isolated spider network: ${internalAttach.stderr}`);
   await new Promise(resolveReady => setTimeout(resolveReady, 300));
 
   const argv = [

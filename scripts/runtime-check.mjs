@@ -126,7 +126,7 @@ try {
   }
   if (out.code !== 0) {
     const error = (out.stderr || out.stdout || `docker exited ${out.code}`).slice(-4000);
-    const networkBlocked = /ConnectionError|ConnectTimeout|ReadTimeout|NameResolutionError|Temporary failure in name resolution|Network is unreachable|No route to host|Max retries exceeded|Connection refused/i.test(error);
+    const networkBlocked = gatewayIssues || /ConnectionError|ConnectTimeout|ReadTimeout|NameResolutionError|Temporary failure in name resolution|Network is unreachable|No route to host|Max retries exceeded|Connection refused/i.test(error);
     result(networkBlocked ? "runtime-uncertain" : "runtime-error", {
       runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : kind === "js" ? "QuickJS / MisaTV bootstrap" : "CPython 3.11",
       errorType: networkBlocked ? "egress-proxy-or-upstream-failed" : "spider-execution-failed",
@@ -144,7 +144,7 @@ try {
   }
   if (kind === "js" && data && typeof data.status === "string") {
     const { status, ...details } = data;
-    if (status === "runtime-empty" && gatewayIssues) {
+    if ((status === "runtime-empty" || status === "runtime-error") && gatewayIssues) {
       result("runtime-uncertain", { runtimeVersion: details.runtimeVersion || "QuickJS / MisaTV bootstrap",
         errorType: "egress-policy-or-upstream-failure", error: "The egress gateway rejected a destination or could not reach an upstream; empty data is not evidence that the source is dead.",
         ...details, durationMs, network: { mode: "filtered-proxy", gatewayIssues: true } });

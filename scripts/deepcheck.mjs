@@ -30,8 +30,8 @@ import { httpGet, normUrl, parseLooseJson } from "./core.mjs";
 
 /** 判定为「确定不可用」的状态（strict 模式下会剔除） */
 export const HEALTH = {
-  OK_CONTENT: "ok-content", // 有内容 + 搜索有结果（唯一「确定可用」档）
-  OK_CLASSES: "ok-classes", // 有分类能刷出条目，但搜索无结果 / 未验搜索（严格模式当死）
+  OK_CONTENT: "ok-content", // 主页/首个分类能取到内容
+  OK_CLASSES: "ok-classes", // 有分类可浏览；与 MisaTV 一样不要求首页必须有推荐内容
   OK_UNKNOWN: "ok-unknown", // 没有可验的抓手（内置类且无需 ext），信任保留
   NEEDS_EXT: "needs-ext", // 这类爬虫必须有 ext 才能工作，但 ext 是空的
   EMPTY: "empty", // 请求成功，但没有条目也没有分类（空壳站）
@@ -47,18 +47,17 @@ export const HEALTH = {
 export const DEAD_HEALTH = new Set([
   HEALTH.NEEDS_EXT,
   HEALTH.EMPTY,
-  HEALTH.NO_SEARCH,
   HEALTH.NO_CLASS,
   HEALTH.NO_TARGET,
   HEALTH.NO_RULE,
   HEALTH.ERROR,
-  HEALTH.OK_CLASSES, // 严格：没有搜索结果不算「好用」
+  // MisaTV 将「有分类但首页无推荐」视为可用；搜索不是源可用性的必要条件。
 ]);
 
 /** 状态 → 中文短标签（报告里用） */
 export const HEALTH_LABEL = {
-  [HEALTH.OK_CONTENT]: "有内容+可搜",
-  [HEALTH.OK_CLASSES]: "有分类无搜索",
+  [HEALTH.OK_CONTENT]: "有内容",
+  [HEALTH.OK_CLASSES]: "有分类",
   [HEALTH.OK_UNKNOWN]: "无需验",
   [HEALTH.NEEDS_EXT]: "缺 ext",
   [HEALTH.EMPTY]: "空壳",
@@ -649,6 +648,18 @@ export async function deepCheckCms(site, opts = {}) {
       sampleTitle = p3.items[0]?.name || "";
     }
     if (!contentItems) {
+      // 对齐 MisaTV SourceHealth.fromHome：有分类本身就是可浏览能力，
+      // 不要求首页必须有推荐列表，也不要求搜索接口必须返回结果。
+      if (classCount > 0) {
+        return {
+          status: HEALTH.OK_CLASSES,
+          reason: `主页无推荐内容，但检测到 ${classCount} 个分类（与 MisaTV 的 ok-classes 口径一致）`,
+          items: 0,
+          classes: classCount,
+          classNames,
+          ttfb,
+        };
+      }
       const looksCms = /"(class|list)"\s*:|<rss|<class>/i.test(first.text);
       return {
         status: HEALTH.EMPTY,
@@ -660,8 +671,19 @@ export async function deepCheckCms(site, opts = {}) {
     }
   }
 
-  // ④ 强制搜索验证（用户要求：有内容 + 搜索有结果才保留，宁可误杀）
-  // 关键词：优先用样本标题里的 2 个汉字/字母，否则用常见词「战」「电影」
+  // MisaTV 的源审计只以 home() 的真实返回判断站点基础可用性。
+  // 搜索是独立能力：搜索无结果可能是关键词、站点策略或接口实现差异，
+  // 不应因此把整个源判死。后续可单独输出 search-health，不参与删源。
+  return {
+    status: HEALTH.OK_CONTENT,
+    reason: `主页/首个分类取到内容 ${contentItems} 条（首条：${sampleTitle || "-"}）`,
+    items: contentItems,
+    classes: classCount,
+    sampleTitle,
+    classNames,
+    ttfb,
+  };
+}  // 关键词：优先用样本标题里的 2 个汉字/字母，否则用常见词「战」「电影」
   const searchWords = [];
   if (sampleTitle) {
     const m = sampleTitle.match(/[\u4e00-\u9fff]{2}|[A-Za-z0-9]{3,}/);

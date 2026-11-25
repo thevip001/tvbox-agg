@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import base64, hashlib, json, os, sys, traceback
 import quickjs
+from esm_transform import transform_to_cjs, ESMTransformError
 
 BOOTSTRAP = open("/opt/misa/bootstrap.js", encoding="utf-8").read()
 LOCAL = {}
@@ -14,8 +15,11 @@ def main():
     if os.path.getsize(path) > 2 * 1024 * 1024:
         raise ValueError("JS source exceeds 2 MiB")
     source = open(path, encoding="utf-8-sig").read()
-    if __import__("re").search(r"(^|[\n;])\s*(import|export)\b", source):
-        print(json.dumps({"status":"runtime-unsupported","errorType":"esm-transform-unavailable","error":"MisaTV's Dart ESM transformToCjs has not been ported; refusing to execute ESM without equivalent transformation"}))
+    original_source = source
+    try:
+        source = transform_to_cjs(source, api or path)
+    except ESMTransformError as exc:
+        print(json.dumps({"status":"runtime-unsupported","errorType":"esm-transform-unsupported","error":str(exc)}, ensure_ascii=False))
         return
     ctx = quickjs.Context()
     ctx.set_memory_limit(96 * 1024 * 1024)
@@ -26,7 +30,16 @@ def main():
         if name == "__net":
             return json.dumps({"headers":{},"content":"","status":0,"ok":False,"error":"network disabled by runtime sandbox"})
         if name == "__module":
-            return json.dumps({"ok":False})
+            spec = str(data.get("spec", "")).split("?")[0].split("#")[0]
+            base = os.path.basename(spec)
+            candidates = [base] if base.endswith(".js") else [base + ".js", base]
+            for filename in candidates:
+                libpath = os.path.join("/opt/misa/libs", filename)
+                if os.path.isfile(libpath):
+                    with open(libpath, encoding="utf-8-sig") as libfile:
+                        module_source = transform_to_cjs(libfile.read(), "lib:" + filename)
+                    return json.dumps({"ok": True, "key": "lib:" + filename, "source": module_source})
+            return json.dumps({"ok": False})
         if name == "__local":
             key = str(data.get("key",""))
             op = data.get("op")

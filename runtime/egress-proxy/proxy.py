@@ -6,13 +6,14 @@ containers share a per-job --internal network with this gateway and have no
 route to the Internet or LAN. Destinations must resolve exclusively to public
 global unicast IPs; only TCP 80/443 is allowed.
 """
-import ipaddress, select, socket, socketserver, urllib.parse
+import ipaddress, os, select, socket, socketserver, urllib.parse
 
 MAX_HEADER = 32768
 MAX_BODY = 8 * 1024 * 1024
 MAX_RELAY = 24 * 1024 * 1024
 IDLE_TIMEOUT = 15
 TOTAL_TIMEOUT = 45
+ALLOWED_HOSTS = {item.strip().lower().rstrip(".") for item in os.environ.get("MISA_ALLOWED_HOSTS", "").split(",") if item.strip()}
 DENIED_NETWORKS = tuple(ipaddress.ip_network(value) for value in (
     "0.0.0.0/8", "10.0.0.0/8", "100.64.0.0/10", "127.0.0.0/8",
     "169.254.0.0/16", "172.16.0.0/12", "192.0.0.0/24", "192.0.2.0/24",
@@ -26,6 +27,12 @@ def resolve_public(host, port):
     host = host.rstrip(".").lower()
     if not host or len(host) > 253 or any(c in host for c in "/\\@%"):
         raise ValueError("invalid destination host")
+    allowed = host in ALLOWED_HOSTS or any(
+        entry.startswith("*.") and host.endswith(entry[1:]) and host != entry[2:]
+        for entry in ALLOWED_HOSTS
+    )
+    if not allowed:
+        raise ValueError("destination host is not in the per-run allowlist")
     try:
         literal = ipaddress.ip_address(host.strip("[]"))
         addresses = [str(literal)]

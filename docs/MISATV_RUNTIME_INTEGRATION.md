@@ -59,9 +59,9 @@ JVM runner 使用固定 MisaTV commit 的 `spider-host.jar`、`stubs.jar` 和 sh
 ## 受控联网网关
 
 ```sh
-node scripts/runtime-check.mjs --kind py --source ./site.py
-node scripts/runtime-check.mjs --kind js --source ./rule.js
-node scripts/runtime-check.mjs --kind jar --source ./spider.jar --class com.example.spider.Site
+node scripts/runtime-check.mjs --kind py --source ./site.py --allow-hosts api.example.com,cdn.example.com
+node scripts/runtime-check.mjs --kind js --source ./rule.js --api https://api.example.com --allow-hosts cdn.example.com
+node scripts/runtime-check.mjs --kind jar --source ./spider.jar --class com.example.spider.Site --allow-hosts api.example.com,cdn.example.com
 ```
 
 CI 还会分别通过 Py requests、QuickJS 的 MisaTV `req()`、JVM `HttpURLConnection` 请求 `https://example.com/`，验证三种运行时的 HTTPS 代理链路确实可用；同时运行内网/特殊用途 IP、混合 DNS 答案和 DNS 解析后固定 IP 连接的安全测试。

@@ -47,15 +47,16 @@ export function readOptions(env = process.env) {
     vodFastOnly: (env.VOD_ONLY_FAST || "1") !== "0",
     /* ---------- 深度体检（学 MisaTV + 用户「宁可误杀」策略） ----------
      * 探活只证明「接口文件在」，证明不了「点开能用」。深度体检按站点类型真的跑一次：
-     *   · 采集站：必须有内容条目，且 ac=search 搜索有结果，否则剔除
-     *   · Jar 站：解包 jar 看 dex 里有没有 csp_XXX 对应的类
-     *   · JS/Jar 规则站：规则里的目标站要有一个活着才算可用
-     * 严格模式：判不准也剔除。只对「探活已通过」的站点生效。
+     *   · CMS：复刻 MisaTV home()，原样请求主页；无推荐时回退首个分类；有分类即可保留
+     *   · Py：校验 Spider/home 方法与规则引用目标
+     *   · JS：校验规则结构、引用资源与目标站
+     *   · Jar：校验实际生效 jar 的 dex 类名、ext 规则与目标站
+     * 判不准默认保留并降级；只对「探活已通过」的站点生效。
      * DEEP_CHECK=0 可整体关掉；DEEP_CHECK_CATEGORIES 选择深检哪几类。
      */
     deepCheck: (env.DEEP_CHECK || "1") !== "0",
     deepCheckCategories: new Set(
-      String(env.DEEP_CHECK_CATEGORIES || "cj,js,spider")
+      String(env.DEEP_CHECK_CATEGORIES || "cj,py,js,spider")
         .split(/[,\s]+/)
         .map((s) => s.trim().toLowerCase())
         .filter(Boolean),
@@ -68,7 +69,7 @@ export function readOptions(env = process.env) {
     deepMaxTargets: Number(env.DEEP_MAX_TARGETS || 3),
     // 是否校验「jar 里有没有这个爬虫类」（DEEP_JAR_CLASS=0 可关）
     deepJarClass: (env.DEEP_JAR_CLASS || "1") !== "0",
-    // 严格模式（默认）：空壳 / 无搜索 / 类不存在 / 目标全挂 / 判不准 全部剔除（宁可误杀）
+    // 严格模式：只剔除有明确证据的空壳 / 缺类 / 无效规则 / 目标全挂；判不准由独立开关控制。
     // DEEP_CHECK_STRICT=0 或 STRICTNESS=loose 时放宽
     deepStrict: env.DEEP_CHECK_STRICT
       ? env.DEEP_CHECK_STRICT !== "0"

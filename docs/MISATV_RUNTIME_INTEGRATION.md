@@ -1,6 +1,6 @@
 # MisaTV Runtime Integration
 
-状态：Py、QuickJS JS、桌面 JVM JAR 均已接入隔离执行器，并有仓库自有 fixture 的 CI 实际执行测试。当前运行时结果尚未接入每日聚合删源决策。
+状态：Py、QuickJS JS、桌面 JVM JAR 均已接入隔离执行器；每日聚合任务对每类抽样运行 2 个真实站点，并生成独立的 `聚合接口/运行时体检.json`。该报告只记录结果，不参与删源、降级或正式产物筛选。
 
 ## 能力与限制
 
@@ -27,7 +27,7 @@ ZIP bundle（默认入口 0.py，可用 --entry 指定）：
 node scripts/runtime-check.mjs --kind py --archive ./spider.zip --entry 0.py --class Spider --ext '{}'
 ```
 
-ZIP 在无网络容器内解压，限制压缩包 10 MiB、解压总量 32 MiB、文件数 2000，拒绝路径穿越和符号链接。ZIP 中的 Python 模块可作为同目录依赖导入；不会对不可信包执行 pip install。缺失第三方依赖时应返回运行错误/不确定，不能判定源死亡。
+ZIP 在仅能访问受控网关的隔离容器内解压，限制压缩包 10 MiB、解压总量 32 MiB、文件数 2000，拒绝路径穿越和符号链接。ZIP 中的 Python 模块可作为同目录依赖导入；不会对不可信包执行 pip install。缺失第三方依赖时应返回运行错误/不确定，不能判定源死亡。
 
 ## JS / QuickJS
 
@@ -53,10 +53,10 @@ JVM runner 使用固定 MisaTV commit 的 `spider-host.jar`、`stubs.jar` 和 sh
 
 运行时容器使用每次检测独立的 Docker `--internal` 网络；只有受控网关同时连接该内部网络和外部 bridge，爬虫容器没有直接外网/LAN 路由。网关仅允许 HTTP/HTTPS（TCP 80/443），对目标 DNS 的全部解析结果执行公网 IP 校验，并连接已校验的数值 IP，阻止 DNS rebinding；拒绝私网、环回、链路本地、保留和组播地址，限制请求头、请求体、连接时长和转发字节数。网关自身只读、非 root、无 capabilities。运行时容器仍只读 rootfs、非 root、capabilities 全丢弃、no-new-privileges，并设置 CPU/内存/PID/文件大小限制。第三方脚本不接触 GitHub Secrets 或仓库写权限。
 
-`runtime-home` 表示在隔离环境中真实执行首页方法并返回非空结构；使用受控网关时可以实际请求公网 API，但仍不等于所有站点都已被完整验证。网关拒绝的目标或连接失败应按网络不确定处理。timeout、network-blocked、unsupported 和 uncertain 均不得作为删源信号。此 PR 不改变正式聚合产物。
+`runtime-home` 表示在隔离环境中真实执行首页方法并返回非空结构；使用受控网关时可以实际请求公网 API，但仍不等于所有站点都已被完整验证。网关拒绝的目标或连接失败应按网络不确定处理。timeout、network-blocked、unsupported 和 uncertain 均不得作为删源信号。每日任务在正式聚合文件写出后，按 Py/JS/JAR 每类最多 2 个站点执行一次抽样运行时体检，默认预算 8 分钟。报告记录每条源的状态、错误原因、耗时及域名白名单；未提供可安全确认的源文件/域名时标为 `runtime-uncertain`。脚本只写 `聚合接口/运行时体检.json`，不修改源列表、不改变精选档位，也不触碰每日删源决策。报告会随每日产物一起提交，便于观察真实站点兼容率。
 
 
-## 受控联网网关
+## 每日真实站点运行时抽样审计\n\n每日聚合工作流会构建三个隔离运行时镜像，然后运行：\n\n```sh\nnode scripts/runtime-audit.mjs\n```\n\n默认每类抽样 2 个站点，单站超时 20 秒，整轮预算 8 分钟。可通过 `RUNTIME_AUDIT_MAX_PER_TYPE`、`RUNTIME_AUDIT_TIMEOUT_MS` 和 `RUNTIME_AUDIT_BUDGET_MS` 调整。输出 `聚合接口/运行时体检.json`，含 `runtime-home`、`runtime-empty`、`runtime-error`、`runtime-unsupported`、`runtime-uncertain` 等状态。源文件下载使用 DNS 校验和固定 IP 连接；脚本从规则/配置中提取本次执行的域名白名单。报告仅用于观察，不是自动删除依据。\n\n## 受控联网网关
 
 ```sh
 node scripts/runtime-check.mjs --kind py --source ./site.py --allow-hosts api.example.com,cdn.example.com
@@ -66,4 +66,4 @@ node scripts/runtime-check.mjs --kind jar --source ./spider.jar --class com.exam
 
 CI 还会分别通过 Py requests、QuickJS 的 MisaTV `req()`、JVM `HttpURLConnection` 请求 `https://example.com/`，验证三种运行时的 HTTPS 代理链路确实可用；同时运行内网/特殊用途 IP、混合 DNS 答案和 DNS 解析后固定 IP 连接的安全测试。
 
-`runtime-check.mjs` 为每次探测创建唯一的 Docker 内部网络和临时网关容器。Py requests/urllib、JS MisaTV `req/http/_http` 及 JVM HTTP(S) 代理属性均使用该网关。运行时容器本身无法绕过代理直接出网；网关拒绝非公网 DNS 结果和非 80/443 端口，HTTPS 使用 CONNECT 隧道。网关不是域名白名单：它允许公网 HTTP(S)，但阻止访问私网和本机服务。需要更严格的站点域名白名单时，应由调用方增加允许域名策略。
+`runtime-check.mjs` 为每次探测创建唯一的 Docker 内部网络和临时网关容器。Py requests/urllib、JS MisaTV `req/http/_http` 及 JVM HTTP(S) 代理属性均使用该网关。运行时容器本身无法绕过代理直接出网；网关拒绝非公网 DNS 结果和非 80/443 端口，HTTPS 使用 CONNECT 隧道。网关强制执行每次运行的 `--allow-hosts` 白名单；白名单之外的域名在 DNS 查询前即拒绝。

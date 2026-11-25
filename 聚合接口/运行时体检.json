@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "runId": "bfb87de8-61f2-485e-beba-32df5f8783c7",
+  "generatedAt": "2026-11-25T10:48:17.491Z",
+  "policy": "report-only; no source is removed or downgraded by runtime audit",
+  "limits": {
+    "maxPerType": 2,
+    "budgetMs": 480000,
+    "siteTimeoutMs": 20000
+  },
+  "summary": {
+    "selected": 6,
+    "byCategory": {
+      "py": {
+        "available": 146,
+        "selected": 2
+      },
+      "js": {
+        "available": 187,
+        "selected": 2
+      },
+      "jar": {
+        "available": 1172,
+        "selected": 2
+      }
+    },
+    "byStatus": {
+      "runtime-uncertain": 6
+    }
+  },
+  "results": [
+    {
+      "category": "py",
+      "key": "wzxxcz_3f04880b66f0",
+      "name": "分享咕噜",
+      "api": "https://raw.githubusercontent.com/dxyc0922/Tvbox4.x_api/refs/heads/main/脚本/分享咕噜.py",
+      "status": "runtime-uncertain",
+      "errorType": "audit-preparation-failed",
+      "reason": "Invalid IP address: undefined"
+    },
+    {
+      "category": "py",
+      "key": "wzxxcz_72a53d4741dc",
+      "name": "央视片库",
+      "api": "https://raw.githubusercontent.com/dxyc0922/Tvbox4.x_api/refs/heads/main/脚本/综/央视片库.py",
+      "status": "runtime-uncertain",
+      "errorType": "audit-preparation-failed",
+      "reason": "Invalid IP address: undefined"
+    },
+    {
+      "category": "js",
+      "key": "js_大师兄",
+      "name": "🐵┃师兄┃影视",
+      "api": "https://raw.liucn.cc/box/libs/js/drpy2.min.js",
+      "status": "runtime-uncertain",
+      "errorType": "audit-preparation-failed",
+      "reason": "Invalid IP address: undefined"
+    },
+    {
+      "category": "js",
+      "key": "js_农民",
+      "name": "👨‍🌾┃农民┃影视",
+      "api": "https://raw.liucn.cc/box/libs/js/drpy2.min.js",
+      "status": "runtime-uncertain",
+      "errorType": "audit-preparation-failed",
+      "reason": "Invalid IP address: undefined"
+    },
+    {
+      "category": "jar",
+      "key": "csp_Djuu",
+      "name": "🎧DJ悠悠",
+      "api": "csp_Djuu",
+      "status": "runtime-uncertain",
+      "errorType": "audit-preparation-failed",
+      "reason": "Invalid IP address: undefined"
+    },
+    {
+      "category": "jar",
+      "key": "csp_Ying",
+      "name": "💮┃樱花┃动漫",
+      "api": "csp_Ying",
+      "status": "runtime-uncertain",
+      "errorType": "audit-preparation-failed",
+      "reason": "Invalid IP address: undefined"
+    }
+  ],
+  "elapsedMs": 37
+}

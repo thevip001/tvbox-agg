@@ -566,37 +566,37 @@
   "elapsed": 1411
  },
  {
-  "when": "2026-11-25 18:21",
+  "when": "2026-11-25 18:47",
   "counts": {
-   "all": 1585,
-   "cj": 55,
-   "py": 153,
-   "js": 174,
-   "spider": 1203,
+   "all": 1561,
+   "cj": 56,
+   "py": 146,
+   "js": 187,
+   "spider": 1172,
    "other": 0,
-   "liveSources": 65
+   "liveSources": 68
   },
   "grades": {
-   "fast": 2521,
-   "ok": 911,
-   "uncertain": 320,
+   "fast": 2509,
+   "ok": 953,
+   "uncertain": 356,
    "unsure": 0,
-   "slow": 190,
-   "dead": 684
+   "slow": 108,
+   "dead": 713
   },
   "uncertain": null,
   "dropped": {
-   "dead": 684,
-   "slow": 190,
+   "dead": 713,
+   "slow": 108,
    "local": 321,
-   "dup": 11407,
+   "dup": 11583,
    "blocked": 14,
-   "notFast": 1458,
+   "notFast": 1550,
    "liveProbe": 26,
-   "deep": 673
+   "deep": 671
   },
-  "fetched": 144,
-  "candidates": 255,
-  "elapsed": 1449
+  "fetched": 146,
+  "candidates": 243,
+  "elapsed": 1560
  }
 ]

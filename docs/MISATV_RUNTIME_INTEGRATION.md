@@ -7,7 +7,7 @@
 | 类型 | 实际执行能力 | 限制 |
 | --- | --- | --- |
 | Py | MisaTV CPython 3.11 runner + base.spider；支持单文件和受限 ZIP bundle，真实调用 homeContent | ZIP 内随附的纯 Python 模块可导入；不会安装任意 pip 包；禁网 |
-| JS | QuickJS 引擎 + MisaTV 原版 spiderJsBootstrap；执行 home/homeContent，接入 sendMessage、local、MD5/SHA1/SHA256、Base64 通道 | 不是 Flutter flutter_js 二进制构建；Dart transformToCjs 尚未移植，ESM 返回 unsupported；动态远程模块和网络请求禁用；未捆绑 MisaTV 的 cheerio/crypto-js 等 JS 资产库 |
+| JS | QuickJS 引擎 + MisaTV 原版 spiderJsBootstrap；执行 home/homeContent，接入 sendMessage、local、MD5/SHA1/SHA256、Base64 通道 | 不是 Flutter flutter_js 二进制构建；已移植 MisaTV 的受限 regex transformToCjs 并捆绑其 JS 库；export * from 等不支持语法仍返回 unsupported；远程模块和 HTTP 请求禁用 |
 | JAR | MisaTV 桌面 OpenJDK 17 SpiderHost + stubs/shims，真实加载普通 JVM JAR 并调用 homeContent(boolean) | 不等同 Android ART；DEX/JNI/加固壳/依赖原生 Android 服务的载荷不保证支持；禁网 |
 
 ## Py
@@ -38,7 +38,7 @@ node scripts/runtime-check.mjs --kind js --source ./rule.js --api https://exampl
 
 执行引擎使用 QuickJS Python binding（不是 Node/V8），并 vendored 固定 MisaTV commit `fd0106a9d1a450d46925ccb8cf47feef3acf6350` 的 `spiderJsBootstrap` 原始 JS。Bootstrap 负责蜘蛛对象发现、init、home/homeContent 调用与 Promise 结果封装；Python native bridge 提供 local、hash、base64。网络与模块请求由隔离宿主明确阻断，避免任意第三方代码访问内网/云 metadata。
 
-MisaTV 的 Dart `transformToCjs`、Flutter JS asset 库（cheerio、crypto-js、cat.js 等）和同步 curl 网络层尚未完整移植。因此 CommonJS/global 规则可真实执行；检测到 ESM import/export 时返回 `runtime-unsupported`，不得改用 Node/V8 兜底。依赖远程模块、DOM parser 或在线接口的真实规则，当前会因能力缺失/禁网返回 uncertain 或 error，不会标记为通过。
+已按 MisaTV 的 `esm_transform.dart` 移植受限正则 ESM→CJS 转换器，并捆绑 MisaTV 的 `cat.js`、`cheerio.min.js`、`crypto-js.js`、`gbk.js`、`net.js`、`similarity.js`、`utils.js`、`模板.js`。支持常见 import/export、default export、named export 和 CommonJS/global 规则；`export * from` 等上游明确不支持的形式返回 `runtime-unsupported`。本地内置模块由宿主桥加载；远程模块与 HTTP 请求仍禁用。
 
 ## JAR
 

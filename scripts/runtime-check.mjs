@@ -52,17 +52,17 @@ if (kind === "js") {
       : "MisaTV JAR requires its Android/JVM SpiderHost, Android API bridge and sometimes JNI/native libraries; plain JVM/Dex inspection is not runtime execution."
   }); process.exit(0);
 }
-if (kind === "jar" && !args.source) {
+if (kind === "jar" && !args.source && args.fixture !== "true") {
   result("runtime-unsupported", { errorType: "missing-source", error: "--source is required for JAR runtime" }); process.exit(0);
 }
 if (!args.source) {
   result("runtime-unsupported", { errorType: "missing-source", error: "--source is required for Py runtime" }); process.exit(0);
 }
-const source = resolve(args.source);
+const source = args.source ? resolve(args.source) : null;
 const image = kind === "jar" ? (process.env.MISA_JAR_IMAGE || "tvbox-agg/misa-jar:17") : (process.env.MISA_PY_IMAGE || "tvbox-agg/misa-py:3.11");
 const temp = await mkdtemp(join(tmpdir(), "misa-py-"));
 try {
-  const code = await readFile(source);
+  const code = source ? await readFile(source) : Buffer.alloc(0);
   if (kind === "py" && code.length > 2 * 1024 * 1024) {
     result("runtime-unsupported", { errorType: "source-too-large", error: "Py source exceeds 2 MiB safety limit" }); process.exit(0);
   }
@@ -74,7 +74,7 @@ try {
     result("runtime-unsupported", { errorType: "ext-too-large", error: "ext exceeds 128 KiB safety limit" }); process.exit(0);
   }
   const site = join(temp, kind === "jar" ? "site.jar" : "site.py");
-  await writeFile(site, code, { mode: 0o444 });
+  if (source) await writeFile(site, code, { mode: 0o444 });
   // Deliberately no network: arbitrary spider code must not reach LAN, metadata, or secrets.
   // Network-enabled production probes require a separately deployed egress-filtering proxy.
   const argv = [
@@ -83,7 +83,7 @@ try {
     "--ulimit=nofile=64:64", "--ulimit=fsize=10485760:10485760",
     "--cap-drop=ALL", "--security-opt=no-new-privileges",
     "--user=65532:65532", "--tmpfs=/tmp:rw,noexec,nosuid,size=16m",
-    "--mount", `type=bind,src=${site},dst=${kind === "jar" ? "/work/site.jar" : "/work/site.py"},readonly`,
+    ...(source ? ["--mount", `type=bind,src=${site},dst=${kind === "jar" ? "/work/site.jar" : "/work/site.py"},readonly`] : []),
     image,
     ...(kind === "jar" ? [String(args.class || "com.github.catvod.spider.RuntimeFixture")] : ["/work/site.py", String(args.class || "Spider"), "homeContent", ext])
   ];

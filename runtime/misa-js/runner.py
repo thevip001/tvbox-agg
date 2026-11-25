@@ -14,7 +14,7 @@ def main():
     if os.path.getsize(path) > 2 * 1024 * 1024:
         raise ValueError("JS source exceeds 2 MiB")
     source = open(path, encoding="utf-8-sig").read()
-    if __import__("re").search(r"(^|[\\n;])\\s*(import|export)\\b", source):
+    if __import__("re").search(r"(^|[\n;])\s*(import|export)\b", source):
         print(json.dumps({"status":"runtime-unsupported","errorType":"esm-transform-unavailable","error":"MisaTV's Dart ESM transformToCjs has not been ported; refusing to execute ESM without equivalent transformation"}))
         return
     ctx = quickjs.Context()
@@ -54,9 +54,7 @@ def main():
     ctx.eval("globalThis.__runtimeResult = null;")
     invoke = ctx.get("__kniephosInvoke")
     # Invoke through the upstream bootstrap; pump QuickJS promise jobs until settled.
-    promise = invoke("home", [])
-    ctx.set("__runtimePromise", promise)
-    ctx.eval("__runtimePromise.then(v => { globalThis.__runtimeResult = v; }, e => { globalThis.__runtimeResult = JSON.stringify({__error:String(e)}); });")
+    ctx.eval("__kniephosInvoke('home', []).then(v => { globalThis.__runtimeResult = v; }, e => { globalThis.__runtimeResult = JSON.stringify({__error:String(e)}); });")
     for _ in range(10000):
         if ctx.eval("globalThis.__runtimeResult !== null"): break
         if not ctx.execute_pending_job(): break

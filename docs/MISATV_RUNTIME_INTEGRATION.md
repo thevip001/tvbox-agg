@@ -1,61 +1,49 @@
 # MisaTV Runtime Integration
 
-状态：**Py 的隔离运行时执行器已接入并有离线 fixture；JS 与 JAR 仍明确 unsupported。三类运行时尚未全部完成，生产流水线未启用运行时剔除。**
+状态：Py 和桌面 JVM JAR 已加入隔离执行器及仓库自有 fixture；JS 仍 unsupported。运行时结果尚未接入每日聚合删源决策。CI 必须实际构建并执行 fixture，不能仅凭代码存在宣称通过。
 
-## 当前实现
+## 能力边界
 
-| 类型 | 实际执行能力 | 状态 |
+| 类型 | 实际执行能力 | 限制 |
 | --- | --- | --- |
-| Py | vendored MisaTV CPython 3.11 `runner.py` + `base.spider`，Docker 隔离执行 `homeContent` | 已实现离线执行器；真实网络源需要安全出口代理，当前 sandbox 禁网 |
-| JS | MisaTV QuickJS + `flutter_js` + `js_bootstrap` + native bridge | unsupported；Node/V8 不等价 |
-| JAR/DEX | MisaTV SpiderHost + Android/JVM bridge | unsupported；仅检查 dex/class 不算实际执行 |
+| Py | vendored MisaTV CPython 3.11 runner + base.spider，真实调用 homeContent | 当前禁网；不自动下载任意 spider ZIP / pip 依赖 |
+| JAR | MisaTV 桌面 OpenJDK 17 SpiderHost + stubs/shims，真实加载 JAR 类并调用 homeContent(boolean) | 仅普通 JVM 兼容 JAR；DEX/ART、JNI、加固壳和依赖 Android 原生能力的载荷不保证支持；当前禁网 |
+| JS | — | unsupported；需要 QuickJS 与 Flutter native host bridge，Node/V8 不等价 |
 
-## Py 执行器
+## Py
 
-上游来源：<https://github.com/yagami-hue/MisaTV>。本仓库保留上游 GPL-3.0 LICENSE，并在 `runtime/misa-py/NOTICE.md` 标明 vendored 文件。
-
-构建镜像：
+上游来源：<https://github.com/yagami-hue/MisaTV>。保留 GPL-3.0 LICENSE 和来源 NOTICE。
 
 ```sh
 docker build -t tvbox-agg/misa-py:3.11 runtime/misa-py
+node scripts/runtime-check.mjs --kind py --source ./site.py --class Spider --ext ''
 ```
 
-执行本地规则：
+Docker sandbox 使用非 root、无网络、只读根文件系统、丢弃 capabilities、no-new-privileges、CPU/内存/PID 限制。当前可以验证 Python 解释器、runner、模块初始化及离线首页逻辑；在线站源会因网络被禁而返回 uncertain，不得判死。未自动下载配置引用的 spider ZIP 或任意 pip 包。
+
+## JAR
+
+JVM runner 使用固定 MisaTV commit `fd0106a9d1a450d46925ccb8cf47feef3acf6350` 的 `spider-host.jar`、`stubs.jar`、相关 shim，并按 MisaTV 桌面端依赖版本构建 OpenJDK 17 镜像。Docker build 同时编译仓库自有 Java fixture；执行器通过 SpiderHost 反射加载类并调用 `homeContent(boolean)`。
 
 ```sh
-node scripts/runtime-check.mjs --kind py --source ./path/to/site.py --class Spider --ext ''
+docker build -t tvbox-agg/misa-jar:17 runtime/misa-jar
+node scripts/runtime-check.mjs --kind jar --source ./spider.jar --class com.example.spider.Site
 ```
 
-输出为单行 JSON，状态包括 `runtime-home`、`runtime-empty`、`runtime-error`。执行使用 CPython 3.11、MisaTV runner 与 Spider 基类，调用 `homeContent`。
+CI fixture 使用镜像内置的测试 JAR：
 
-### 安全边界
+```sh
+node scripts/runtime-check.mjs --kind jar --fixture --class com.github.catvod.spider.RuntimeFixture
+```
 
-每个探针运行在独立 Docker 容器：非 root、`--network=none`、只读根文件系统、无 Linux capabilities、no-new-privileges、CPU/内存/PID 限制、只读脚本挂载。没有 GitHub token 或任何仓库 secrets。
+该路径是真实 JVM + MisaTV SpiderHost 执行，不是仅扫描 class 名。但它不等同 Android ART，也不能保证执行依赖 JNI、DEX 动态加载、特定 Android 系统服务或加固壳解密链的 JAR。沙箱禁网，因此需要联网的 spider 只能得到网络受限/不确定。
 
-**禁网是有意设计，不是功能遗漏。** 任意第三方 Python 蜘蛛等同于不可信代码。当前执行器可以真实验证解释器、模块加载、初始化和不依赖网络的首页逻辑；如果源必须联网，失败只能作为沙箱网络限制/不确定，不能据此判死。要验证在线源，必须另行部署受控出站代理，并在网络层阻断 loopback、RFC1918、链路本地、云元数据地址及 DNS rebinding；不能简单改成 Docker bridge/host 网络。
+## JS
 
-### Py 支持边界
+MisaTV JS 依赖 QuickJS、bootstrap、同步 `sendMessage`、网络/模块/local/hash/base64 native channels 和内置 JS 库。当前适配器明确返回 `runtime-unsupported`，没有用 Node/V8 伪装为 QuickJS。必须移植或构建真实 QuickJS host bridge 后才可启用。
 
-- 支持单文件脚本和 MisaTV `base.spider` 常用 API。
-- 不自动下载站点配置中的外部 spider ZIP、任意 pip 包或动态依赖。
-- 依赖额外 ZIP、私有文件、运行时安装包的源会失败或需要显式打包依赖。
-- 目前只调用 `homeContent`，不执行播放代理或持久服务模式。
+## 安全与生产策略
 
-## JS / JAR 为什么不冒充通过
+第三方脚本不接触 GitHub Secrets 或仓库写权限。固定 fixture 不访问公网、不执行采集到的任意第三方源。Py/JAR 每次执行都在独立 Docker 容器中，`--network=none`、只读 rootfs、非 root、capabilities 全丢弃、no-new-privileges、CPU/内存/PID 限制。
 
-MisaTV JS 执行不仅是 QuickJS 引擎，还依赖 bootstrap、同步网络 `sendMessage`、模块加载、缓存和内置 JS 库。当前项目没有等价的 Flutter/QuickJS 宿主桥。使用 Node.js `vm` 或 V8 执行会产生假阳性，因此 adapter 返回 `runtime-unsupported`。
-
-MisaTV JAR 需要 SpiderHost、Android API、JVM/ART 桥接及可能的 JNI/原生库。普通 JVM 或 dex 类名存在检查不能证明首页方法可执行，因此 adapter 返回 `runtime-unsupported`。
-
-## 测试
-
-GitHub Actions `.github/workflows/misa-runtime.yml`：
-1. 构建 Py Docker 镜像；
-2. 在无网络沙箱中执行仓库固定 fixture，必须得到 `runtime-home`；
-3. 检查 JS/JAR adapter 只能返回 `runtime-unsupported`，不得伪装成功。
-
-固定 fixture 不访问公网，不会运行仓库收集到的真实第三方源。
-
-## 生产策略
-
-该执行器尚未接入每日聚合的删源决策。当前静态审计仍保留原有状态，Py 在线网络探测、JS QuickJS 宿主桥和 JAR Android Host 尚未完成前，不能据此改变正式产物。任何 `runtime-unsupported`、沙箱网络阻断或超时均不得视为源失效。
+`runtime-home` 只表示该隔离环境中真实调用首页方法并得到非空结构；不代表源的外网接口在生产网络可用。timeout、network-blocked、unsupported 和 uncertain 均不得作为删源信号。此 PR 不改变正式聚合产物。

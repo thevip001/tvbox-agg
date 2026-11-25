@@ -71,4 +71,4 @@ jobs:
           node scripts/runtime-check.mjs --kind js --source runtime/fixtures/js/commonjs.js > /tmp/js-cjs-result.json
           node -e "const r=require('/tmp/js-cjs-result.json'); if(r.status!=='runtime-home' || r.data?.list?.[0]?.vod_id!=='cjs-1') { console.error(r); process.exit(1) }"
           node scripts/runtime-check.mjs --kind js --source runtime/fixtures/js/esm.js > /tmp/js-esm-result.json
-          node -e "const r=require('/tmp/js-esm-result.json'); if(r.status!=='runtime-home' || r.data?.list?.[0]?.vod_id!=='esm-1') { console.error(r); process.exit(1) }"
+          node -e "const r=require('/tmp/js-esm-result.json'); const v=r.data?.list?.[0]; if(r.status!=='runtime-home' || v?.vod_id!=='esm-1' || v?.digest!=='5d41402abc4b2a76b9719d911017c592') { console.error(r); process.exit(1) }"

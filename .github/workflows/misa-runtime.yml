@@ -2,6 +2,7 @@ name: MisaTV runtime fixture
 on:
   pull_request:
     paths:
+      - "runtime/egress-proxy/**"
       - "runtime/misa-py/**"
       - "runtime/misa-js/**"
       - "runtime/fixtures/js/**"
@@ -42,6 +43,10 @@ jobs:
           node scripts/runtime-check.mjs --kind py --archive /tmp/spider.zip --entry home.py > /tmp/py-zip-result.json
           node -e "const r=require('/tmp/py-zip-result.json'); if(r.status!=='runtime-home') { console.error(r); process.exit(1) }"
 
+      - name: Verify egress proxy SSRF policy
+        run: |
+          python runtime/egress-proxy/test_proxy.py
+          python -m py_compile runtime/egress-proxy/proxy.py
       - name: Verify runtime adapter argument contracts
         run: |
           node --check scripts/runtime-check.mjs

@@ -1,19 +1,24 @@
-# MisaTV runtime adapter
+# MisaTV runtime adapters
 
-Build the CPython 3.11 runtime image:
+Build the isolated runtimes:
 
 ```sh
 docker build -t tvbox-agg/misa-py:3.11 runtime/misa-py
+docker build -t tvbox-agg/misa-jar:17 runtime/misa-jar
 ```
 
-Run an isolated Py spider home probe:
+Run a Python spider home probe:
 
 ```sh
 node scripts/runtime-check.mjs --kind py --source ./site.py --class Spider --ext ''
 ```
 
-The runner uses the MisaTV CPython runner and base Spider implementation. Each execution is a non-root, read-only, no-network Docker container with CPU, memory and PID limits. The no-network policy is deliberate: third-party spiders are arbitrary code and must not be allowed to reach private networks, localhost or cloud metadata. Online source validation requires a separately deployed egress-filtering proxy and is not enabled here.
+Run a regular Java spider through MisaTV's desktop SpiderHost:
 
-JS and JAR currently return `runtime-unsupported`: MisaTV's QuickJS host bridge and Android/JVM SpiderHost have not been ported. Node/V8 or plain JVM execution would not be equivalent and must not be counted as a successful runtime test.
+```sh
+node scripts/runtime-check.mjs --kind jar --source ./spider.jar --class com.example.spider.Site
+```
 
-The fixture workflow tests only repository-owned code; it never executes harvested third-party sources. Runtime results are not yet used to remove sources in the daily pipeline.
+Both runtimes are sandboxed with Docker networking disabled, a read-only root filesystem, non-root UID, dropped Linux capabilities, no-new-privileges, and resource limits. Online spider probes are therefore uncertain when they need network access. JAR support targets ordinary JVM-compatible payloads; Android ART/DEX, JNI and protected-shell payloads are not guaranteed. JS remains unsupported until the actual QuickJS native host bridge is available. See [the integration notes](../docs/MISATV_RUNTIME_INTEGRATION.md).
+
+Runtime results are not connected to production source deletion.

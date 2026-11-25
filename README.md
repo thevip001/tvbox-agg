@@ -100,8 +100,10 @@
 - `聚合接口/`：每日生成的聚合文件
 - `scripts/main.mjs`：入口（收集 → 抓取 → 探活测速 → 去重 → 分类输出，无第三方依赖，需 Node.js 18+）
 - `scripts/deepcheck.mjs`：深度体检（按类型实跑：采集站内容 / jar 类名 / 规则目标站；零依赖自己读 ZIP+dex）
-- `scripts/selftest.mjs`：离线自检 63 项（`node scripts/selftest.mjs`，全程不出网；含快站筛选、频道抽查、测不准分类、种子与屏蔽域名、深度体检的端到端用例）
-- `.github/workflows/aggregate-daily.yml`：每日定时任务
+- `scripts/selftest.mjs`：离线自检 68 项（`node scripts/selftest.mjs`，全程不出网；含快站筛选、频道抽查、测不准分类、严格模式剔除判不准、种子与屏蔽域名、深度体检的端到端用例）
+- `.github/workflows/aggregate-daily.yml`：每日定时任务（也是唯一需要手动 Run workflow 的任务）
+
+严格筛选规则已经直接写进 `scripts/deepcheck.mjs` / `scripts/pipeline.mjs`，详见 `STRICT_FILTER.md`。无需、也不应再运行任何「Apply Strict Filter」之类的补丁工作流（旧的载荷分片已删除，因为它无法正确还原脚本）。
 
 ## 产物保留（30 天）
 

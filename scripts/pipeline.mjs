@@ -73,10 +73,11 @@ export function readOptions(env = process.env) {
     deepStrict: env.DEEP_CHECK_STRICT
       ? env.DEEP_CHECK_STRICT !== "0"
       : (env.STRICTNESS || "balanced").toLowerCase() !== "loose",
-    // 判不准是否也剔（默认跟随 deepStrict）。用户策略：宁可误杀 → 默认开
+    // 判不准默认保留为 uncertain，不进入精选；网络超时/限流不能当作源已失效。
+    // 只有显式 DEEP_KILL_UNCERTAIN=1 才会把判不准的源删除。
     deepKillUncertain: env.DEEP_KILL_UNCERTAIN
       ? env.DEEP_KILL_UNCERTAIN !== "0"
-      : undefined, // undefined → deepcheck 内跟随 deepStrict
+      : false,
     // 是否去掉 127.0.0.1 本地引用
     dropLocalRef: (env.DROP_LOCAL_REF || "1") !== "0",
     // 是否保留「｜来源」后缀（默认不加，改为重名加序号）

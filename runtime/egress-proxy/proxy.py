@@ -50,14 +50,14 @@ class Handler(socketserver.BaseRequestHandler):
         self.request.settimeout(8)
         try:
             data = bytearray()
-            while b"\\r\\n\\r\\n" not in data and len(data) <= MAX_HEADER:
+            while b"\r\n\r\n" not in data and len(data) <= MAX_HEADER:
                 chunk = self.request.recv(4096)
                 if not chunk: return
                 data.extend(chunk)
-            if len(data) > MAX_HEADER or b"\\r\\n\\r\\n" not in data:
+            if len(data) > MAX_HEADER or b"\r\n\r\n" not in data:
                 return self.deny(431, "headers too large")
-            head, body = bytes(data).split(b"\\r\\n\\r\\n", 1)
-            lines = head.split(b"\\r\\n")
+            head, body = bytes(data).split(b"\r\n\r\n", 1)
+            lines = head.split(b"\r\n")
             parts = lines[0].decode("latin1").split(" ")
             if len(parts) != 3: return self.deny(400, "bad request")
             method, target, version = parts
@@ -67,7 +67,7 @@ class Handler(socketserver.BaseRequestHandler):
                     return self.deny(403, "CONNECT only supports port 443")
                 host = host.strip("[]")
                 upstream = connect_pinned(host, 443)
-                self.request.sendall(b"HTTP/1.1 200 Connection Established\\r\\n\\r\\n")
+                self.request.sendall(b"HTTP/1.1 200 Connection Established\r\n\r\n")
                 self.relay(upstream)
                 return
             url = urllib.parse.urlsplit(target)
@@ -94,15 +94,15 @@ class Handler(socketserver.BaseRequestHandler):
                 if line.lower().startswith(b"host:"): has_host = True
                 out.append(line)
             if not has_host: out.append(("Host: " + host).encode("latin1"))
-            upstream.sendall(b"\\r\\n".join(out) + b"\\r\\n\\r\\n" + body)
+            upstream.sendall(b"\r\n".join(out) + b"\r\n\r\n" + body)
             self.relay(upstream)
         except (OSError, ValueError, UnicodeError):
             try: self.deny(502, "upstream rejected or unavailable")
             except OSError: pass
 
     def deny(self, status, message):
-        body = (message + "\\n").encode()
-        self.request.sendall((f"HTTP/1.1 {status} Error\\r\\nConnection: close\\r\\nContent-Length: {len(body)}\\r\\nContent-Type: text/plain\\r\\n\\r\\n").encode() + body)
+        body = (message + "\n").encode()
+        self.request.sendall((f"HTTP/1.1 {status} Error\r\nConnection: close\r\nContent-Length: {len(body)}\r\nContent-Type: text/plain\r\n\r\n").encode() + body)
 
     def relay(self, upstream):
         sockets = [self.request, upstream]

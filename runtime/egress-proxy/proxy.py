@@ -78,7 +78,7 @@ class Handler(socketserver.BaseRequestHandler):
                 host = host.strip("[]")
                 upstream = connect_pinned(host, 443)
                 self.request.sendall(b"HTTP/1.1 200 Connection Established\r\n\r\n")
-                self.relay(upstream)
+                self.relay(upstream, initial=body)
                 return
             url = urllib.parse.urlsplit(target)
             if url.scheme.lower() != "http" or not url.hostname or url.port not in (None, 80) or url.username or url.password:
@@ -116,11 +116,13 @@ class Handler(socketserver.BaseRequestHandler):
         body = (message + "\n").encode()
         self.request.sendall((f"HTTP/1.1 {status} Error\r\nConnection: close\r\nContent-Length: {len(body)}\r\nContent-Type: text/plain\r\n\r\n").encode() + body)
 
-    def relay(self, upstream):
+    def relay(self, upstream, initial=b""):
         sockets = [self.request, upstream]
-        total = 0
+        total = len(initial)
         deadline = __import__("time").monotonic() + TOTAL_TIMEOUT
         try:
+            if initial:
+                upstream.sendall(initial)
             while True:
                 if __import__("time").monotonic() > deadline: break
                 readable, _, exceptional = select.select(sockets, [], sockets, IDLE_TIMEOUT)

@@ -21,7 +21,7 @@ RUN set -eux; \
       curl -fsSL "https://maven.aliyun.com/repository/public/${path}" -o "libs/$(basename "${path}")"; \
     done
 COPY fixture-src/ /tmp/fixture-src/
-RUN mkdir -p /tmp/classes && javac -cp '/opt/misa/stubs.jar:/opt/misa/libs/*' -d /tmp/classes /tmp/fixture-src/com/github/catvod/spider/RuntimeFixture.java && jar --create --file /opt/misa/fixture.jar -C /tmp/classes .
+RUN mkdir -p /tmp/classes && javac -cp '/opt/misa/stubs.jar:/opt/misa/libs/*' -d /tmp/classes $(find /tmp/fixture-src -name '*.java') && jar --create --file /opt/misa/fixture.jar -C /tmp/classes .
 COPY entrypoint.sh /opt/misa/entrypoint.sh
 RUN chmod 0555 /opt/misa/entrypoint.sh && chmod -R a+rX /opt/misa
 USER 65532:65532

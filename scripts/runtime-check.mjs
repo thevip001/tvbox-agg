@@ -116,6 +116,8 @@ try {
   const started = Date.now();
   const timeoutMs = Math.min(30000, Math.max(1000, Number(args.timeout || 15000)));
   const out = await run("docker", argv, timeoutMs);
+  const gatewayLog = await run("docker", ["logs", gateway], 5000);
+  const gatewayIssues = /egress-deny|egress-error/.test(gatewayLog.stdout + gatewayLog.stderr);
   const durationMs = Date.now() - started;
   if (out.timedOut) {
     result("runtime-uncertain", { runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : kind === "js" ? "QuickJS / MisaTV bootstrap" : "CPython 3.11", errorType: "timeout",
@@ -142,7 +144,13 @@ try {
   }
   if (kind === "js" && data && typeof data.status === "string") {
     const { status, ...details } = data;
-    result(status, { runtimeVersion: details.runtimeVersion || "QuickJS / MisaTV bootstrap", ...details, durationMs });
+    if (status === "runtime-empty" && gatewayIssues) {
+      result("runtime-uncertain", { runtimeVersion: details.runtimeVersion || "QuickJS / MisaTV bootstrap",
+        errorType: "egress-policy-or-upstream-failure", error: "The egress gateway rejected a destination or could not reach an upstream; empty data is not evidence that the source is dead.",
+        ...details, durationMs, network: { mode: "filtered-proxy", gatewayIssues: true } });
+    } else {
+      result(status, { runtimeVersion: details.runtimeVersion || "QuickJS / MisaTV bootstrap", ...details, durationMs });
+    }
     process.exitCode = 0; throw new Error('__MISA_STOP__');
   }
   if (kind === "jar" && typeof data === "string") {
@@ -153,11 +161,17 @@ try {
     Array.isArray(data?.list?.data) ? data.list.data.length > 0 :
     Array.isArray(data?.class) ? data.class.length > 0 :
     Boolean(data && typeof data === "object" && Object.keys(data).length);
-  result(hasContent ? "runtime-home" : "runtime-empty", {
-    runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : kind === "js" ? "QuickJS / MisaTV bootstrap" : "CPython 3.11 / MisaTV runner",
-    method: "homeContent", data, durationMs,
-    network: { mode: "filtered-proxy", policy: "public HTTP/HTTPS only; non-global IPs and non-80/443 ports blocked" }
-  });
+  if (!hasContent && gatewayIssues) {
+    result("runtime-uncertain", { runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : "CPython 3.11 / MisaTV runner",
+      errorType: "egress-policy-or-upstream-failure", error: "The egress gateway rejected a destination or could not reach an upstream; empty data is not evidence that the source is dead.",
+      method: "homeContent", data, durationMs, network: { mode: "filtered-proxy", gatewayIssues: true } });
+  } else {
+    result(hasContent ? "runtime-home" : "runtime-empty", {
+      runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : kind === "js" ? "QuickJS / MisaTV bootstrap" : "CPython 3.11 / MisaTV runner",
+      method: "homeContent", data, durationMs,
+      network: { mode: "filtered-proxy", policy: "public HTTP/HTTPS only; non-global IPs and non-80/443 ports blocked" }
+    });
+  }
 } catch (error) {
   if (error?.message !== "__MISA_STOP__") {
     result("runtime-error", { errorType: "runner-error", error: String(error?.stack || error) });

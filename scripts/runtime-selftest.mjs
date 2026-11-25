@@ -14,4 +14,4 @@ assert.equal(JSON.parse(js.out.trim()).status, "runtime-unsupported");
 const jar = await run("--kind", "jar");
 assert.equal(jar.code, 0);
 assert.equal(JSON.parse(jar.out.trim()).status, "runtime-unsupported");
-console.log("runtime adapter contract: JS/JAR safely report unsupported");
+console.log("runtime adapter contract: JS requires a source; JAR requires a source or fixture");

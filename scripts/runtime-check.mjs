@@ -67,13 +67,13 @@ try {
     result("runtime-unsupported", { errorType: "source-too-large", error: "JAR exceeds 32 MiB safety limit" }); process.exitCode = 0; throw new Error('__MISA_STOP__');
   }
   const ext = String(args.ext || "");
-  const requestedHosts = String(args["allow-hosts"] || "").split(/[\\s,;]+/).filter(Boolean);
+  const requestedHosts = String(args["allow-hosts"] || "").split(/[\s,;]+/).filter(Boolean);
   if (args.api) {
     try { requestedHosts.push(new URL(String(args.api)).hostname); } catch {}
   }
-  const allowedHosts = [...new Set(requestedHosts.map(host => host.toLowerCase().replace(/\\.$/, "")))];
+  const allowedHosts = [...new Set(requestedHosts.map(host => host.toLowerCase().replace(/\.$/, "")))];
   const validDomain = host => host.length <= 253 &&
-    /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)*[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(host);
+    /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)*[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(host);
   const invalidHosts = allowedHosts.filter(host => {
     const value = host.startsWith("*.") ? host.slice(2) : host;
     return !(isIP(value) || validDomain(value));

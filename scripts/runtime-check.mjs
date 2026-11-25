@@ -28,7 +28,12 @@ const result = (status, extra = {}) => {
 const run = (cmd, argv, timeoutMs = 15000) => new Promise((resolveRun) => {
   const p = spawn(cmd, argv, { stdio: ["ignore", "pipe", "pipe"] });
   let stdout = "", stderr = "", timedOut = false, settled = false;
-  const timer = setTimeout(() => { timedOut = true; p.kill("SIGKILL"); }, timeoutMs);
+  const timer = setTimeout(() => {
+    timedOut = true;
+    p.kill("SIGTERM"); // docker run forwards SIGTERM to the container
+    const force = setTimeout(() => p.kill("SIGKILL"), 1500);
+    force.unref?.();
+  }, timeoutMs);
   const finish = value => { if (settled) return; settled = true; clearTimeout(timer); resolveRun(value); };
   p.stdout.on("data", b => { stdout += b; if (stdout.length > 2_000_000) p.kill("SIGKILL"); });
   p.stderr.on("data", b => { stderr += b; if (stderr.length > 64_000) stderr = stderr.slice(-64_000); });
@@ -85,8 +90,13 @@ try {
     process.exit(0);
   }
   if (out.code !== 0) {
-    result("runtime-error", { runtimeVersion: "CPython 3.11", errorType: "spider-execution-failed",
-      error: (out.stderr || out.stdout || `docker exited ${out.code}`).slice(-4000), durationMs });
+    const error = (out.stderr || out.stdout || `docker exited ${out.code}`).slice(-4000);
+    const networkBlocked = /ConnectionError|ConnectTimeout|ReadTimeout|NameResolutionError|Temporary failure in name resolution|Network is unreachable|No route to host|Max retries exceeded|Connection refused/i.test(error);
+    result(networkBlocked ? "runtime-uncertain" : "runtime-error", {
+      runtimeVersion: "CPython 3.11",
+      errorType: networkBlocked ? "sandbox-network-disabled" : "spider-execution-failed",
+      error, durationMs, network: { mode: "disabled", requests: "blocked" }
+    });
     process.exit(0);
   }
   const raw = out.stdout.trim();

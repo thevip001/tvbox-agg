@@ -42,7 +42,7 @@
   | Jar 爬虫站（`csp_*`） | 解包 jar 的 `classes.dex`，看有没有 `com.github.catvod.spider.类名` | **类不在包里** —— TVBox 一加载就 ClassNotFoundException，站点列表里看得见、点开全报错 |
   | 规则型爬虫 / JS 站 | 把 `ext` 规则拉下来，抽出规则里的目标站逐个探活 | 规则无效 / 目标站**全部**不可达（域名已不存在、停站页） |
   - **jar 缺类时会先尝试换 jar**：同一份配置里别的 jar 带着这个类，就只换 jar 不删站（实测 GitHub 上 16 个 jar 里就有 18 处「站点指向的类不在包里」，覆盖 122 个站）。
-  - **判不准的一律保留**：403 / 429 / 5xx / 超时 / 跑测机网络受限，只降档不删除，下轮重测。
+  - **判不准默认保留**：403 / 429 / 5xx / 超时 / 跑测机网络受限，只降档不删除，下轮重测；只有显式 `DEEP_KILL_UNCERTAIN=1` 才删除。
   - 开关：`DEEP_CHECK=0` 整体关；`DEEP_CHECK_CATEGORIES=cj,py,js,spider` 选类型；`DEEP_JAR_CLASS=0` 关类名校验；预算 `BUDGET_DEEP_CHECK`（默认 600 秒）。
   - 体检结果写进 `聚合接口/剔除报告.json` 的「深度体检」区，每条都带 `health` 状态（`empty` / `no-class` / `no-target` / `needs-ext` / `no-rule`）和具体原因。
 - **测速只看首字节（TTFB），不看吞吐**：接口本身就是几十 KB 的 JSON/脚本，KB/s 低只代表文件小；

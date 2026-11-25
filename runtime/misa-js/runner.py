@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import base64, hashlib, json, os, sys, traceback
+import base64, hashlib, json, os, sys, traceback, urllib.request, urllib.error
 import quickjs
 from esm_transform import transform_to_cjs, ESMTransformError
 
@@ -28,7 +28,38 @@ def main():
         try: data = json.loads(payload or "{}")
         except Exception: data = {}
         if name == "__net":
-            return json.dumps({"headers":{},"content":"","status":0,"ok":False,"error":"network disabled by runtime sandbox"})
+            url = str(data.get("url", ""))
+            try:
+                from urllib.parse import urlsplit
+                parsed = urlsplit(url)
+                if parsed.scheme not in ("http", "https") or not parsed.hostname or parsed.username or parsed.password:
+                    raise ValueError("only absolute HTTP/HTTPS URLs are supported")
+                method = str(data.get("method", "get")).upper()
+                if method not in ("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"):
+                    raise ValueError("HTTP method is not allowed")
+                headers = {str(k): str(v) for k, v in (data.get("headers") or {}).items()
+                           if str(k).lower() not in ("proxy-authorization", "proxy-connection", "host", "content-length")}
+                body = data.get("body")
+                request = urllib.request.Request(url, data=(str(body).encode() if body not in (None, "") else None),
+                                                 headers=headers, method=method)
+                timeout = max(1, min(20, int(data.get("timeout", 10000)) / 1000))
+                try:
+                    response = urllib.request.urlopen(request, timeout=timeout)
+                except urllib.error.HTTPError as response:
+                    pass
+                with response:
+                    raw = response.read(4 * 1024 * 1024 + 1)
+                    if len(raw) > 4 * 1024 * 1024:
+                        raise ValueError("HTTP response exceeds 4 MiB")
+                    charset = str(data.get("charset") or response.headers.get_content_charset() or "utf-8")
+                    try: content = raw.decode(charset, "replace")
+                    except LookupError: content = raw.decode("utf-8", "replace")
+                    return json.dumps({"headers": dict(response.headers.items()), "content": content,
+                                       "status": response.status, "ok": 200 <= response.status < 400,
+                                       "url": response.geturl()}, ensure_ascii=False)
+            except Exception as exc:
+                return json.dumps({"headers": {}, "content": "", "status": 0, "ok": False,
+                                   "error": str(exc)}, ensure_ascii=False)
         if name == "__module":
             spec = str(data.get("spec", "")).split("?")[0].split("#")[0]
             base = os.path.basename(spec)

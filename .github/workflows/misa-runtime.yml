@@ -10,6 +10,7 @@ on:
       - "runtime/misa-jar/**"
       - "scripts/runtime-check.mjs"
       - "scripts/runtime-audit.mjs"
+      - "scripts/runtime-audit.mjs"
       - "scripts/runtime-selftest.mjs"
       - ".github/workflows/misa-runtime.yml"
   push:
@@ -22,6 +23,7 @@ on:
       - "runtime/fixtures/js/**"
       - "runtime/misa-jar/**"
       - "scripts/runtime-check.mjs"
+      - "scripts/runtime-audit.mjs"
       - "scripts/runtime-selftest.mjs"
       - ".github/workflows/misa-runtime.yml"
 permissions:

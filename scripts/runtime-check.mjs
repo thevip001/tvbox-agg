@@ -6,8 +6,8 @@
  * JS: executes MisaTV bootstrap on QuickJS with filtered host-network bridge. JAR: executes MisaTV desktop SpiderHost through JVM proxy settings.
  *
  * Usage:
- *   node scripts/runtime-check.mjs --kind py --source /path/to/site.py [--class Spider] [--ext URL_OR_JSON]
- *   node scripts/runtime-check.mjs --kind js --source /path/to/site.js [--api URL] [--ext JSON]\n   node scripts/runtime-check.mjs --kind jar --source /path/to/site.jar
+ *   node scripts/runtime-check.mjs --kind py --source /path/to/site.py [--allow-hosts host1,host2] [--class Spider] [--ext URL_OR_JSON]
+ *   node scripts/runtime-check.mjs --kind js --source /path/to/site.js [--api URL] [--allow-hosts host1,host2] [--ext JSON]\n   node scripts/runtime-check.mjs --kind jar --source /path/to/site.jar [--allow-hosts host1,host2]
  *
  * Output: one JSON object on stdout. Diagnostics go to stderr.
  */

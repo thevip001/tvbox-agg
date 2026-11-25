@@ -69,10 +69,33 @@ try {
   }
   const site = join(temp, kind === "jar" ? "site.jar" : kind === "js" ? "site.js" : "site.py");
   if (source) await writeFile(site, code, { mode: 0o444 });
-  // Deliberately no network: arbitrary spider code must not reach LAN, metadata, or secrets.
-  // Network-enabled production probes require a separately deployed egress-filtering proxy.
+
+  // Per-invocation internal network: only the gateway is attached to both this
+  // isolated network and Docker's outbound bridge. Spider containers cannot
+  // route directly to the Internet or LAN, even if they ignore proxy settings.
+  const network = `misa-job-${randomUUID().replaceAll("-", "").slice(0, 16)}`;
+  const gateway = `misa-egress-${randomUUID().replaceAll("-", "").slice(0, 12)}`;
+  const proxyScript = resolve("runtime/egress-proxy/proxy.py");
+  const networkCreate = await run("docker", ["network", "create", "--internal", network], 15000);
+  if (networkCreate.code !== 0) throw new Error(`cannot create isolated Docker network: ${networkCreate.stderr}`);
+  const proxyStart = await run("docker", [
+    "run", "-d", "--name", gateway, "--network", network, "--network-alias", "egress-proxy",
+    "--read-only", "--tmpfs=/tmp:rw,noexec,nosuid,size=8m", "--cap-drop=ALL",
+    "--security-opt=no-new-privileges", "--user=65532:65532",
+    "--env=PYTHONDONTWRITEBYTECODE=1",
+    "--mount", `type=bind,src=${proxyScript},dst=/proxy.py,readonly`,
+    "python:3.11-alpine", "python", "/proxy.py"
+  ], 30000);
+  if (proxyStart.code !== 0) throw new Error(`cannot start egress gateway: ${proxyStart.stderr}`);
+  const externalAttach = await run("docker", ["network", "connect", "bridge", gateway], 15000);
+  if (externalAttach.code !== 0) throw new Error(`cannot attach egress gateway to outbound bridge: ${externalAttach.stderr}`);
+  await new Promise(resolveReady => setTimeout(resolveReady, 300));
+
   const argv = [
-    "run", "--rm", "--stop-timeout=1", "--network=none", "--read-only",
+    "run", "--rm", "--stop-timeout=1", `--network=${network}`, "--read-only",
+    "--env=HTTP_PROXY=http://egress-proxy:3128", "--env=HTTPS_PROXY=http://egress-proxy:3128",
+    "--env=ALL_PROXY=http://egress-proxy:3128", "--env=http_proxy=http://egress-proxy:3128",
+    "--env=https_proxy=http://egress-proxy:3128", "--env=NO_PROXY=localhost,127.0.0.1,::1",
     "--memory=256m", "--memory-swap=256m", "--cpus=1", "--pids-limit=32",
     "--ulimit=nofile=64:64", "--ulimit=fsize=41943040:41943040",
     "--cap-drop=ALL", "--security-opt=no-new-privileges",
@@ -95,8 +118,8 @@ try {
     const networkBlocked = /ConnectionError|ConnectTimeout|ReadTimeout|NameResolutionError|Temporary failure in name resolution|Network is unreachable|No route to host|Max retries exceeded|Connection refused/i.test(error);
     result(networkBlocked ? "runtime-uncertain" : "runtime-error", {
       runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : kind === "js" ? "QuickJS / MisaTV bootstrap" : "CPython 3.11",
-      errorType: networkBlocked ? "sandbox-network-disabled" : "spider-execution-failed",
-      error, durationMs, network: { mode: "disabled", requests: "blocked" }
+      errorType: networkBlocked ? "egress-proxy-or-upstream-failed" : "spider-execution-failed",
+      error, durationMs, network: { mode: "filtered-proxy", requests: "attempted" }
     });
     process.exit(0);
   }
@@ -124,10 +147,12 @@ try {
   result(hasContent ? "runtime-home" : "runtime-empty", {
     runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : kind === "js" ? "QuickJS / MisaTV bootstrap" : "CPython 3.11 / MisaTV runner",
     method: "homeContent", data, durationMs,
-    network: { mode: "disabled", requests: 0 }
+    network: { mode: "filtered-proxy", policy: "public HTTP/HTTPS only; non-global IPs and non-80/443 ports blocked" }
   });
 } catch (error) {
   result("runtime-error", { errorType: "runner-error", error: String(error?.stack || error) });
 } finally {
+  if (typeof gateway !== "undefined") await run("docker", ["rm", "-f", gateway], 10000);
+  if (typeof network !== "undefined") await run("docker", ["network", "rm", network], 10000);
   await rm(temp, { recursive: true, force: true });
 }

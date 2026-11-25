@@ -604,7 +604,7 @@ t("深度体检选项默认值：开启、深检 cj/js/spider、类名校验开"
   const o = readOptions({});
   assert.strictEqual(o.deepCheck, true);
   assert.ok(o.deepCheckCategories.has("cj") && o.deepCheckCategories.has("js") && o.deepCheckCategories.has("spider"));
-  assert.strictEqual(o.deepCheckCategories.has("py"), false, "Py 站默认不深检（文件本身已验过）");
+  assert.strictEqual(o.deepCheckCategories.has("py"), true, "Py 站也必须进入规则体检");
   assert.strictEqual(o.deepJarClass, true);
   assert.strictEqual(readOptions({ DEEP_CHECK: "0" }).deepCheck, false);
   assert.strictEqual(readOptions({ DEEP_CHECK_CATEGORIES: "cj" }).deepCheckCategories.has("js"), false);
@@ -651,16 +651,11 @@ await ta("端到端深检：空壳采集站被剔，有内容的留下，jar 缺
     const send = (b, t = "text/plain; charset=utf-8") => res.writeHead(200, { "Content-Type": t }).end(b);
     if (u.pathname === "/shell.php") return send(JSON.stringify({ code: 0, list: [] }), "application/json");
     if (u.pathname === "/real.php") {
-      if (u.searchParams.get("ac") === "list") {
-        return send(JSON.stringify({ class: [{ type_id: 1, type_name: "动作" }] }), "application/json");
-      }
       return send(JSON.stringify({ list: [{ vod_id: 1, vod_name: "真片名" }] }), "application/json");
     }
     if (u.pathname === "/real2.php") {
-      if (u.searchParams.get("ac") === "list") {
-        return send(JSON.stringify({ class: [{ type_id: 1, type_name: "动作" }] }), "application/json");
-      }
-      return send(JSON.stringify({ list: [] }), "application/json");
+      if (u.searchParams.get("t") === "1") return send(JSON.stringify({ list: [] }), "application/json");
+      return send(JSON.stringify({ class: [{ type_id: 1, type_name: "动作" }], list: [] }), "application/json");
     }
     if (u.pathname === "/x.jar") return send(zip, "application/java-archive");
     if (u.pathname === "/rule.json") return send(JSON.stringify({ 主页url: `http://127.0.0.1:${server2.address().port}/site/` }));
@@ -698,7 +693,8 @@ await ta("端到端深检：空壳采集站被剔，有内容的留下，jar 缺
     assert.strictEqual(byName["空壳站"].grade, "dead", "空壳采集站必须剔除");
     assert.ok(/空壳/.test(byName["空壳站"].healthReason), byName["空壳站"].healthReason);
     assert.notStrictEqual(byName["真采集站"].grade, "dead", "有内容的采集站必须保留");
-    assert.strictEqual(byName["有分类无内容"].grade, "dead", "有分类但取不到内容 = 空壳");
+    assert.notStrictEqual(byName["有分类无内容"].grade, "dead", "MisaTV 口径：有分类即 ok-classes，不能误杀");
+    assert.strictEqual(byName["有分类无内容"].health, "ok-classes");
     assert.strictEqual(byName["缺类的jar站"].grade, "dead", "jar 里没有该类必须剔除");
     assert.ok(/没有 PanSou/.test(byName["缺类的jar站"].healthReason), byName["缺类的jar站"].healthReason);
     assert.notStrictEqual(byName["类在包里的站"].grade, "dead", "类在包里 + 目标站活着 → 保留");
@@ -706,7 +702,7 @@ await ta("端到端深检：空壳采集站被剔，有内容的留下，jar 缺
     assert.strictEqual(byName["缺ext的规则站"].health, "needs-ext");
     assert.strictEqual(byName["类不在包里的规则站"].grade, "dead", "类不在包里 → 补 ext 也没用，必须剔除");
     assert.strictEqual(byName["类不在包里的规则站"].health, "no-class");
-    assert.strictEqual(stats.dropped.deep, 5, `剔除 5 个，实际 ${stats.dropped.deep}`);
+    assert.strictEqual(stats.dropped.deep, 4, `剔除 4 个，实际 ${stats.dropped.deep}`);
     assert.ok(ds.removed >= 4);
   } finally {
     await new Promise((r) => server2.close(r));

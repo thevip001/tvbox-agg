@@ -15,13 +15,13 @@ jobs:
           from pathlib import Path
           root = Path("scripts/.strict-payload")
           m = json.loads((root / "manifest.json").read_text())
-          def rebuild(prefix, n):
-              b64 = "".join((root / f"{prefix}.{i:02d}.b64").read_text() for i in range(n))
+          def rebuild(parts_key, md5_key):
+              b64 = "".join((root / name).read_text() for name in m[parts_key])
               data = gzip.decompress(base64.b64decode(b64))
-              assert hashlib.md5(data).hexdigest() == m[f"{prefix}_md5"], prefix
+              assert hashlib.md5(data).hexdigest() == m[md5_key], md5_key
               return data
-          deep = rebuild("deep", m["deep"])
-          pipe = rebuild("pipe", m["pipe"])
+          deep = rebuild("deep_parts", "deep_md5")
+          pipe = rebuild("pipe_parts", "pipe_md5")
           Path("scripts/deepcheck.mjs").write_bytes(deep)
           Path("scripts/pipeline.mjs").write_bytes(pipe)
           print("OK", len(deep), len(pipe))

@@ -657,6 +657,7 @@ await ta("端到端深检：空壳采集站被剔，有内容的留下，jar 缺
       if (u.searchParams.get("t") === "1") return send(JSON.stringify({ list: [] }), "application/json");
       return send(JSON.stringify({ class: [{ type_id: 1, type_name: "动作" }], list: [] }), "application/json");
     }
+    if (u.pathname === "/good.py") return send("class Spider:\\n    def homeContent(self, filter):\\n        return {}\\n    def searchContent(self, key, quick):\\n        return []\\nhost = 'http://127.0.0.1:" + server2.address().port + "/site/'", "text/plain");
     if (u.pathname === "/x.jar") return send(zip, "application/java-archive");
     if (u.pathname === "/rule.json") return send(JSON.stringify({ 主页url: `http://127.0.0.1:${server2.address().port}/site/` }));
     if (u.pathname === "/site/" || u.pathname === "/site") return send("<html><body>" + "x".repeat(400) + "</body></html>", "text/html");
@@ -677,6 +678,7 @@ await ta("端到端深检：空壳采集站被剔，有内容的留下，jar 缺
       { category: "cj", grade: "fast", site: { name: "空壳站", type: 1, api: `${base}/shell.php` }, probe: { ttfb: 100 } },
       { category: "cj", grade: "fast", site: { name: "真采集站", type: 1, api: `${base}/real.php` }, probe: { ttfb: 100 } },
       { category: "cj", grade: "fast", site: { name: "有分类无内容", type: 1, api: `${base}/real2.php` }, probe: { ttfb: 100 } },
+      { category: "py", grade: "fast", site: { name: "有效Py规则", type: 3, api: "py_test", ext: `${base}/good.py` }, probe: { ttfb: 100 } },
       { category: "spider", grade: "fast", site: { name: "缺类的jar站", type: 3, api: "csp_PanSou", jar: `${base}/x.jar`, ext: `${base}/rule.json` }, probe: { ttfb: 100 } },
       { category: "spider", grade: "fast", site: { name: "类在包里的站", type: 3, api: "csp_XBPQ", jar: `${base}/x.jar`, ext: `${base}/rule.json` }, probe: { ttfb: 100 } },
       { category: "spider", grade: "fast", site: { name: "缺ext的规则站", type: 3, api: "csp_XBPQ", jar: `${base}/x.jar` }, probe: { ttfb: 100 } },
@@ -695,6 +697,8 @@ await ta("端到端深检：空壳采集站被剔，有内容的留下，jar 缺
     assert.notStrictEqual(byName["真采集站"].grade, "dead", "有内容的采集站必须保留");
     assert.notStrictEqual(byName["有分类无内容"].grade, "dead", "MisaTV 口径：有分类即 ok-classes，不能误杀");
     assert.strictEqual(byName["有分类无内容"].health, "ok-classes");
+    assert.notStrictEqual(byName["有效Py规则"].grade, "dead", "Py 必须进入深检且有效 Spider 规则应保留");
+    assert.strictEqual(byName["有效Py规则"].health, "ok-content");
     assert.strictEqual(byName["缺类的jar站"].grade, "dead", "jar 里没有该类必须剔除");
     assert.ok(/没有 PanSou/.test(byName["缺类的jar站"].healthReason), byName["缺类的jar站"].healthReason);
     assert.notStrictEqual(byName["类在包里的站"].grade, "dead", "类在包里 + 目标站活着 → 保留");

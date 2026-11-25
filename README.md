@@ -43,7 +43,7 @@
   | 规则型爬虫 / JS 站 | 把 `ext` 规则拉下来，抽出规则里的目标站逐个探活 | 规则无效 / 目标站**全部**不可达（域名已不存在、停站页） |
   - **jar 缺类时会先尝试换 jar**：同一份配置里别的 jar 带着这个类，就只换 jar 不删站（实测 GitHub 上 16 个 jar 里就有 18 处「站点指向的类不在包里」，覆盖 122 个站）。
   - **判不准的一律保留**：403 / 429 / 5xx / 超时 / 跑测机网络受限，只降档不删除，下轮重测。
-  - 开关：`DEEP_CHECK=0` 整体关；`DEEP_CHECK_CATEGORIES=cj,js,spider` 选类型；`DEEP_JAR_CLASS=0` 关类名校验；预算 `BUDGET_DEEP_CHECK`（默认 600 秒）。
+  - 开关：`DEEP_CHECK=0` 整体关；`DEEP_CHECK_CATEGORIES=cj,py,js,spider` 选类型；`DEEP_JAR_CLASS=0` 关类名校验；预算 `BUDGET_DEEP_CHECK`（默认 600 秒）。
   - 体检结果写进 `聚合接口/剔除报告.json` 的「深度体检」区，每条都带 `health` 状态（`empty` / `no-class` / `no-target` / `needs-ext` / `no-rule`）和具体原因。
 - **测速只看首字节（TTFB），不看吞吐**：接口本身就是几十 KB 的 JSON/脚本，KB/s 低只代表文件小；
   实测按 50KB/s 判会删掉 TTFB 只有 130~360ms 的健康站。
@@ -99,7 +99,7 @@
 - `data/pool.json`：候选池（自动累积，记录每条地址的成功/失败次数）
 - `聚合接口/`：每日生成的聚合文件
 - `scripts/main.mjs`：入口（收集 → 抓取 → 探活测速 → 去重 → 分类输出，无第三方依赖，需 Node.js 18+）
-- `scripts/deepcheck.mjs`：深度体检（按类型实跑：采集站内容 / jar 类名 / 规则目标站；零依赖自己读 ZIP+dex）
+- `scripts/deepcheck.mjs`：深度体检（按类型实跑：CMS 主页/首分类 / Py、JS 规则 / jar 类名与目标站；零依赖自己读 ZIP+dex）
 - `scripts/selftest.mjs`：离线自检 68 项（`node scripts/selftest.mjs`，全程不出网；含快站筛选、频道抽查、测不准分类、严格模式剔除判不准、种子与屏蔽域名、深度体检的端到端用例）
 - `.github/workflows/aggregate-daily.yml`：每日定时任务（也是唯一需要手动 Run workflow 的任务）
 

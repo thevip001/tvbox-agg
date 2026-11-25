@@ -57,7 +57,10 @@ try {
   if ((kind === "py" && !args.archive || kind === "js") && code.length > 2 * 1024 * 1024) {
     result("runtime-unsupported", { errorType: "source-too-large", error: "Script source exceeds 2 MiB safety limit" }); process.exit(0);
   }
-  if (kind === "py" && args.archive && code.length > 10 * 1024 * 1024) {\n    result("runtime-unsupported", { errorType: "archive-too-large", error: "Py spider ZIP exceeds 10 MiB safety limit" }); process.exit(0);\n  }\n  if (kind === "jar" && code.length > 32 * 1024 * 1024) {
+  if (kind === "py" && args.archive && code.length > 10 * 1024 * 1024) {
+    result("runtime-unsupported", { errorType: "archive-too-large", error: "Py spider ZIP exceeds 10 MiB safety limit" }); process.exit(0);
+  }
+  if (kind === "jar" && code.length > 32 * 1024 * 1024) {
     result("runtime-unsupported", { errorType: "source-too-large", error: "JAR exceeds 32 MiB safety limit" }); process.exit(0);
   }
   const ext = String(args.ext || "");
@@ -73,7 +76,7 @@ try {
     "--memory=256m", "--memory-swap=256m", "--cpus=1", "--pids-limit=32",
     "--ulimit=nofile=64:64", "--ulimit=fsize=10485760:10485760",
     "--cap-drop=ALL", "--security-opt=no-new-privileges",
-    "--user=65532:65532", "--tmpfs=/tmp:rw,noexec,nosuid,size=16m",
+    "--user=65532:65532", "--tmpfs=/tmp:rw,noexec,nosuid,size=48m",
     ...(source ? ["--mount", `type=bind,src=${site},dst=${kind === "jar" ? "/work/site.jar" : kind === "js" ? "/work/site.js" : args.archive ? "/work/archive.zip" : "/work/site.py"},readonly`] : []),
     image,
     ...(kind === "jar" ? [String(args.class || "com.github.catvod.spider.RuntimeFixture")] : kind === "js" ? ["/work/site.js", String(args.api || ""), ext] : args.archive ? ["--archive", "/work/archive.zip", String(args.entry || "0.py"), String(args.class || "Spider"), String(args.method || "homeContent"), ext] : ["/work/site.py", String(args.class || "Spider"), "homeContent", ext])

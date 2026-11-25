@@ -82,7 +82,7 @@ try {
   if (networkCreate.code !== 0) throw new Error(`cannot create isolated Docker network: ${networkCreate.stderr}`);
   const proxyStart = await run("docker", [
     "run", "-d", "--name", gateway, "--network", "bridge",
-    "--read-only", "--tmpfs=/tmp:rw,noexec,nosuid,size=8m", "--cap-drop=ALL",
+    "--read-only", "--tmpfs=/tmp:rw,noexec,nosuid,size=8m", "--cap-drop=ALL", "--pids-limit=64", "--memory=64m", "--memory-swap=64m", "--cpus=0.5", "--ulimit=nofile=128:128",
     "--security-opt=no-new-privileges", "--user=65532:65532",
     "--env=PYTHONDONTWRITEBYTECODE=1",
     "--mount", `type=bind,src=${proxyScript},dst=/proxy.py,readonly`,
@@ -91,7 +91,14 @@ try {
   if (proxyStart.code !== 0) throw new Error(`cannot start egress gateway: ${proxyStart.stderr}`);
   const internalAttach = await run("docker", ["network", "connect", "--alias", "egress-proxy", network, gateway], 15000);
   if (internalAttach.code !== 0) throw new Error(`cannot attach egress gateway to isolated spider network: ${internalAttach.stderr}`);
-  await new Promise(resolveReady => setTimeout(resolveReady, 300));
+  let gatewayReady = false;
+  for (let attempt = 0; attempt < 10; attempt++) {
+    const probe = await run("docker", ["exec", gateway, "python", "-c",
+      "import socket; s=socket.create_connection(('127.0.0.1',3128),1); s.close()"], 3000);
+    if (probe.code === 0) { gatewayReady = true; break; }
+    await new Promise(resolveReady => setTimeout(resolveReady, 250));
+  }
+  if (!gatewayReady) throw new Error("egress gateway did not become ready");
 
   const argv = [
     "run", "--rm", "--stop-timeout=1", `--network=${network}`, "--read-only",

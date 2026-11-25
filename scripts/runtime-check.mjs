@@ -74,7 +74,7 @@ try {
   const argv = [
     "run", "--rm", "--stop-timeout=1", "--network=none", "--read-only",
     "--memory=256m", "--memory-swap=256m", "--cpus=1", "--pids-limit=32",
-    "--ulimit=nofile=64:64", "--ulimit=fsize=10485760:10485760",
+    "--ulimit=nofile=64:64", "--ulimit=fsize=41943040:41943040",
     "--cap-drop=ALL", "--security-opt=no-new-privileges",
     "--user=65532:65532", "--tmpfs=/tmp:rw,noexec,nosuid,size=48m",
     ...(source ? ["--mount", `type=bind,src=${site},dst=${kind === "jar" ? "/work/site.jar" : kind === "js" ? "/work/site.js" : args.archive ? "/work/archive.zip" : "/work/site.py"},readonly`] : []),

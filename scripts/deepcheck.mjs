@@ -30,8 +30,9 @@ import { httpGet, normUrl, parseLooseJson } from "./core.mjs";
 
 /** 判定为「确定不可用」的状态（strict 模式下会剔除） */
 export const HEALTH = {
-  OK_CONTENT: "ok-content", // 有内容 + 搜索有结果（唯一「确定可用」档）
-  OK_CLASSES: "ok-classes", // 有分类能刷出条目，但搜索无结果 / 未验搜索（严格模式当死）
+  OK_CONTENT: "ok-content", // 主页/首个分类能取到内容
+  OK_CLASSES: "ok-classes", // 有分类可浏览；与 MisaTV 一样不要求首页必须有推荐内容
+  OK_TARGET: "ok-target", // 规则静态检查通过且至少一个目标站可达（不等于运行时 home 成功）
   OK_UNKNOWN: "ok-unknown", // 没有可验的抓手（内置类且无需 ext），信任保留
   NEEDS_EXT: "needs-ext", // 这类爬虫必须有 ext 才能工作，但 ext 是空的
   EMPTY: "empty", // 请求成功，但没有条目也没有分类（空壳站）
@@ -47,18 +48,18 @@ export const HEALTH = {
 export const DEAD_HEALTH = new Set([
   HEALTH.NEEDS_EXT,
   HEALTH.EMPTY,
-  HEALTH.NO_SEARCH,
   HEALTH.NO_CLASS,
   HEALTH.NO_TARGET,
   HEALTH.NO_RULE,
   HEALTH.ERROR,
-  HEALTH.OK_CLASSES, // 严格：没有搜索结果不算「好用」
+  // MisaTV 将「有分类但首页无推荐」视为可用；搜索不是源可用性的必要条件。
 ]);
 
 /** 状态 → 中文短标签（报告里用） */
 export const HEALTH_LABEL = {
-  [HEALTH.OK_CONTENT]: "有内容+可搜",
-  [HEALTH.OK_CLASSES]: "有分类无搜索",
+  [HEALTH.OK_CONTENT]: "有内容",
+  [HEALTH.OK_CLASSES]: "有分类",
+  [HEALTH.OK_TARGET]: "规则目标可达",
   [HEALTH.OK_UNKNOWN]: "无需验",
   [HEALTH.NEEDS_EXT]: "缺 ext",
   [HEALTH.EMPTY]: "空壳",
@@ -559,171 +560,83 @@ export async function deepCheckCms(site, opts = {}) {
   const raw = cleanResourceUrl(site?.api);
   if (!/^https?:\/\//i.test(raw)) return { status: HEALTH.ERROR, reason: "api 不是有效地址" };
 
-  // 保留原有查询串里除 ac 之外的参数（不少站点用 ?key=xxx 鉴权）
-  const [base, query = ""] = raw.split(/\?(.*)/s);
-  const keep = query
-    .split("&")
-    .filter((kv) => kv && !/^ac=/i.test(kv) && !/^(pg|p|t|wd|ids|ac)=/i.test(kv))
-    .join("&");
-  const withParams = (params) => {
-    const q = [keep, new URLSearchParams(params).toString()].filter(Boolean).join("&");
-    return `${base}${q ? (base.includes("?") ? "&" : "?") + q : ""}`;
-  };
-
-  const acForDetail = type === 0 ? "videolist" : "detail";
-  /**
-   * 请求并返回 { r, text, failed }：
-   *   failed=true 表示「请求失败」（text 为空的原因不是内容为空）——
-   *   调用方必须按 failed 区分「判不准 / 报错」，绝不能当成「站是空的」。
-   */
-  const getJson = async (url) => {
+  // 严格复刻 MisaTV CmsSource.home：
+  // 1) 原样请求 site.api（不擅自附加 ac=list）；
+  // 2) 解析主页的分类与内容；
+  // 3) 首页无内容但有分类时，按首个分类请求一页；
+  // 4) 若分类仍无内容，仍按 ok-classes 保留，因为分类可浏览入口存在。
+  const get = async (url) => {
     const r = await httpGet(url, { timeoutMs, maxBytes: 1024 * 1024, ua: "Mozilla/5.0" });
-    if (!r.ok) return { r, text: "", failed: true };
-    return { r, text: r.body.toString("utf8"), failed: false };
+    if (!r.ok) return { r, failed: true, text: "" };
+    return { r, failed: false, text: r.body.toString("utf8") };
   };
+  const home = await get(raw);
+  if (home.failed) {
+    return isUncertainStatus(home.r)
+      ? { status: HEALTH.UNCERTAIN, reason: `主页请求判不准：${home.r.error || `HTTP ${home.r.status}`}`, ttfb: home.r.ttfb }
+      : { status: HEALTH.ERROR, reason: `主页请求失败：HTTP ${home.r.status}`, ttfb: home.r.ttfb };
+  }
+  if (!home.text.trim()) {
+    return { status: HEALTH.EMPTY, reason: "主页请求成功但返回空内容（MisaTV home 判定 empty）", ttfb: home.r.ttfb };
+  }
 
-  // ① 拿分类 / 推荐（ac=list）
-  const first = await getJson(withParams({ ac: "list" }));
-  if (first.failed) {
-    if (isUncertainStatus(first.r)) {
-      return { status: HEALTH.UNCERTAIN, reason: `ac=list ${first.r.error || `HTTP ${first.r.status}`}（判不准）`, ttfb: first.r.ttfb };
-    }
-    return { status: HEALTH.ERROR, reason: `ac=list HTTP ${first.r.status}`, ttfb: first.r.ttfb };
-  }
-  if (!first.text.trim()) {
-    return { status: HEALTH.EMPTY, reason: "ac=list 返回空内容（空壳站）", ttfb: first.r.ttfb };
-  }
-  let parsed = parseCmsPayload(first.text, type);
-  const ttfb = first.r.ttfb;
-  let contentItems = parsed.items.length;
+  const parsed = parseCmsPayload(home.text, type);
+  const classCount = parsed.classes.length;
+  const classNames = parsed.classes.map((c) => c.name).filter(Boolean).join(",");
+  let items = parsed.items.length;
   let sampleTitle = parsed.items[0]?.name || "";
-  let classNames = parsed.classes.map((c) => c.name).join(",");
-  let classCount = parsed.classes.length;
+  let fallbackNote = "";
 
-  // ② 主页无条目时，用首个分类刷一页
-  if (!contentItems && parsed.classes.length) {
-    const tid = parsed.classes.find((c) => c.id)?.id;
-    if (!tid) {
-      return { status: HEALTH.EMPTY, reason: `有 ${parsed.classes.length} 个分类但都没有 id，无法取内容`, ttfb };
-    }
-    const second = await getJson(withParams({ ac: acForDetail, t: tid, pg: 1 }));
-    if (second.failed) {
-      if (isUncertainStatus(second.r)) {
-        return { status: HEALTH.UNCERTAIN, reason: `分类 ${tid} ${second.r.error || `HTTP ${second.r.status}`}（判不准）`, ttfb };
-      }
-      return { status: HEALTH.EMPTY, reason: `有 ${parsed.classes.length} 个分类，但首个分类 HTTP ${second.r.status}`, classes: parsed.classes.length, ttfb };
-    }
-    parsed = parseCmsPayload(second.text, type);
-    contentItems = parsed.items.length;
-    sampleTitle = parsed.items[0]?.name || sampleTitle;
-    if (!contentItems) {
-      return {
-        status: HEALTH.EMPTY,
-        reason: `有分类但取不到任何内容（ac=${acForDetail} 返回空列表），源站可能已失效`,
-        classes: classCount,
-        ttfb,
-      };
-    }
-  }
-
-  // ③ 连分类都没有：兜底 ac=detail/videolist
-  if (!contentItems) {
-    const third = await getJson(withParams({ ac: acForDetail, pg: 1 }));
-    if (third.failed) {
-      if (isUncertainStatus(third.r)) {
-        return {
-          status: HEALTH.UNCERTAIN,
-          reason: `ac=list 无分类，兜底 ac=${acForDetail} ${third.r.error || `HTTP ${third.r.status}`}（判不准）`,
-          ttfb,
-        };
-      }
-      return {
-        status: HEALTH.ERROR,
-        reason: `ac=list 无分类，兜底 ac=${acForDetail} HTTP ${third.r.status}`,
-        ttfb,
-      };
-    }
-    if (third.text) {
-      const p3 = parseCmsPayload(third.text, type);
-      contentItems = p3.items.length;
-      sampleTitle = p3.items[0]?.name || "";
-    }
-    if (!contentItems) {
-      const looksCms = /"(class|list)"\s*:|<rss|<class>/i.test(first.text);
-      return {
-        status: HEALTH.EMPTY,
-        reason: looksCms
-          ? "接口有响应，但既没有分类也没有任何条目（空壳站）"
-          : `接口返回的不是 CMS 数据（${trimmed(first.text, 60) || "空"}）`,
-        ttfb,
-      };
-    }
-  }
-
-  // ④ 强制搜索验证（用户要求：有内容 + 搜索有结果才保留，宁可误杀）
-  // 关键词：优先用样本标题里的 2 个汉字/字母，否则用常见词「战」「电影」
-  const searchWords = [];
-  if (sampleTitle) {
-    const m = sampleTitle.match(/[\u4e00-\u9fff]{2}|[A-Za-z0-9]{3,}/);
-    if (m) searchWords.push(m[0]);
-  }
-  searchWords.push("战", "电影");
-  let searchHit = 0;
-  let searchTried = 0;
-  let searchLastReason = "";
-  for (const wd of searchWords) {
-    if (searchHit > 0) break;
-    searchTried++;
-    const sr = await getJson(withParams({ ac: "search", wd, pg: 1 }));
-    if (sr.failed) {
-      if (isUncertainStatus(sr.r)) {
-        searchLastReason = `ac=search&wd=${wd} ${sr.r.error || `HTTP ${sr.r.status}`}`;
-        // 搜索限流/超时：不直接判死整站，继续试下一个词；全失败再按 uncertain
-        continue;
-      }
-      searchLastReason = `ac=search&wd=${wd} HTTP ${sr.r.status}`;
-      continue;
-    }
-    const sp = parseCmsPayload(sr.text, type);
-    if (sp.items.length) {
-      searchHit = sp.items.length;
-      if (!sampleTitle) sampleTitle = sp.items[0]?.name || "";
-      break;
-    }
-    searchLastReason = `ac=search&wd=${wd} 返回 0 条`;
-  }
-
-  if (searchHit > 0) {
+  if (items > 0) {
     return {
       status: HEALTH.OK_CONTENT,
-      reason: `有内容 ${contentItems} 条 + 搜索命中 ${searchHit} 条（首条：${sampleTitle || "-"}）`,
-      items: contentItems,
-      searchItems: searchHit,
-      classes: classCount,
-      sampleTitle,
-      classNames,
-      ttfb,
+      reason: `主页解析到 ${items} 条内容（${classCount} 个分类）`,
+      items, classes: classCount, sampleTitle, classNames, ttfb: home.r.ttfb,
     };
   }
 
-  // 有内容但搜索全空 / 全失败
-  // 若全部是限流类失败 → uncertain；若明确 0 条 → no-search（死）
-  if (searchTried > 0 && /判不准|HTTP 429|HTTP 403|超时|timeout|ECONN/i.test(searchLastReason)) {
+  if (classCount > 0) {
+    const firstClass = parsed.classes.find((c) => c.id);
+    if (firstClass) {
+      const url = new URL(raw);
+      // 与 MisaTV CmsSource._ac / _buildUri 完全一致。
+      url.searchParams.set("ac", type === 0 ? "videolist" : "detail");
+      url.searchParams.set("t", firstClass.id);
+      url.searchParams.set("pg", "1");
+      const category = await get(url.toString());
+      if (!category.failed) {
+        const page = parseCmsPayload(category.text, type);
+        items = page.items.length;
+        sampleTitle = page.items[0]?.name || "";
+        if (items > 0) {
+          return {
+            status: HEALTH.OK_CONTENT,
+            reason: `首页无推荐，回退首个分类「${firstClass.name || firstClass.id}」取得 ${items} 条内容`,
+            items, classes: classCount, sampleTitle, classNames, ttfb: home.r.ttfb,
+            homeFallback: true,
+          };
+        }
+        fallbackNote = "；首个分类暂未返回条目";
+      } else if (isUncertainStatus(category.r)) {
+        // MisaTV 会吞掉分类回退异常并返回原主页结果（有分类），所以保留 ok-classes。
+        fallbackNote = `；分类回退判不准（${category.r.error || `HTTP ${category.r.status}`})`;
+      } else {
+        fallbackNote = `；分类回退失败（HTTP ${category.r.status}）`;
+      }
+    } else {
+      fallbackNote = "；分类缺少 id，无法自动回退";
+    }
     return {
-      status: HEALTH.UNCERTAIN,
-      reason: `有内容但搜索探活判不准（${searchLastReason}）`,
-      items: contentItems,
-      sampleTitle,
-      ttfb,
+      status: HEALTH.OK_CLASSES,
+      reason: `首页无推荐，但有 ${classCount} 个分类可浏览${fallbackNote}`,
+      items: 0, classes: classCount, classNames, ttfb: home.r.ttfb,
     };
   }
+
   return {
-    status: HEALTH.NO_SEARCH,
-    reason: `有内容 ${contentItems} 条，但搜索无结果（${searchLastReason || "未命中"}）——按策略剔除`,
-    items: contentItems,
-    classes: classCount,
-    sampleTitle,
-    ttfb,
+    status: HEALTH.EMPTY,
+    reason: `主页请求成功，但既没有影视条目也没有分类（MisaTV home 判定 empty）：${trimmed(home.text, 80)}`,
+    items: 0, classes: 0, ttfb: home.r.ttfb,
   };
 }
 
@@ -792,7 +705,7 @@ export async function deepCheckScript(site, category, opts = {}, caches = {}) {
   const targets = extractRuleTargets(ruleText);
   const judged = await judgeTargets(targets, caches.host, { ...opts, maxTargets: 3 });
   if (judged.verdict === "alive") {
-    return { status: HEALTH.OK_CONTENT, reason: `规则里的目标站可用（${judged.alive[0].origin}）`, targets: judged };
+    return { status: HEALTH.OK_TARGET, reason: `规则结构通过静态检查，目标站可达（${judged.alive[0].origin}）；未执行 JS/Py 运行时`, targets: judged };
   }
   if (judged.verdict === "dead") {
     return { status: HEALTH.NO_TARGET, reason: `规则里的目标站全部不可达：${judged.detail}` };
@@ -957,7 +870,7 @@ export async function deepCheckSpider(site, opts = {}, ctx = {}, caches = {}) {
   const targets = extractRuleTargets([ruleText, ...extra].join("\n"));
   const judged = await judgeTargets(targets, caches.host, { ...opts, maxTargets: 3 });
   if (judged.verdict === "alive") {
-    return { status: HEALTH.OK_CONTENT, reason: `规则目标站可用（${judged.alive[0].origin}）${className ? ` 类 ${className} 在包里` : ""}` };
+    return { status: HEALTH.OK_TARGET, reason: `规则静态检查通过，目标站可达（${judged.alive[0].origin}）${className ? `，类 ${className} 在 jar 中` : ""}；未执行 Android/QuickJS 蜘蛛运行时` };
   }
   if (judged.verdict === "dead") {
     return { status: HEALTH.NO_TARGET, reason: `规则里的目标站全部不可达：${judged.detail}` };
@@ -986,6 +899,7 @@ export async function runDeepCheck(entries, opts, ctx = {}) {
     checked: 0,
     skippedBudget: 0,
     byStatus: {},
+    auditModes: { "runtime-home": 0, "static-rule-target": 0 },
     removed: 0,
     uncertain: 0,
     samples: 0,
@@ -1021,7 +935,9 @@ export async function runDeepCheck(entries, opts, ctx = {}) {
     }
 
     const status = res.status || HEALTH.OK_UNKNOWN;
+    const auditMode = e.category === "cj" ? "runtime-home" : "static-rule-target";
     stats.checked++;
+    stats.auditModes[auditMode] = (stats.auditModes[auditMode] || 0) + 1;
     stats.byStatus[status] = (stats.byStatus[status] || 0) + 1;
     e.health = status;
     e.healthReason = res.reason || "";

@@ -39,9 +39,9 @@
 | 抓多仓（`urls`/`storeHouse`）递归 | ❌ 无 | ⚠️ 只抓一层、子仓地址不入池 | ✅ 递归 2 层 + 子仓地址入池 |
 | 2423 AES / 图片套壳 / Base64 解码 | ✅ | ✅ | ✅ |
 | **从上游公开清单收集新源** | ❌ 无（只读自己手写清单） | ❌ 无 | ✅ **三种格式 + 自动抽地址** |
-| 采集站探活 | ❌ | ✅（仅 `ac=list`） | ✅ `ac=list` + `ac=detail` 双段 + 内容指纹 |
-| **JS / Py 站探活** | ❌ | ❌ **占 95% 的站点完全没验过** | ✅ 主文件 + ext 规则文件双检 |
-| **Jar 站探活** | ❌ | ❌ | ✅ jar ZIP 魔数校验 + ext 目标域名可达 |
+| CMS 源审计 | ❌ | ⚠️ 旧版仅做接口探活 | ✅ 复刻 MisaTV：原样请求主页、无推荐回退首分类、有分类即保留 |
+| **JS / Py 站审计** | ❌ | ❌ **占 95% 的站点完全没验过** | ✅ 规则结构 + ext 子资源 + 目标站静态检查；非 Android 运行时执行 |
+| **Jar 站审计** | ❌ | ❌ | ✅ dex 类名 + ext 规则 + 目标站；可尝试换 jar 修复 |
 | **测速 / 剔除慢站** | ❌ | ❌ 全脚本无任何速度判定 | ✅ 三次取样取中位数 |
 | 去重 | 仅按 key | type+api+ext | ✅ 再加 `?ac=` 归一 + ext 内镜像归一 |
 | 直播频道级合并 | ❌ | ❌（9.5 万条，CCTV1 有 402 个源） | ❌ 不合并（2026-11-22 废弃，改抽查剔除） |
@@ -275,7 +275,7 @@ git push
 | `MAX_FAILS` | 3 | 连续失败几轮才永久剔除 |
 | `VOD_ONLY_FAST` | 1 | 点播输出只收录快站（TTFB≤`FAST_TTFB_MS`） |
 | `DEEP_CHECK` | 1 | 深度体检开关：探活通过后再按类型实跑一次（采集站内容 / jar 类名 / 规则目标站） |
-| `DEEP_CHECK_CATEGORIES` | `cj,js,spider` | 深度体检覆盖哪几类（逗号分隔） |
+| `DEEP_CHECK_CATEGORIES` | `cj,py,js,spider` | 深度体检覆盖哪几类（逗号分隔） |
 | `DEEP_JAR_CLASS` | 1 | 校验「jar 里有没有 csp_XXX 这个类」；发现的缺类会先尝试换 jar，换不到才剔 |
 | `DEEP_CHECK_STRICT` | 跟随 STRICTNESS | 0 = 只剔硬证据（缺 ext / 类不存在 / 空壳 / 规则无效），目标站全挂与报错保留 |
 | `DEEP_CHECK_WORKERS` / `BUDGET_DEEP_CHECK` / `DEEP_TARGET_TIMEOUT_MS` / `DEEP_MAX_TARGETS` | 16 / 600 / 8000 / 3 | 并发 / 阶段预算（秒）/ 目标站探活超时 / 每站最多探几个目标站 |

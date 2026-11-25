@@ -600,11 +600,11 @@ t("GitHub/CDN/图床 不算「目标站」，不该拿去判死", () => {
   assert.strictEqual(isProbeableTarget(toOrigin("https://cdn.jsdelivr.net/gh/a/b@main/x.js")), false);
   assert.strictEqual(isProbeableTarget(toOrigin("https://sc1080.top")), true);
 });
-t("深度体检选项默认值：开启、深检 cj/js/spider、类名校验开", () => {
+t("深度体检选项默认值：开启、深检 cj/py/js/spider、类名校验开", () => {
   const o = readOptions({});
   assert.strictEqual(o.deepCheck, true);
   assert.ok(o.deepCheckCategories.has("cj") && o.deepCheckCategories.has("js") && o.deepCheckCategories.has("spider"));
-  assert.strictEqual(o.deepCheckCategories.has("py"), false, "Py 站默认不深检（文件本身已验过）");
+  assert.strictEqual(o.deepCheckCategories.has("py"), true, "Py 站也必须进入规则体检");
   assert.strictEqual(o.deepJarClass, true);
   assert.strictEqual(readOptions({ DEEP_CHECK: "0" }).deepCheck, false);
   assert.strictEqual(readOptions({ DEEP_CHECK_CATEGORIES: "cj" }).deepCheckCategories.has("js"), false);
@@ -651,17 +651,13 @@ await ta("端到端深检：空壳采集站被剔，有内容的留下，jar 缺
     const send = (b, t = "text/plain; charset=utf-8") => res.writeHead(200, { "Content-Type": t }).end(b);
     if (u.pathname === "/shell.php") return send(JSON.stringify({ code: 0, list: [] }), "application/json");
     if (u.pathname === "/real.php") {
-      if (u.searchParams.get("ac") === "list") {
-        return send(JSON.stringify({ class: [{ type_id: 1, type_name: "动作" }] }), "application/json");
-      }
       return send(JSON.stringify({ list: [{ vod_id: 1, vod_name: "真片名" }] }), "application/json");
     }
     if (u.pathname === "/real2.php") {
-      if (u.searchParams.get("ac") === "list") {
-        return send(JSON.stringify({ class: [{ type_id: 1, type_name: "动作" }] }), "application/json");
-      }
-      return send(JSON.stringify({ list: [] }), "application/json");
+      if (u.searchParams.get("t") === "1") return send(JSON.stringify({ list: [] }), "application/json");
+      return send(JSON.stringify({ class: [{ type_id: 1, type_name: "动作" }], list: [] }), "application/json");
     }
+    if (u.pathname === "/good.py") return send("class Spider:\n    def homeContent(self, filter):\n        return {}\n    def searchContent(self, key, quick):\n        return []\nhost = 'http://127.0.0.1:" + server2.address().port + "/site/'", "text/plain");
     if (u.pathname === "/x.jar") return send(zip, "application/java-archive");
     if (u.pathname === "/rule.json") return send(JSON.stringify({ 主页url: `http://127.0.0.1:${server2.address().port}/site/` }));
     if (u.pathname === "/site/" || u.pathname === "/site") return send("<html><body>" + "x".repeat(400) + "</body></html>", "text/html");
@@ -673,7 +669,7 @@ await ta("端到端深检：空壳采集站被剔，有内容的留下，jar 缺
   try {
     const o = {
       ...readOptions({}),
-      deepCheckCategories: new Set(["cj", "spider"]),
+      deepCheckCategories: new Set(["cj", "py", "spider"]),
       budgetDeepCheck: 60,
       deepTargetTimeout: 5000,
     };
@@ -682,6 +678,7 @@ await ta("端到端深检：空壳采集站被剔，有内容的留下，jar 缺
       { category: "cj", grade: "fast", site: { name: "空壳站", type: 1, api: `${base}/shell.php` }, probe: { ttfb: 100 } },
       { category: "cj", grade: "fast", site: { name: "真采集站", type: 1, api: `${base}/real.php` }, probe: { ttfb: 100 } },
       { category: "cj", grade: "fast", site: { name: "有分类无内容", type: 1, api: `${base}/real2.php` }, probe: { ttfb: 100 } },
+      { category: "py", grade: "fast", site: { name: "有效Py规则", type: 3, api: "py_test", ext: `${base}/good.py` }, probe: { ttfb: 100 } },
       { category: "spider", grade: "fast", site: { name: "缺类的jar站", type: 3, api: "csp_PanSou", jar: `${base}/x.jar`, ext: `${base}/rule.json` }, probe: { ttfb: 100 } },
       { category: "spider", grade: "fast", site: { name: "类在包里的站", type: 3, api: "csp_XBPQ", jar: `${base}/x.jar`, ext: `${base}/rule.json` }, probe: { ttfb: 100 } },
       { category: "spider", grade: "fast", site: { name: "缺ext的规则站", type: 3, api: "csp_XBPQ", jar: `${base}/x.jar` }, probe: { ttfb: 100 } },
@@ -696,9 +693,12 @@ await ta("端到端深检：空壳采集站被剔，有内容的留下，jar 缺
     });
     const byName = Object.fromEntries(entries.map((e) => [e.site.name, e]));
     assert.strictEqual(byName["空壳站"].grade, "dead", "空壳采集站必须剔除");
-    assert.ok(/空壳/.test(byName["空壳站"].healthReason), byName["空壳站"].healthReason);
+    assert.ok(/empty|没有影视条目|空壳/i.test(byName["空壳站"].healthReason), byName["空壳站"].healthReason);
     assert.notStrictEqual(byName["真采集站"].grade, "dead", "有内容的采集站必须保留");
-    assert.strictEqual(byName["有分类无内容"].grade, "dead", "有分类但取不到内容 = 空壳");
+    assert.notStrictEqual(byName["有分类无内容"].grade, "dead", "MisaTV 口径：有分类即 ok-classes，不能误杀");
+    assert.strictEqual(byName["有分类无内容"].health, "ok-classes");
+    assert.notStrictEqual(byName["有效Py规则"].grade, "dead", "Py 必须进入深检且有效 Spider 规则应保留");
+    assert.strictEqual(byName["有效Py规则"].health, "ok-target");
     assert.strictEqual(byName["缺类的jar站"].grade, "dead", "jar 里没有该类必须剔除");
     assert.ok(/没有 PanSou/.test(byName["缺类的jar站"].healthReason), byName["缺类的jar站"].healthReason);
     assert.notStrictEqual(byName["类在包里的站"].grade, "dead", "类在包里 + 目标站活着 → 保留");
@@ -706,7 +706,7 @@ await ta("端到端深检：空壳采集站被剔，有内容的留下，jar 缺
     assert.strictEqual(byName["缺ext的规则站"].health, "needs-ext");
     assert.strictEqual(byName["类不在包里的规则站"].grade, "dead", "类不在包里 → 补 ext 也没用，必须剔除");
     assert.strictEqual(byName["类不在包里的规则站"].health, "no-class");
-    assert.strictEqual(stats.dropped.deep, 5, `剔除 5 个，实际 ${stats.dropped.deep}`);
+    assert.strictEqual(stats.dropped.deep, 4, `剔除 4 个，实际 ${stats.dropped.deep}`);
     assert.ok(ds.removed >= 4);
   } finally {
     await new Promise((r) => server2.close(r));
@@ -770,7 +770,7 @@ await ta("深度体检也认「限流」：兜底请求 429 不判空壳（与�
   }
 });
 
-await ta("ext 规则文件 404 → 判 no-rule；5xx → 判不准（严格模式剔、宽松模式留）", async () => {
+await ta("ext 规则文件 404 → 判 no-rule；5xx 默认判不准并保留，可显式设置删除", async () => {
   const zipOk = makeZip([
     { name: "classes.dex", data: Buffer.from("Lcom/github/catvod/spider/XBPQ;" + "q".repeat(1024)), deflate: true },
   ]);
@@ -800,25 +800,24 @@ await ta("ext 规则文件 404 → 判 no-rule；5xx → 判不准（严格模�
     assert.strictEqual(gone.grade, "dead", "ext 规则文件 404 必须判死");
     assert.strictEqual(gone.health, "no-rule");
     assert.ok(/ext 规则文件已失效/.test(gone.healthReason), gone.healthReason);
-    // 用户策略「宁可误杀」：严格模式下 5xx/超时等判不准也剔
-    assert.strictEqual(err.grade, "dead", "严格模式下判不准也要剔除");
+    // 5xx / 超时是判不准，默认保留，不因 STRICTNESS=strict 误删。
+    assert.notStrictEqual(err.grade, "dead", "判不准默认必须保留");
     assert.strictEqual(err.health, "uncertain");
-    assert.ok(/严格剔除/.test(err.probe?.reason || ""), err.probe?.reason || "");
-    assert.strictEqual(stats.dropped.deep, 2);
-    assert.strictEqual(ds.removed, 2);
+    assert.strictEqual(stats.dropped.deep, 1);
+    assert.strictEqual(ds.removed, 1);
 
-    // 显式关掉 DEEP_KILL_UNCERTAIN 时，判不准应保留（宽松口径）
-    const loose = { ...readOptions({ DEEP_KILL_UNCERTAIN: "0" }), budgetDeepCheck: 60, deepTargetTimeout: 4000 };
-    const err2 = mk("规则文件503-宽松", `${base}/err.json`);
+    // 只有显式 DEEP_KILL_UNCERTAIN=1 才启用激进删除。
+    const kill = { ...readOptions({ DEEP_KILL_UNCERTAIN: "1" }), budgetDeepCheck: 60, deepTargetTimeout: 4000 };
+    const err2 = mk("规则文件503-显式剔除", `${base}/err.json`);
     const stats2 = { dropped: {}, removed: [] };
-    await runDeepCheck([err2], loose, {
+    await runDeepCheck([err2], kill, {
       stats: stats2,
       effectiveJar: (st) => st.jar,
       jarCache: new Map(),
       hostCache: new Map(),
       textCache: new Map(),
     });
-    assert.notStrictEqual(err2.grade, "dead", "DEEP_KILL_UNCERTAIN=0 时判不准不能删");
+    assert.strictEqual(err2.grade, "dead", "显式开启 DEEP_KILL_UNCERTAIN=1 才删除");
     assert.strictEqual(err2.health, "uncertain");
   } finally {
     await new Promise((r) => server5.close(r));

@@ -1,0 +1,35 @@
+name: 源审计自检
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/**"
+      - ".github/workflows/**"
+  push:
+    branches:
+      - "feat/misa-style-source-audit"
+    paths:
+      - "scripts/**"
+      - ".github/workflows/**"
+
+permissions:
+  contents: read
+
+jobs:
+  audit-selftest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+      - name: 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: 检查脚本语法
+        run: |
+          set -e
+          for f in scripts/*.mjs; do node --check "$f"; done
+      - name: 运行离线审计测试
+        run: node scripts/selftest.mjs

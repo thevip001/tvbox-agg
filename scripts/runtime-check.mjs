@@ -25,13 +25,15 @@ const kind = String(args.kind || "").toLowerCase();
 const result = (status, extra = {}) => {
   process.stdout.write(JSON.stringify({ id: randomUUID(), kind, status, runtime: "misa-compatible", ...extra }) + "\n");
 };
-const run = (cmd, argv, opts = {}) => new Promise((resolveRun) => {
-  const p = spawn(cmd, argv, { stdio: ["ignore", "pipe", "pipe"], ...opts });
-  let stdout = "", stderr = "";
+const run = (cmd, argv, timeoutMs = 15000) => new Promise((resolveRun) => {
+  const p = spawn(cmd, argv, { stdio: ["ignore", "pipe", "pipe"] });
+  let stdout = "", stderr = "", timedOut = false, settled = false;
+  const timer = setTimeout(() => { timedOut = true; p.kill("SIGKILL"); }, timeoutMs);
+  const finish = value => { if (settled) return; settled = true; clearTimeout(timer); resolveRun(value); };
   p.stdout.on("data", b => { stdout += b; if (stdout.length > 2_000_000) p.kill("SIGKILL"); });
   p.stderr.on("data", b => { stderr += b; if (stderr.length > 64_000) stderr = stderr.slice(-64_000); });
-  p.on("error", e => resolveRun({ code: -1, stdout, stderr: stderr + e.message }));
-  p.on("close", code => resolveRun({ code, stdout, stderr }));
+  p.on("error", e => finish({ code: -1, stdout, stderr: stderr + e.message, timedOut }));
+  p.on("close", code => finish({ code, stdout, stderr, timedOut }));
 });
 if (!["py", "js", "jar"].includes(kind)) {
   result("runtime-unsupported", { errorType: "invalid-kind", error: "kind must be py, js or jar" }); process.exit(0);
@@ -53,21 +55,35 @@ const image = process.env.MISA_PY_IMAGE || "tvbox-agg/misa-py:3.11";
 const temp = await mkdtemp(join(tmpdir(), "misa-py-"));
 try {
   const code = await readFile(source);
+  if (code.length > 2 * 1024 * 1024) {
+    result("runtime-unsupported", { errorType: "source-too-large", error: "Py source exceeds 2 MiB safety limit" }); process.exit(0);
+  }
+  const ext = String(args.ext || "");
+  if (Buffer.byteLength(ext, "utf8") > 128 * 1024) {
+    result("runtime-unsupported", { errorType: "ext-too-large", error: "ext exceeds 128 KiB safety limit" }); process.exit(0);
+  }
   const site = join(temp, "site.py");
   await writeFile(site, code, { mode: 0o444 });
   // Deliberately no network: arbitrary spider code must not reach LAN, metadata, or secrets.
   // Network-enabled production probes require a separately deployed egress-filtering proxy.
   const argv = [
-    "run", "--rm", "--network=none", "--read-only",
+    "run", "--rm", "--stop-timeout=1", "--network=none", "--read-only",
     "--memory=256m", "--memory-swap=256m", "--cpus=1", "--pids-limit=32",
+    "--ulimit=nofile=64:64", "--ulimit=fsize=10485760:10485760",
     "--cap-drop=ALL", "--security-opt=no-new-privileges",
     "--user=65532:65532", "--tmpfs=/tmp:rw,noexec,nosuid,size=16m",
     "--mount", `type=bind,src=${site},dst=/work/site.py,readonly`,
-    image, "/work/site.py", String(args.class || "Spider"), "homeContent", String(args.ext || "")
+    image, "/work/site.py", String(args.class || "Spider"), "homeContent", ext
   ];
   const started = Date.now();
-  const out = await run("docker", argv);
+  const timeoutMs = Math.min(30000, Math.max(1000, Number(args.timeout || 15000)));
+  const out = await run("docker", argv, timeoutMs);
   const durationMs = Date.now() - started;
+  if (out.timedOut) {
+    result("runtime-uncertain", { runtimeVersion: "CPython 3.11", errorType: "timeout",
+      error: `Py spider exceeded ${timeoutMs}ms sandbox limit`, durationMs });
+    process.exit(0);
+  }
   if (out.code !== 0) {
     result("runtime-error", { runtimeVersion: "CPython 3.11", errorType: "spider-execution-failed",
       error: (out.stderr || out.stdout || `docker exited ${out.code}`).slice(-4000), durationMs });

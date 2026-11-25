@@ -1,0 +1,7 @@
+将 scripts/deepcheck.mjs 与 scripts/pipeline.mjs 覆盖到仓库对应路径后提交。
+
+改动摘要：
+1. 采集站必须「有内容 + ac=search 有结果」才保留
+2. 严格模式把 uncertain 也剔除（宁可误杀）
+3. 新增 HEALTH.NO_SEARCH
+4. pipeline 增加 DEEP_KILL_UNCERTAIN 选项

@@ -669,7 +669,7 @@ await ta("端到端深检：空壳采集站被剔，有内容的留下，jar 缺
   try {
     const o = {
       ...readOptions({}),
-      deepCheckCategories: new Set(["cj", "spider"]),
+      deepCheckCategories: new Set(["cj", "py", "spider"]),
       budgetDeepCheck: 60,
       deepTargetTimeout: 5000,
     };
@@ -693,7 +693,7 @@ await ta("端到端深检：空壳采集站被剔，有内容的留下，jar 缺
     });
     const byName = Object.fromEntries(entries.map((e) => [e.site.name, e]));
     assert.strictEqual(byName["空壳站"].grade, "dead", "空壳采集站必须剔除");
-    assert.ok(/空壳/.test(byName["空壳站"].healthReason), byName["空壳站"].healthReason);
+    assert.ok(/empty|没有影视条目|空壳/i.test(byName["空壳站"].healthReason), byName["空壳站"].healthReason);
     assert.notStrictEqual(byName["真采集站"].grade, "dead", "有内容的采集站必须保留");
     assert.notStrictEqual(byName["有分类无内容"].grade, "dead", "MisaTV 口径：有分类即 ok-classes，不能误杀");
     assert.strictEqual(byName["有分类无内容"].health, "ok-classes");

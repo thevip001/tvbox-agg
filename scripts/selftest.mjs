@@ -600,7 +600,7 @@ t("GitHub/CDN/图床 不算「目标站」，不该拿去判死", () => {
   assert.strictEqual(isProbeableTarget(toOrigin("https://cdn.jsdelivr.net/gh/a/b@main/x.js")), false);
   assert.strictEqual(isProbeableTarget(toOrigin("https://sc1080.top")), true);
 });
-t("深度体检选项默认值：开启、深检 cj/js/spider、类名校验开", () => {
+t("深度体检选项默认值：开启、深检 cj/py/js/spider、类名校验开", () => {
   const o = readOptions({});
   assert.strictEqual(o.deepCheck, true);
   assert.ok(o.deepCheckCategories.has("cj") && o.deepCheckCategories.has("js") && o.deepCheckCategories.has("spider"));
@@ -698,7 +698,7 @@ await ta("端到端深检：空壳采集站被剔，有内容的留下，jar 缺
     assert.notStrictEqual(byName["有分类无内容"].grade, "dead", "MisaTV 口径：有分类即 ok-classes，不能误杀");
     assert.strictEqual(byName["有分类无内容"].health, "ok-classes");
     assert.notStrictEqual(byName["有效Py规则"].grade, "dead", "Py 必须进入深检且有效 Spider 规则应保留");
-    assert.strictEqual(byName["有效Py规则"].health, "ok-content");
+    assert.strictEqual(byName["有效Py规则"].health, "ok-target");
     assert.strictEqual(byName["缺类的jar站"].grade, "dead", "jar 里没有该类必须剔除");
     assert.ok(/没有 PanSou/.test(byName["缺类的jar站"].healthReason), byName["缺类的jar站"].healthReason);
     assert.notStrictEqual(byName["类在包里的站"].grade, "dead", "类在包里 + 目标站活着 → 保留");

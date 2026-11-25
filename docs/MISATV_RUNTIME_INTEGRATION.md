@@ -1,86 +1,61 @@
 # MisaTV Runtime Integration
 
-状态：实施方案已确认；运行时执行器尚未接入生产流水线。
+状态：**Py 的隔离运行时执行器已接入并有离线 fixture；JS 与 JAR 仍明确 unsupported。三类运行时尚未全部完成，生产流水线未启用运行时剔除。**
 
-## 目标
+## 当前实现
 
-将 MisaTV 的真实 Py / QuickJS / JAR 蜘蛛执行能力接入 `tvbox-agg` 的深度审计。主项目仍负责采集、探活、去重和生成聚合产物；运行时作为独立执行服务，通过 JSON Lines 输入/输出协议调用。
-
-上游：
-- MisaTV：<https://github.com/yagami-hue/MisaTV>
-- 上游许可证：GPL-3.0，见上游 `LICENSE`
-- 上游第三方组件清单：上游 `THIRD-PARTY-NOTICES.md`
-
-## 已核实的上游实现
-
-| 类型 | 上游实现 | 关键依赖/边界 |
+| 类型 | 实际执行能力 | 状态 |
 | --- | --- | --- |
-| Py | `assets/python_runner/runner.py`、`assets/python_runner/base/spider.py` | CPython 3.11 runner；`base.spider`、requests 等依赖；源可能还依赖顶层 spider ZIP 和其中的模块 |
-| JS | `lib/services/js_spider/js_spider.dart`、`js_spider_worker.dart`、`js_bootstrap.dart` | QuickJS（上游依赖 `flutter_js`）；宿主 API、同步网络请求、模块加载、缓存和内置 JS 库不可省略 |
-| JAR/DEX | `lib/services/jar_spider/jar_spider.dart`、`spider_host.dart` 及 JVM 相关实现 | JRE 17、dex2jar、SpiderHost/兼容桩；部分源依赖 Android API、JNI、原生库或加固壳桥接，普通 JVM 不能等价验证 |
+| Py | vendored MisaTV CPython 3.11 `runner.py` + `base.spider`，Docker 隔离执行 `homeContent` | 已实现离线执行器；真实网络源需要安全出口代理，当前 sandbox 禁网 |
+| JS | MisaTV QuickJS + `flutter_js` + `js_bootstrap` + native bridge | unsupported；Node/V8 不等价 |
+| JAR/DEX | MisaTV SpiderHost + Android/JVM bridge | unsupported；仅检查 dex/class 不算实际执行 |
 
-注意：MisaTV 是 Flutter 应用，不是现成的无界面 CLI SDK。不能简单复制三个文件或用 Node.js/V8、普通 CPython、普通 JVM 冒充上游运行时。接入前必须把宿主 API、资源加载、网络、缓存、扩展包依赖及进程生命周期一起纳入适配。
+## Py 执行器
 
-## 许可证与分发规则
+上游来源：<https://github.com/yagami-hue/MisaTV>。本仓库保留上游 GPL-3.0 LICENSE，并在 `runtime/misa-py/NOTICE.md` 标明 vendored 文件。
 
-1. MisaTV 本体为 GPL-3.0。复制或修改其代码时，保留版权/许可证声明，标注修改及日期，并按 GPL-3.0 提供对应源码。
-2. 上游 `THIRD-PARTY-NOTICES.md` 明确区分 GPL 本体代码、自建运行时代码、MIT/Apache 等第三方依赖、按需下载的 JRE/CPython/dex2jar 等组件。不得把所有依赖都笼统标成 GPL；每个随包/下载组件都要保留准确许可和 NOTICE。
-3. 当前方案不把 MisaTV Flutter UI、播放器、网盘、直播等无关功能整体搬入聚合器。仅适配审计必需的运行时部分，并保留其来源与许可证。
-4. 运行时作为独立目录/进程发布，主程序以 JSONL 调用；这有利于保持模块边界，但进程拆分本身不是 GPL 规避保证。若代码实际构成一个组合/衍生程序，应按 GPL-3.0 履行整体义务。
-5. 若未来对外分发包含 GPL 运行时的二进制/容器/安装包，必须同时提供对应源码、构建/安装脚本、许可证文本和清晰源码获取方式。仅在自有 CI/服务器内部运行，与向外分发是不同场景。
+构建镜像：
 
-## 运行协议（拟定）
+```sh
+docker build -t tvbox-agg/misa-py:3.11 runtime/misa-py
+```
 
-每条输入一行 JSON；每条输出一行 JSON，禁止把日志写入 stdout。
+执行本地规则：
 
-输入字段：
-- `id`：请求 ID
-- `kind`：`py`、`js` 或 `jar`
-- `api`、`ext`、`jar`、`spider`：站点配置中原始字段
-- `method`：首轮至少执行 `homeContent` / 上游对应的 `home`
-- `timeoutMs`：单次执行上限
-- `resources`：允许加载的站点依赖/扩展资源
+```sh
+node scripts/runtime-check.mjs --kind py --source ./path/to/site.py --class Spider --ext ''
+```
 
-输出字段：
-- `id`、`ok`、`status`、`runtime`、`runtimeVersion`
-- `data`：运行时返回的 JSON 内容（不在这里执行播放）
-- `errorType`、`error`、`durationMs`
-- `network`：请求数量、HTTP 状态摘要；不记录 Cookie、Authorization 等敏感值
+输出为单行 JSON，状态包括 `runtime-home`、`runtime-empty`、`runtime-error`。执行使用 CPython 3.11、MisaTV runner 与 Spider 基类，调用 `homeContent`。
 
-## 审计状态
+### 安全边界
 
-| 状态 | 含义 | 是否据此删除源 |
-| --- | --- | --- |
-| `runtime-home` | 指定运行时真实执行首页成功，至少有内容或分类 | 否，作为可运行证据 |
-| `runtime-empty` | 代码成功执行，但首页没有内容和分类 | 进入待确认，不直接当网络死源 |
-| `runtime-error` | 规则加载/初始化/方法调用抛错 | 仅在可重复、明确属于规则错误时才考虑剔除 |
-| `runtime-unsupported` | Android API、JNI、原生库或上游宿主能力不支持 | 不删除 |
-| `runtime-uncertain` | 超时、限流、403/429/5xx、网络抖动 | 不删除 |
-| `static-only` | 只通过静态规则检查，尚未真实执行 | 不得标记为运行时通过 |
+每个探针运行在独立 Docker 容器：非 root、`--network=none`、只读根文件系统、无 Linux capabilities、no-new-privileges、CPU/内存/PID 限制、只读脚本挂载。没有 GitHub token 或任何仓库 secrets。
 
-## 安全边界（上线前必须具备）
+**禁网是有意设计，不是功能遗漏。** 任意第三方 Python 蜘蛛等同于不可信代码。当前执行器可以真实验证解释器、模块加载、初始化和不依赖网络的首页逻辑；如果源必须联网，失败只能作为沙箱网络限制/不确定，不能据此判死。要验证在线源，必须另行部署受控出站代理，并在网络层阻断 loopback、RFC1918、链路本地、云元数据地址及 DNS rebinding；不能简单改成 Docker bridge/host 网络。
 
-第三方蜘蛛是任意代码，不是可信配置。执行环境必须：
-- 每个任务在短生命周期容器/沙箱内运行，非 root；
-- 只读根文件系统，临时工作目录单独挂载；
-- 禁止特权、丢弃 Linux capabilities、启用 no-new-privileges；
-- 限制 CPU、内存、PID、文件大小、输出大小和执行时间；
-- 不注入 GitHub Token、仓库写权限凭据、数据库密码或其他 Secrets；
-- 网络请求经受控代理层；阻止访问云元数据、内网管理地址、localhost 和私有网段，避免 SSRF；
-- 运行时进程与 Node 聚合器隔离，日志与结果分流。
+### Py 支持边界
 
-在隔离能力未验证前，不得在定时 CI 中执行任意第三方源；先使用仓库内固定 fixture 做回归测试。
+- 支持单文件脚本和 MisaTV `base.spider` 常用 API。
+- 不自动下载站点配置中的外部 spider ZIP、任意 pip 包或动态依赖。
+- 依赖额外 ZIP、私有文件、运行时安装包的源会失败或需要显式打包依赖。
+- 目前只调用 `homeContent`，不执行播放代理或持久服务模式。
 
-## 分阶段实施
+## JS / JAR 为什么不冒充通过
 
-1. **基线与许可**：锁定 MisaTV commit、保存上游许可证/NOTICE、生成依赖许可证清单和来源记录。
-2. **Py runner**：先实现 CPython runner 的隔离调用，覆盖普通单文件源和带顶层 spider ZIP 的源。
-3. **QuickJS runner**：适配上游 QuickJS 与完整宿主 API；不能用 Node/V8 替代。
-4. **JAR runner**：复用 SpiderHost/JRE/dex2jar；对 Android/JNI/原生依赖明确返回 `runtime-unsupported`。
-5. **fixture 测试**：每种类型加入成功、空结果、异常、超时、依赖缺失和恶意访问拦截样例。
-6. **聚合器接入**：将运行时结果写入 health/auditModes；默认不因 unsupported/uncertain 删除源。
-7. **小流量影子运行**：先对少量样本执行，只记录结果，不改变产物；验证稳定后再讨论正式启用。
+MisaTV JS 执行不仅是 QuickJS 引擎，还依赖 bootstrap、同步网络 `sendMessage`、模块加载、缓存和内置 JS 库。当前项目没有等价的 Flutter/QuickJS 宿主桥。使用 Node.js `vm` 或 V8 执行会产生假阳性，因此 adapter 返回 `runtime-unsupported`。
 
-## 当前生产策略
+MisaTV JAR 需要 SpiderHost、Android API、JVM/ART 桥接及可能的 JNI/原生库。普通 JVM 或 dex 类名存在检查不能证明首页方法可执行，因此 adapter 返回 `runtime-unsupported`。
 
-在运行时执行器和沙箱完成前，现有深度审计继续标记为 `static-rule-target`。不得把现有静态 JS/Py/JAR 检查升级成 `runtime-home`，也不得在 CI 中执行未隔离的第三方脚本。
+## 测试
+
+GitHub Actions `.github/workflows/misa-runtime.yml`：
+1. 构建 Py Docker 镜像；
+2. 在无网络沙箱中执行仓库固定 fixture，必须得到 `runtime-home`；
+3. 检查 JS/JAR adapter 只能返回 `runtime-unsupported`，不得伪装成功。
+
+固定 fixture 不访问公网，不会运行仓库收集到的真实第三方源。
+
+## 生产策略
+
+该执行器尚未接入每日聚合的删源决策。当前静态审计仍保留原有状态，Py 在线网络探测、JS QuickJS 宿主桥和 JAR Android Host 尚未完成前，不能据此改变正式产物。任何 `runtime-unsupported`、沙箱网络阻断或超时均不得视为源失效。

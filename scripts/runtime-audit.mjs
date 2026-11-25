@@ -6,7 +6,7 @@
  */
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, extname } from "node:path";
+import { join, extname, resolve } from "node:path";
 import { spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import { lookup } from "node:dns/promises";
@@ -16,6 +16,7 @@ import https from "node:https";
 
 const ROOT = process.cwd();
 const OUT = process.env.RUNTIME_AUDIT_OUT || "聚合接口/运行时体检.json";
+const INPUT_DIR = resolve(process.env.RUNTIME_AUDIT_INPUT_DIR || "聚合接口");
 const MAX_PER_TYPE = Math.max(0, Math.min(10, Number(process.env.RUNTIME_AUDIT_MAX_PER_TYPE || 2)));
 const BUDGET_MS = Math.max(30_000, Number(process.env.RUNTIME_AUDIT_BUDGET_MS || 480_000));
 const SITE_TIMEOUT = Math.max(5_000, Math.min(30_000, Number(process.env.RUNTIME_AUDIT_TIMEOUT_MS || 20_000)));
@@ -194,9 +195,9 @@ async function runOne(category, site, topSpider, temp) {
 }
 async function main() {
   const categories = [
-    ["py","聚合接口/点播-Py站.json"],
-    ["js","聚合接口/点播-JS站.json"],
-    ["jar","聚合接口/点播-Jar爬虫站.json"],
+    ["py",join(INPUT_DIR,"点播-Py站.json")],
+    ["js",join(INPUT_DIR,"点播-JS站.json")],
+    ["jar",join(INPUT_DIR,"点播-Jar爬虫站.json")],
   ];
   const report = {
     version:1, runId, generatedAt:new Date().toISOString(),

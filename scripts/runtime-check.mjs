@@ -52,6 +52,8 @@ if ((kind === "py" && !args.source && !args.archive) || (kind === "js" && !args.
 const source = args.source ? resolve(args.source) : args.archive ? resolve(args.archive) : null;
 const image = kind === "jar" ? (process.env.MISA_JAR_IMAGE || "tvbox-agg/misa-jar:17") : kind === "js" ? (process.env.MISA_JS_IMAGE || "tvbox-agg/misa-js:quickjs") : (process.env.MISA_PY_IMAGE || "tvbox-agg/misa-py:3.11");
 const temp = await mkdtemp(join(tmpdir(), "misa-py-"));
+let network = null;
+let gateway = null;
 try {
   const code = source ? await readFile(source) : Buffer.alloc(0);
   if ((kind === "py" && !args.archive || kind === "js") && code.length > 2 * 1024 * 1024) {
@@ -73,8 +75,8 @@ try {
   // Per-invocation internal network: only the gateway is attached to both this
   // isolated network and Docker's outbound bridge. Spider containers cannot
   // route directly to the Internet or LAN, even if they ignore proxy settings.
-  const network = `misa-job-${randomUUID().replaceAll("-", "").slice(0, 16)}`;
-  const gateway = `misa-egress-${randomUUID().replaceAll("-", "").slice(0, 12)}`;
+  network = `misa-job-${randomUUID().replaceAll("-", "").slice(0, 16)}`;
+  gateway = `misa-egress-${randomUUID().replaceAll("-", "").slice(0, 12)}`;
   const proxyScript = resolve("runtime/egress-proxy/proxy.py");
   const networkCreate = await run("docker", ["network", "create", "--internal", network], 15000);
   if (networkCreate.code !== 0) throw new Error(`cannot create isolated Docker network: ${networkCreate.stderr}`);
@@ -152,7 +154,7 @@ try {
 } catch (error) {
   result("runtime-error", { errorType: "runner-error", error: String(error?.stack || error) });
 } finally {
-  if (typeof gateway !== "undefined") await run("docker", ["rm", "-f", gateway], 10000);
-  if (typeof network !== "undefined") await run("docker", ["network", "rm", network], 10000);
+  if (gateway) await run("docker", ["rm", "-f", gateway], 10000);
+  if (network) await run("docker", ["network", "rm", network], 10000);
   await rm(temp, { recursive: true, force: true });
 }

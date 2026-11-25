@@ -39,6 +39,14 @@ jobs:
           python-version: "3.11"
       - name: Check runtime audit script syntax
         run: node --check scripts/runtime-audit.mjs
+      - name: Smoke-test report-only runtime audit
+        run: |
+          mkdir -p /tmp/runtime-audit-fixture
+          printf '{"sites":[]}' > /tmp/runtime-audit-fixture/点播-Py站.json
+          printf '{"sites":[]}' > /tmp/runtime-audit-fixture/点播-JS站.json
+          printf '{"sites":[]}' > /tmp/runtime-audit-fixture/点播-Jar爬虫站.json
+          RUNTIME_AUDIT_INPUT_DIR=/tmp/runtime-audit-fixture RUNTIME_AUDIT_OUT=/tmp/runtime-audit-report.json RUNTIME_AUDIT_MAX_PER_TYPE=0 node scripts/runtime-audit.mjs
+          node -e "const r=JSON.parse(require('fs').readFileSync('/tmp/runtime-audit-report.json','utf8')); if(r.summary.selected!==0 || r.policy.indexOf('report-only')<0) process.exit(1); console.log('runtime audit report smoke test passed')"
       - name: Build isolated MisaTV Py runtime
         run: docker build -t tvbox-agg/misa-py:3.11 runtime/misa-py
       - name: Execute Python source fixture through isolated filtered egress gateway

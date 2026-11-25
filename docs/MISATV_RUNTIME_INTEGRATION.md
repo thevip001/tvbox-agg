@@ -64,4 +64,6 @@ node scripts/runtime-check.mjs --kind js --source ./rule.js
 node scripts/runtime-check.mjs --kind jar --source ./spider.jar --class com.example.spider.Site
 ```
 
+CI 还会分别通过 Py requests、QuickJS 的 MisaTV `req()`、JVM `HttpURLConnection` 请求 `https://example.com/`，验证三种运行时的 HTTPS 代理链路确实可用；同时运行内网/特殊用途 IP、混合 DNS 答案和 DNS 解析后固定 IP 连接的安全测试。
+
 `runtime-check.mjs` 为每次探测创建唯一的 Docker 内部网络和临时网关容器。Py requests/urllib、JS MisaTV `req/http/_http` 及 JVM HTTP(S) 代理属性均使用该网关。运行时容器本身无法绕过代理直接出网；网关拒绝非公网 DNS 结果和非 80/443 端口，HTTPS 使用 CONNECT 隧道。网关不是域名白名单：它允许公网 HTTP(S)，但阻止访问私网和本机服务。需要更严格的站点域名白名单时，应由调用方增加允许域名策略。

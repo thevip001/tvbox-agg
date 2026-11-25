@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - "runtime/misa-py/**"
+      - "runtime/misa-jar/**"
       - "scripts/runtime-check.mjs"
       - "scripts/runtime-selftest.mjs"
       - ".github/workflows/misa-runtime.yml"
@@ -10,6 +11,7 @@ on:
     branches: [feat/misatv-runtime-validation]
     paths:
       - "runtime/misa-py/**"
+      - "runtime/misa-jar/**"
       - "scripts/runtime-check.mjs"
       - "scripts/runtime-selftest.mjs"
       - ".github/workflows/misa-runtime.yml"
@@ -30,5 +32,17 @@ jobs:
         run: |
           node scripts/runtime-check.mjs --kind py --source runtime/fixtures/py/home.py > /tmp/py-result.json
           node -e "const r=require('/tmp/py-result.json'); if(r.status!=='runtime-home') { console.error(r); process.exit(1) }"
-      - name: Verify unsupported adapters never claim success
+
+      - name: Verify JS adapter remains explicitly unsupported
         run: node scripts/runtime-selftest.mjs
+  jar-fixture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build isolated MisaTV desktop JVM runtime
+        run: docker build -t tvbox-agg/misa-jar:17 runtime/misa-jar
+      - name: Execute fixture through MisaTV SpiderHost
+        run: |
+          node scripts/runtime-check.mjs --kind jar --source runtime/misa-jar/fixture.jar --class com.github.catvod.spider.RuntimeFixture > /tmp/jar-result.json
+          node -e "const r=require('/tmp/jar-result.json'); if(r.status!=='runtime-home') { console.error(r); process.exit(1) }"

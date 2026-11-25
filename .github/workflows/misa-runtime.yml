@@ -15,6 +15,7 @@ on:
     branches: [feat/misatv-runtime-validation]
     paths:
       - "runtime/egress-proxy/**"
+      - "runtime/fixtures/py/**"
       - "runtime/misa-py/**"
       - "runtime/misa-js/**"
       - "runtime/fixtures/js/**"

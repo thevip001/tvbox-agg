@@ -107,10 +107,12 @@ class Handler(socketserver.BaseRequestHandler):
             upstream.sendall(b"\r\n".join(out) + b"\r\n\r\n" + body)
             self.relay(upstream)
         except (OSError, ValueError, UnicodeError):
+            print("egress-error upstream-or-policy-failure", flush=True)
             try: self.deny(502, "upstream rejected or unavailable")
             except OSError: pass
 
     def deny(self, status, message):
+        print(f"egress-deny status={status} reason={message}", flush=True)
         body = (message + "\n").encode()
         self.request.sendall((f"HTTP/1.1 {status} Error\r\nConnection: close\r\nContent-Length: {len(body)}\r\nContent-Type: text/plain\r\n\r\n").encode() + body)
 

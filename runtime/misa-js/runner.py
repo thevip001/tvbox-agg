@@ -111,7 +111,7 @@ def main():
     if isinstance(data,dict) and data.get("__error"):
         print(json.dumps({"status":"runtime-error","errorType":"spider-home-failed","error":data["__error"]},ensure_ascii=False)); return
     has = bool(data) and (not isinstance(data,(dict,list)) or bool(data.get("list") or data.get("class") or data))
-    print(json.dumps({"status":"runtime-home" if has else "runtime-empty","runtimeVersion":"QuickJS / MisaTV bootstrap","method":"homeContent/home","style":init_result.get("style"),"data":data,"network":{"mode":"disabled","requests":"blocked"}},ensure_ascii=False))
+    print(json.dumps({"status":"runtime-home" if has else "runtime-empty","runtimeVersion":"QuickJS / MisaTV bootstrap","method":"homeContent/home","style":init_result.get("style"),"data":data,"network":{"mode":"filtered-proxy","policy":"public HTTP/HTTPS only; private/reserved IPs blocked"}},ensure_ascii=False))
 
 if __name__ == "__main__":
     try: main()

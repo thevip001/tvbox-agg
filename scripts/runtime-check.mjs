@@ -55,7 +55,7 @@ if (kind === "js") {
 if (kind === "jar" && !args.source && args.fixture !== "true") {
   result("runtime-unsupported", { errorType: "missing-source", error: "--source is required for JAR runtime" }); process.exit(0);
 }
-if (!args.source) {
+if (kind === "py" && !args.source) {
   result("runtime-unsupported", { errorType: "missing-source", error: "--source is required for Py runtime" }); process.exit(0);
 }
 const source = args.source ? resolve(args.source) : null;
@@ -93,7 +93,7 @@ try {
   const durationMs = Date.now() - started;
   if (out.timedOut) {
     result("runtime-uncertain", { runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : "CPython 3.11", errorType: "timeout",
-      error: `Py spider exceeded ${timeoutMs}ms sandbox limit`, durationMs });
+      error: `${kind.toUpperCase()} spider exceeded ${timeoutMs}ms sandbox limit`, durationMs });
     process.exit(0);
   }
   if (out.code !== 0) {

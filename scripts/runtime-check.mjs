@@ -83,7 +83,7 @@ try {
   const out = await run("docker", argv, timeoutMs);
   const durationMs = Date.now() - started;
   if (out.timedOut) {
-    result("runtime-uncertain", { runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : "CPython 3.11", errorType: "timeout",
+    result("runtime-uncertain", { runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : kind === "js" ? "QuickJS / MisaTV bootstrap" : "CPython 3.11", errorType: "timeout",
       error: `${kind.toUpperCase()} spider exceeded ${timeoutMs}ms sandbox limit`, durationMs });
     process.exit(0);
   }
@@ -91,7 +91,7 @@ try {
     const error = (out.stderr || out.stdout || `docker exited ${out.code}`).slice(-4000);
     const networkBlocked = /ConnectionError|ConnectTimeout|ReadTimeout|NameResolutionError|Temporary failure in name resolution|Network is unreachable|No route to host|Max retries exceeded|Connection refused/i.test(error);
     result(networkBlocked ? "runtime-uncertain" : "runtime-error", {
-      runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : "CPython 3.11",
+      runtimeVersion: kind === "jar" ? "OpenJDK 17 / MisaTV SpiderHost" : kind === "js" ? "QuickJS / MisaTV bootstrap" : "CPython 3.11",
       errorType: networkBlocked ? "sandbox-network-disabled" : "spider-execution-failed",
       error, durationMs, network: { mode: "disabled", requests: "blocked" }
     });
@@ -105,7 +105,12 @@ try {
       error: "MisaTV runner returned non-JSON output", output: raw.slice(0, 1000), durationMs });
     process.exit(0);
   }
-  if (kind === "js" && data && typeof data.status === "string") {\n    const { status, ...details } = data;\n    result(status, { runtimeVersion: details.runtimeVersion || "QuickJS / MisaTV bootstrap", ...details, durationMs });\n    process.exit(0);\n  }\n  if (kind === "jar" && typeof data === "string") {
+  if (kind === "js" && data && typeof data.status === "string") {
+    const { status, ...details } = data;
+    result(status, { runtimeVersion: details.runtimeVersion || "QuickJS / MisaTV bootstrap", ...details, durationMs });
+    process.exit(0);
+  }
+  if (kind === "jar" && typeof data === "string") {
     try { data = JSON.parse(data); } catch {}
   }
   const hasContent = Array.isArray(data?.list) ? data.list.length > 0 :

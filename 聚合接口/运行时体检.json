@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "runId": "487a3068-418b-4651-a237-583dc6988fd0",
-  "generatedAt": "2026-11-25T11:12:04.931Z",
+  "runId": "528a1e6b-b77c-4dcc-bdf2-9b795a1de7c4",
+  "generatedAt": "2026-11-26T02:56:21.227Z",
   "policy": "report-only; no source is removed or downgraded by runtime audit",
   "limits": {
     "maxPerType": 2,
@@ -12,15 +12,15 @@
     "selected": 6,
     "byCategory": {
       "py": {
-        "available": 148,
+        "available": 131,
         "selected": 2
       },
       "js": {
-        "available": 181,
+        "available": 189,
         "selected": 2
       },
       "jar": {
-        "available": 1132,
+        "available": 1227,
         "selected": 2
       }
     },
@@ -31,18 +31,18 @@
   "results": [
     {
       "category": "py",
-      "key": "国外影视",
-      "name": "全球｜APP",
-      "api": "https://jiekou.netlify.app/py/国外剧.py",
+      "key": "2",
+      "name": "哔哩",
+      "api": "https://raw.githubusercontent.com/dxyc0922/Tvbox4.x_api/refs/heads/main/脚本/哔哩.py",
       "status": "runtime-uncertain",
       "errorType": "audit-preparation-failed",
       "reason": "Invalid IP address: undefined"
     },
     {
       "category": "py",
-      "key": "看球PY",
-      "name": "球球｜看球",
-      "api": "https://jiekou.netlify.app/py/球球.py",
+      "key": "wzxxcz_131cdc217285",
+      "name": "多瑙影院",
+      "api": "https://raw.githubusercontent.com/dxyc0922/Tvbox4.x_api/refs/heads/main/脚本/多瑙影院.py",
       "status": "runtime-uncertain",
       "errorType": "audit-preparation-failed",
       "reason": "Invalid IP address: undefined"
@@ -58,8 +58,8 @@
     },
     {
       "category": "js",
-      "key": "js_农民",
-      "name": "👨‍🌾┃农民┃影视",
+      "key": "js_007",
+      "name": "🕵‍┃特工┃影视",
       "api": "https://raw.liucn.cc/box/libs/js/drpy2.min.js",
       "status": "runtime-uncertain",
       "errorType": "audit-preparation-failed",
@@ -67,22 +67,22 @@
     },
     {
       "category": "jar",
-      "key": "csp_BLSGod",
-      "name": "🧲80S影视",
-      "api": "csp_BLSGod",
+      "key": "Itv",
+      "name": "🥝爱奇艺解析",
+      "api": "csp_Itv",
       "status": "runtime-uncertain",
       "errorType": "audit-preparation-failed",
       "reason": "Invalid IP address: undefined"
     },
     {
       "category": "jar",
-      "key": "360_spider",
-      "name": "🐞360影视",
-      "api": "csp_SP360",
+      "key": "csp_QnMp4",
+      "name": "🧲七妹",
+      "api": "csp_QnMp4",
       "status": "runtime-uncertain",
       "errorType": "audit-preparation-failed",
       "reason": "Invalid IP address: undefined"
     }
   ],
-  "elapsedMs": 60
+  "elapsedMs": 57
 }

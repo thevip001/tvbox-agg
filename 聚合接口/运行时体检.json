@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "runId": "528a1e6b-b77c-4dcc-bdf2-9b795a1de7c4",
-  "generatedAt": "2026-11-26T02:56:21.227Z",
+  "runId": "f887b594-09c9-4b6b-815c-79bdf27e9855",
+  "generatedAt": "2026-11-27T02:51:37.116Z",
   "policy": "report-only; no source is removed or downgraded by runtime audit",
   "limits": {
     "maxPerType": 2,
@@ -12,15 +12,15 @@
     "selected": 6,
     "byCategory": {
       "py": {
-        "available": 131,
+        "available": 125,
         "selected": 2
       },
       "js": {
-        "available": 189,
+        "available": 181,
         "selected": 2
       },
       "jar": {
-        "available": 1227,
+        "available": 1302,
         "selected": 2
       }
     },
@@ -31,26 +31,26 @@
   "results": [
     {
       "category": "py",
-      "key": "2",
-      "name": "哔哩",
-      "api": "https://raw.githubusercontent.com/dxyc0922/Tvbox4.x_api/refs/heads/main/脚本/哔哩.py",
+      "key": "wzxxcz_32aaf84342f3",
+      "name": "影迷4K",
+      "api": "https://raw.githubusercontent.com/dxyc0922/Tvbox4.x_api/refs/heads/main/脚本/影迷4K.py",
       "status": "runtime-uncertain",
       "errorType": "audit-preparation-failed",
       "reason": "Invalid IP address: undefined"
     },
     {
       "category": "py",
-      "key": "wzxxcz_131cdc217285",
-      "name": "多瑙影院",
-      "api": "https://raw.githubusercontent.com/dxyc0922/Tvbox4.x_api/refs/heads/main/脚本/多瑙影院.py",
+      "key": "河马短剧",
+      "name": "河马｜短剧",
+      "api": "https://jiekou.netlify.app/py/河马短剧.py",
       "status": "runtime-uncertain",
       "errorType": "audit-preparation-failed",
       "reason": "Invalid IP address: undefined"
     },
     {
       "category": "js",
-      "key": "圣城影视",
-      "name": "🏰┃圣城┃影视",
+      "key": "js_czsapp",
+      "name": "🏭️┃厂长┃Js",
       "api": "https://raw.liucn.cc/box/libs/js/drpy2.min.js",
       "status": "runtime-uncertain",
       "errorType": "audit-preparation-failed",
@@ -58,31 +58,31 @@
     },
     {
       "category": "js",
-      "key": "js_007",
-      "name": "🕵‍┃特工┃影视",
-      "api": "https://raw.liucn.cc/box/libs/js/drpy2.min.js",
+      "key": "异世界",
+      "name": "异世界｜动漫",
+      "api": "https://jiekou.netlify.app/js/drpy2.min.js",
       "status": "runtime-uncertain",
       "errorType": "audit-preparation-failed",
       "reason": "Invalid IP address: undefined"
     },
     {
       "category": "jar",
-      "key": "Itv",
-      "name": "🥝爱奇艺解析",
-      "api": "csp_Itv",
+      "key": "alllive",
+      "name": "📽️┃一直播┃LIVE",
+      "api": "csp_Alllive",
       "status": "runtime-uncertain",
       "errorType": "audit-preparation-failed",
       "reason": "Invalid IP address: undefined"
     },
     {
       "category": "jar",
-      "key": "csp_QnMp4",
-      "name": "🧲七妹",
-      "api": "csp_QnMp4",
+      "key": "抠搜",
+      "name": "🍄┃抠抠┃搜搜",
+      "api": "csp_KkSs",
       "status": "runtime-uncertain",
       "errorType": "audit-preparation-failed",
       "reason": "Invalid IP address: undefined"
     }
   ],
-  "elapsedMs": 57
+  "elapsedMs": 45
 }
